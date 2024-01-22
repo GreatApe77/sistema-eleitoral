@@ -33,11 +33,17 @@ contract Eleicao {
     }
     function getCandidatos(uint256 indiceDePartida,uint256 indiceDeChegada) public view returns(Candidato[] memory){
         //to do: concluir essa funcao
+        if(indiceDePartida>indiceDeChegada) revert();
         uint256 tamanhoDaPagina = (indiceDeChegada - indiceDePartida)+ 1;
         Candidato[] memory candidatos = new Candidato[](tamanhoDaPagina);
-        for (uint256 i = indiceDePartida; i < tamanhoDaPagina; i++) {
+        
+        for (uint256 i = indiceDePartida; i < indiceDeChegada; i++) {
             candidatos[i] = candidatoPorNumero[listaDeNumerosCadastrados[i]];
         }
         return candidatos;
+    }
+
+    function _candidatoExiste(uint16 numeroDoCandidato) private view returns(bool){
+        return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }
 }
