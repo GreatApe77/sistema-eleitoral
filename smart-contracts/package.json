@@ -4,13 +4,21 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npx hardhat test",
+    "coverage":"npx hardhat coverage",
+    "compile":"npx hardhat compile",
+    "docgen":"npx hardhat docgen"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^4.0.0",
-    "hardhat": "^2.19.4"
+    "deployment-history": "^2.0.4",
+    "hardhat": "^2.19.4",
+    "solidity-docgen": "^0.6.0-beta.36"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.2"
   }
 }
