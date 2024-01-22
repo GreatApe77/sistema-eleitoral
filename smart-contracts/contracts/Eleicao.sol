@@ -10,4 +10,17 @@ contract Eleicao {
         uint16 numeroDeVotacao;
     }
     mapping(uint16 numeroDeVotacao => Candidato informacoes) public candidatoPorNumero;
+    uint16[] public listaDeNumerosCadastrados;
+    constructor(Candidato[] memory candidatosIniciais){
+        _cadastrarCandidatosIniciais(candidatosIniciais);
+    }
+
+
+    function _cadastrarCandidatosIniciais(Candidato[] memory candidatosIniciais) private{
+        for (uint i = 0; i < candidatosIniciais.length; i++) {
+            uint16 numeroDoCandidato =candidatosIniciais[i].numeroDeVotacao; 
+            candidatoPorNumero[numeroDoCandidato] = candidatosIniciais[i];
+            listaDeNumerosCadastrados.push(numeroDoCandidato);
+        }
+    }
 }
