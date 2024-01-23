@@ -30,5 +30,23 @@ import { candidatosMock } from "./utils/candidatoMock";
 
         })
     })
+    it("Nao Deve  cadastar candidato com numero repetido",async ()=>{
+      const EleicaoFactory = await ethers.getContractFactory("Eleicao")
+      candidatosMock.push({
+        fotoDoCandidatoUrl:"http://linkDeFoto",
+        nome:"Eduardo Jorge",
+        partido:"PT",
+        numeroDeVotacao:13,
+        quantidadeDeVotos:0
+      })
+      candidatosMock.push({
+        fotoDoCandidatoUrl:"http://linkDeFoto",
+        nome:"Eduardo Jorge Andrade",
+        partido:"PTdoB",
+        numeroDeVotacao:13,
+        quantidadeDeVotos:0
+      })
+      await expect(EleicaoFactory.deploy(candidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__CandidatoJaExiste")
+    })
   });
   
