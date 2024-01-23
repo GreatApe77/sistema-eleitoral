@@ -32,21 +32,36 @@ import { candidatosMock } from "./utils/candidatoMock";
     })
     it("Nao Deve  cadastar candidato com numero repetido",async ()=>{
       const EleicaoFactory = await ethers.getContractFactory("Eleicao")
-      candidatosMock.push({
+       const copyCandidatosMock = [...candidatosMock]
+       copyCandidatosMock.push({
         fotoDoCandidatoUrl:"http://linkDeFoto",
         nome:"Eduardo Jorge",
         partido:"PT",
         numeroDeVotacao:13,
         quantidadeDeVotos:0
       })
-      candidatosMock.push({
+      copyCandidatosMock.push({
         fotoDoCandidatoUrl:"http://linkDeFoto",
         nome:"Eduardo Jorge Andrade",
         partido:"PTdoB",
         numeroDeVotacao:13,
         quantidadeDeVotos:0
       })
-      await expect(EleicaoFactory.deploy(candidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__CandidatoJaExiste")
+      await expect(EleicaoFactory.deploy(copyCandidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__CandidatoJaExiste")
+    })
+    it("Nao Deve cadastar candidato com votos diferentes de ZERO",async ()=>{
+      const EleicaoFactory = await ethers.getContractFactory("Eleicao")
+      const copyCandidatosMock = [...candidatosMock]
+
+      copyCandidatosMock.push({
+        fotoDoCandidatoUrl:"http://linkDeFoto",
+        nome:"Eduardo Jorge",
+        partido:"PT",
+        numeroDeVotacao:13,
+        quantidadeDeVotos:9999
+      })
+
+      await expect(EleicaoFactory.deploy(copyCandidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__VotosNaoZerados")
     })
   });
   
