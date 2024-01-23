@@ -2,6 +2,8 @@
 pragma solidity ^0.8.20;
 
 contract Eleicao {
+    error Eleicao__VotosNaoZerados();
+    error Eleicao__CandidatoJaExiste();
     /**
      * @dev Informações de um candidato
      */
@@ -27,6 +29,9 @@ contract Eleicao {
     function _cadastrarCandidatos(Candidato[] memory candidatos) private {
         for (uint i = 0; i < candidatos.length; i++) {
             uint16 numeroDoCandidato = candidatos[i].numeroDeVotacao;
+            if(_candidatoExiste(numeroDoCandidato)) revert Eleicao__CandidatoJaExiste();
+            _validaVotosZerados(numeroDoCandidato);
+
             candidatoPorNumero[numeroDoCandidato] = candidatos[i];
             listaDeNumerosCadastrados.push(numeroDoCandidato);
         }
@@ -55,6 +60,11 @@ contract Eleicao {
     }
     function _candidatoExiste(uint16 numeroDoCandidato) private view returns(bool){
         return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
+    }
+    function _validaVotosZerados(uint16 numeroDeVotacao) private view {
+        if(candidatoPorNumero[numeroDeVotacao].quantidadeDeVotos!=0){
+            revert Eleicao__VotosNaoZerados();
+        }
     }
 }
 
