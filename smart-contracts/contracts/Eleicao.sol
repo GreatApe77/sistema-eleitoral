@@ -31,7 +31,7 @@ contract Eleicao {
             listaDeNumerosCadastrados.push(numeroDoCandidato);
         }
     }
-    function getCandidatos(uint256 indiceDePartida,uint256 indiceDeChegada) public view returns(Candidato[] memory){
+    /* function getCandidatos(uint256 indiceDePartida,uint256 indiceDeChegada) public view returns(Candidato[] memory){
         //to do: concluir essa funcao
         if(indiceDePartida>indiceDeChegada) revert();
         uint256 tamanhoDaPagina = (indiceDeChegada - indiceDePartida)+ 1;
@@ -41,8 +41,18 @@ contract Eleicao {
             candidatos[i] = candidatoPorNumero[listaDeNumerosCadastrados[i]];
         }
         return candidatos;
+    } */
+    function getCandidatos(uint256 indiceDePartida,uint256 quantidade) public view returns(Candidato[] memory){
+        uint256 length = quantidade;
+        if (length > listaDeNumerosCadastrados.length - indiceDePartida) {
+            length = listaDeNumerosCadastrados.length - indiceDePartida;
+        }
+        Candidato[] memory candidatos = new Candidato[](length);
+        for (uint i = 0; i <length; i++) {
+            candidatos[i] = candidatoPorNumero[listaDeNumerosCadastrados[indiceDePartida+i]];
+        }
+        return candidatos;
     }
-
     function _candidatoExiste(uint16 numeroDoCandidato) private view returns(bool){
         return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }

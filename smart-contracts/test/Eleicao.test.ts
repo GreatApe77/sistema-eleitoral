@@ -19,9 +19,16 @@ import { candidatosMock } from "./utils/candidatoMock";
 
     it("deve ler os candidatos iniciais",async ()=>{
         const {eleicao,signers,eleicaoAddress} = await loadFixture(deployFixture)
-        const candidatosCadastrados = await eleicao.getCandidatos(6,7)
-        console.log(candidatosCadastrados)
-        expect(true).to.be.equal(true)
+        const candidatosCadastrados = await eleicao.getCandidatos(0,8)
+        candidatosCadastrados.map((candidato,index)=>{
+          expect(candidato.nome).to.be.equal(candidatosMock[index].nome)
+          expect(candidato.partido).to.be.equal(candidatosMock[index].partido)
+          expect(candidato.fotoDoCandidatoUrl).to.be.equal(candidatosMock[index].fotoDoCandidatoUrl)
+          expect(candidato.numeroDeVotacao).to.be.equal(candidatosMock[index].numeroDeVotacao)
+          expect(candidato.quantidadeDeVotos).to.be.equal(candidatosMock[index].quantidadeDeVotos)
+
+
+        })
     })
   });
   
