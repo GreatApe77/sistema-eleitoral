@@ -11,9 +11,11 @@ contract Eleicao {
         string nome;
         string partido;
         string fotoDoCandidatoUrl;
-        uint256 quantidadeDeVotos;
         uint16 numeroDeVotacao;
+        uint256 quantidadeDeVotos;
+        uint256 indice;
     }
+    
     mapping(uint16 numeroDeVotacao => Candidato informacoes)
         public candidatoPorNumero;
     uint16[] public listaDeNumerosCadastrados;
@@ -34,7 +36,11 @@ contract Eleicao {
 
             candidatoPorNumero[numeroDoCandidato] = candidatos[i];
             listaDeNumerosCadastrados.push(numeroDoCandidato);
+            candidatos[i].indice = listaDeNumerosCadastrados.length - 1;
         }
+    }
+    function deletarCandidato(uint16 numeroDoCandidato) public {
+        _deletarCandidato(numeroDoCandidato);
     }
     /* function getCandidatos(uint256 indiceDePartida,uint256 indiceDeChegada) public view returns(Candidato[] memory){
         //to do: concluir essa funcao
@@ -47,6 +53,14 @@ contract Eleicao {
         }
         return candidatos;
     } */
+    function _deletarCandidato(uint16 numeroDoCandidato) private {
+        uint256 indiceDeletado = candidatoPorNumero[numeroDoCandidato].indice;
+        uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
+        listaDeNumerosCadastrados[indiceDeletado] = listaDeNumerosCadastrados[indiceUltimoCandidato];
+        listaDeNumerosCadastrados.pop();
+        candidatoPorNumero[listaDeNumerosCadastrados[indiceUltimoCandidato]].indice = indiceDeletado;
+        
+    }
     function getCandidatos(uint256 indiceDePartida,uint256 quantidade) public view returns(Candidato[] memory){
         uint256 length = quantidade;
         if (length > listaDeNumerosCadastrados.length - indiceDePartida) {

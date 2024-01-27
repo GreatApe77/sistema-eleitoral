@@ -38,14 +38,16 @@ import { candidatosMock } from "./utils/candidatoMock";
         nome:"Eduardo Jorge",
         partido:"PT",
         numeroDeVotacao:13,
-        quantidadeDeVotos:0
+        quantidadeDeVotos:0,
+        indice:0
       })
       copyCandidatosMock.push({
         fotoDoCandidatoUrl:"http://linkDeFoto",
         nome:"Eduardo Jorge Andrade",
         partido:"PTdoB",
         numeroDeVotacao:13,
-        quantidadeDeVotos:0
+        quantidadeDeVotos:0,
+        indice:0
       })
       await expect(EleicaoFactory.deploy(copyCandidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__CandidatoJaExiste")
     })
@@ -58,7 +60,8 @@ import { candidatosMock } from "./utils/candidatoMock";
         nome:"Eduardo Jorge",
         partido:"PT",
         numeroDeVotacao:13,
-        quantidadeDeVotos:9999
+        quantidadeDeVotos:9999,
+        indice:0
       })
 
       await expect(EleicaoFactory.deploy(copyCandidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__VotosNaoZerados")
