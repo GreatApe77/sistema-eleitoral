@@ -30,17 +30,23 @@ contract Eleicao {
      */
     function _cadastrarCandidatos(Candidato[] memory candidatos) private {
         for (uint i = 0; i < candidatos.length; i++) {
-            uint16 numeroDoCandidato = candidatos[i].numeroDeVotacao;
-            if(_candidatoExiste(numeroDoCandidato)) revert Eleicao__CandidatoJaExiste();
-            _validaVotosZerados(candidatos[i]);
-
-            candidatoPorNumero[numeroDoCandidato] = candidatos[i];
-            listaDeNumerosCadastrados.push(numeroDoCandidato);
-            candidatos[i].indice = listaDeNumerosCadastrados.length - 1;
+            _cadastrarCandidato(candidatos[i]);
         }
     }
     function deletarCandidato(uint16 numeroDoCandidato) public {
         _deletarCandidato(numeroDoCandidato);
+    }
+
+    function _cadastrarCandidato(Candidato memory candidato) private{
+            uint16 numeroDoCandidato = candidato.numeroDeVotacao;
+            if(_candidatoExiste(numeroDoCandidato)) revert Eleicao__CandidatoJaExiste();
+            _validaVotosZerados(candidato);
+            listaDeNumerosCadastrados.push(numeroDoCandidato);
+            candidato.indice = listaDeNumerosCadastrados.length - 1;
+            candidatoPorNumero[numeroDoCandidato] = candidato;
+    }
+    function cadastrarCandidato(Candidato memory candidato) public {
+        _cadastrarCandidato(candidato);
     }
     /* function getCandidatos(uint256 indiceDePartida,uint256 indiceDeChegada) public view returns(Candidato[] memory){
         //to do: concluir essa funcao

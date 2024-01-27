@@ -66,5 +66,49 @@ import { candidatosMock } from "./utils/candidatoMock";
 
       await expect(EleicaoFactory.deploy(copyCandidatosMock)).to.be.revertedWithCustomError(EleicaoFactory,"Eleicao__VotosNaoZerados")
     })
+    it("Deve cadastrar um candidato depois da criação do contrato",async ()=>{
+      const {eleicao,signers,eleicaoAddress} = await loadFixture(deployFixture)
+      const candidato = {
+        fotoDoCandidatoUrl:"http://linkDeFoto",
+        nome:"Eduardo Jorge",
+        partido:"PT",
+        numeroDeVotacao:13,
+        quantidadeDeVotos:0,
+        indice:0
+      }
+      await eleicao.cadastrarCandidato(candidato)
+     
+      const candidatoCadastrado = await eleicao.candidatoPorNumero(13)
+      expect(candidatoCadastrado.nome).to.be.equal(candidato.nome)
+      expect(candidatoCadastrado.partido).to.be.equal(candidato.partido)
+      expect(candidatoCadastrado.fotoDoCandidatoUrl).to.be.equal(candidato.fotoDoCandidatoUrl)
+      expect(candidatoCadastrado.numeroDeVotacao).to.be.equal(candidato.numeroDeVotacao)
+      expect(candidatoCadastrado.quantidadeDeVotos).to.be.equal(candidato.quantidadeDeVotos)
+
+    })
+    it("Deve cadastrar um candidato depois da criação do contrato e retornar uma pagina de candidatos",async ()=>{
+      const {eleicao,signers,eleicaoAddress} = await loadFixture(deployFixture)
+      
+      const candidatosMockCopy = [...candidatosMock]
+      const candidato = {
+        fotoDoCandidatoUrl:"http://linkDeFoto",
+        nome:"Eduardo Jorge",
+        partido:"PT",
+        numeroDeVotacao:13,
+        quantidadeDeVotos:0,
+        indice:0
+      }
+      candidatosMockCopy.push(candidato)
+      await eleicao.cadastrarCandidato(candidato)
+     
+      const candidatosCadastrados = await eleicao.getCandidatos(0,9)
+      candidatosCadastrados.map((candidato,index)=>{
+        expect(candidato.nome).to.be.equal(candidatosMockCopy[index].nome)
+        expect(candidato.partido).to.be.equal(candidatosMockCopy[index].partido)
+        expect(candidato.fotoDoCandidatoUrl).to.be.equal(candidatosMockCopy[index].fotoDoCandidatoUrl)
+        expect(candidato.numeroDeVotacao).to.be.equal(candidatosMockCopy[index].numeroDeVotacao)
+        expect(candidato.quantidadeDeVotos).to.be.equal(candidatosMockCopy[index].quantidadeDeVotos)
+      })
+    })
   });
   
