@@ -258,8 +258,9 @@ describe("Eleicao", function () {
     }
     await eleicao.encerrarEleicao()
     const resultado = await eleicao.resultado()
-    console.log(resultado)
-    expect(resultado.vencedor.nome).to.be.equal(candidato3.nome)
-    expect(resultado.vencedor.quantidadeDeVotos).to.be.equal(24)
+    //console.log(resultado.quantidadeDeVotos)
+    expect(resultado.quantidadeDeVotos).to.be.equal(59)
+    //expect(resultado.vencedores).to.be.equal(candidato3.nome)
+    //expect(resultado.vencedor.quantidadeDeVotos).to.be.equal(24)
   })
 });
