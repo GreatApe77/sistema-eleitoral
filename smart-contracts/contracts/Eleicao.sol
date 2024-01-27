@@ -24,7 +24,7 @@ contract Eleicao {
         uint256 quantidadeDeVotosBrancos;
         uint256 quantidadeDeVotosNulos;
     }
-    struct Resultado{
+    struct Resultado {
         Votos informacoesDeVotos;
         Candidato vencedor;
     }
@@ -51,24 +51,24 @@ contract Eleicao {
         eleicaoAtiva = true;
     }
 
-    function encerrarEleicao() public {
+    function encerrarEleicao() public virtual {
         eleicaoAtiva = false;
         eleicaoEncerrada = true;
         resultado.informacoesDeVotos = _informacoesDeVotos;
-
+        _decidirVencedor();
     }
 
     function _decidirVencedor() private {
-        uint256 maiorQuantidadeDeVotos = 0;
+        Candidato memory vencedor;
         for (uint256 i = 0; i < listaDeNumerosCadastrados.length; i++) {
             Candidato memory candidato = candidatoPorNumero[
                 listaDeNumerosCadastrados[i]
             ];
-            if (candidato.quantidadeDeVotos > maiorQuantidadeDeVotos) {
-                maiorQuantidadeDeVotos = candidato.quantidadeDeVotos;
-                resultado.vencedor = candidato;
+            if (candidato.quantidadeDeVotos > vencedor.quantidadeDeVotos) {
+                vencedor = candidato;
             }
         }
+        resultado.vencedor = vencedor;
     }
 
     function votar(uint16 numeroDoCandidato) public {
