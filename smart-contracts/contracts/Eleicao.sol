@@ -86,6 +86,9 @@ contract Eleicao {
             revert Eleicao__VotosNaoZerados();
         }
     }
+    function getQuantidadeDeCandidatos() public view returns(uint256){
+        return listaDeNumerosCadastrados.length;
+    }
 }
 
 /**
