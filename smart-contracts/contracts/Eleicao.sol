@@ -75,7 +75,7 @@ contract Eleicao {
     function _candidatoExiste(uint16 numeroDoCandidato) private view returns(bool){
         return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }
-    function _validaVotosZerados(Candidato memory candidato) private view {
+    function _validaVotosZerados(Candidato memory candidato) private pure {
         if(candidato.quantidadeDeVotos !=0){
             revert Eleicao__VotosNaoZerados();
         }
