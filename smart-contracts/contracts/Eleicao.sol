@@ -16,14 +16,21 @@ contract Eleicao {
         uint256 indice;
     }
     
-    mapping(uint16 numeroDeVotacao => Candidato informacoes)
-        public candidatoPorNumero;
+    mapping(uint16 numeroDeVotacao => Candidato informacoes)public candidatoPorNumero;
     uint16[] public listaDeNumerosCadastrados;
-
+    bool public eleicaoAtiva;
+    uint256 public constant TEMPO_DE_VOTACAO = 1 days;
     constructor(Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
     }
 
+    function iniciarEleicao() public {
+        eleicaoAtiva = true;
+    }
+    function encerrarEleicao() public {
+        
+        eleicaoAtiva = false;
+    }
     /**
      *
      * @param candidatos Candidatos a serem cadastrados;
@@ -36,7 +43,7 @@ contract Eleicao {
     function deletarCandidato(uint16 numeroDoCandidato) public {
         _deletarCandidato(numeroDoCandidato);
     }
-
+    
     function _cadastrarCandidato(Candidato memory candidato) private{
             uint16 numeroDoCandidato = candidato.numeroDeVotacao;
             if(_candidatoExiste(numeroDoCandidato)) revert Eleicao__CandidatoJaExiste();
