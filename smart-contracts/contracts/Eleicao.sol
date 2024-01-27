@@ -32,7 +32,7 @@ contract Eleicao {
         for (uint i = 0; i < candidatos.length; i++) {
             uint16 numeroDoCandidato = candidatos[i].numeroDeVotacao;
             if(_candidatoExiste(numeroDoCandidato)) revert Eleicao__CandidatoJaExiste();
-            _validaVotosZerados(numeroDoCandidato);
+            _validaVotosZerados(candidatos[i]);
 
             candidatoPorNumero[numeroDoCandidato] = candidatos[i];
             listaDeNumerosCadastrados.push(numeroDoCandidato);
@@ -75,8 +75,8 @@ contract Eleicao {
     function _candidatoExiste(uint16 numeroDoCandidato) private view returns(bool){
         return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }
-    function _validaVotosZerados(uint16 numeroDeVotacao) private view {
-        if(candidatoPorNumero[numeroDeVotacao].quantidadeDeVotos!=0){
+    function _validaVotosZerados(Candidato memory candidato) private view {
+        if(candidato.quantidadeDeVotos !=0){
             revert Eleicao__VotosNaoZerados();
         }
     }
