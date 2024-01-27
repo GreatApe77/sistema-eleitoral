@@ -110,5 +110,25 @@ import { candidatosMock } from "./utils/candidatoMock";
         expect(candidato.quantidadeDeVotos).to.be.equal(candidatosMockCopy[index].quantidadeDeVotos)
       })
     })
+    it("Deve deletar um candidato depois da criação do contrato",async ()=>{
+      const {eleicao,signers,eleicaoAddress} = await loadFixture(deployFixture)
+      const candidato = {
+        fotoDoCandidatoUrl:"http://linkDeFoto",
+        nome:"Eduardo Jorge",
+        partido:"PT",
+        numeroDeVotacao:13,
+        quantidadeDeVotos:0,
+        indice:0
+      }
+      await eleicao.cadastrarCandidato(candidato)
+      await eleicao.deletarCandidato(13)
+      const candidatoDeletado = await eleicao.candidatoPorNumero(13)
+      expect(candidatoDeletado.nome).to.be.equal("")
+      expect(candidatoDeletado.partido).to.be.equal("")
+      expect(candidatoDeletado.fotoDoCandidatoUrl).to.be.equal("")
+      expect(candidatoDeletado.numeroDeVotacao).to.be.equal(0)
+      expect(candidatoDeletado.quantidadeDeVotos).to.be.equal(0)
+      //to do terminar o teste
+    })
   });
   

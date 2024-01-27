@@ -63,9 +63,9 @@ contract Eleicao {
         uint256 indiceDeletado = candidatoPorNumero[numeroDoCandidato].indice;
         uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
         listaDeNumerosCadastrados[indiceDeletado] = listaDeNumerosCadastrados[indiceUltimoCandidato];
-        listaDeNumerosCadastrados.pop();
         candidatoPorNumero[listaDeNumerosCadastrados[indiceUltimoCandidato]].indice = indiceDeletado;
-        
+        listaDeNumerosCadastrados.pop();
+        delete candidatoPorNumero[numeroDoCandidato];
     }
     function getCandidatos(uint256 indiceDePartida,uint256 quantidade) public view returns(Candidato[] memory){
         uint256 length = quantidade;
