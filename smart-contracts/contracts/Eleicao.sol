@@ -1,15 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
+/**
+ * @title Eleicao
+ * @author Mateus Navarro
+ * @notice Contrato para gerenciar uma eleição
+ */
 contract Eleicao {
     error Eleicao__VotosNaoZerados();
     error Eleicao__CandidatoJaExiste();
     error Eleicao__EleicaoNaoEstaAtiva();
     error Eleicao__EleicaoEncerrada();
     error Eleicao__SomenteAdministrador();
-    /**
-     * @dev Informações de um candidato
-     */
 
     struct Votos {
         uint256 quantidadeDeVotos;
@@ -110,7 +112,47 @@ contract Eleicao {
         return candidatos;
     }
 
-    /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
+
+    function _cadastrarCandidatos(Candidato[] memory candidatos) private {
+        for (uint i = 0; i < candidatos.length; i++) {
+            _cadastrarCandidato(candidatos[i]);
+        }
+    }
+
+    function _cadastrarCandidato(Candidato memory candidato) private {
+        uint16 numeroDoCandidato = candidato.numeroDeVotacao;
+        if (_candidatoExiste(numeroDoCandidato))
+            revert Eleicao__CandidatoJaExiste();
+        _validaVotosZerados(candidato);
+        listaDeNumerosCadastrados.push(numeroDoCandidato);
+        candidato.indice = listaDeNumerosCadastrados.length - 1;
+        candidatoPorNumero[numeroDoCandidato] = candidato;
+    }
+
+    function _candidatoExiste(
+        uint16 numeroDoCandidato
+    ) private view returns (bool) {
+        return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
+    }
+
+    function _validaVotosZerados(Candidato memory candidato) private pure {
+        if (candidato.quantidadeDeVotos != 0) {
+            revert Eleicao__VotosNaoZerados();
+        }
+    }
+
+    function _deletarCandidato(uint16 numeroDoCandidato) private {
+        uint256 indiceDeletado = candidatoPorNumero[numeroDoCandidato].indice;
+        uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
+        listaDeNumerosCadastrados[indiceDeletado] = listaDeNumerosCadastrados[
+            indiceUltimoCandidato
+        ];
+        candidatoPorNumero[listaDeNumerosCadastrados[indiceUltimoCandidato]]
+            .indice = indiceDeletado;
+        listaDeNumerosCadastrados.pop();
+        delete candidatoPorNumero[numeroDoCandidato];
+    }
+        /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
         Candidato memory vencedor;
         uint256 totalDeCandidatos = getQuantidadeDeCandidatos();
         //Candidato[] memory empatados = new Candidato[](totalDeCandidatos);
@@ -153,49 +195,7 @@ contract Eleicao {
         return candidatos;
     } */
 
-    /**
-     *
-     * @param candidatos Candidatos a serem cadastrados;
-     */
-    function _cadastrarCandidatos(Candidato[] memory candidatos) private {
-        for (uint i = 0; i < candidatos.length; i++) {
-            _cadastrarCandidato(candidatos[i]);
-        }
-    }
-
-    function _cadastrarCandidato(Candidato memory candidato) private {
-        uint16 numeroDoCandidato = candidato.numeroDeVotacao;
-        if (_candidatoExiste(numeroDoCandidato))
-            revert Eleicao__CandidatoJaExiste();
-        _validaVotosZerados(candidato);
-        listaDeNumerosCadastrados.push(numeroDoCandidato);
-        candidato.indice = listaDeNumerosCadastrados.length - 1;
-        candidatoPorNumero[numeroDoCandidato] = candidato;
-    }
-
-    function _candidatoExiste(
-        uint16 numeroDoCandidato
-    ) private view returns (bool) {
-        return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
-    }
-
-    function _validaVotosZerados(Candidato memory candidato) private pure {
-        if (candidato.quantidadeDeVotos != 0) {
-            revert Eleicao__VotosNaoZerados();
-        }
-    }
-
-    function _deletarCandidato(uint16 numeroDoCandidato) private {
-        uint256 indiceDeletado = candidatoPorNumero[numeroDoCandidato].indice;
-        uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
-        listaDeNumerosCadastrados[indiceDeletado] = listaDeNumerosCadastrados[
-            indiceUltimoCandidato
-        ];
-        candidatoPorNumero[listaDeNumerosCadastrados[indiceUltimoCandidato]]
-            .indice = indiceDeletado;
-        listaDeNumerosCadastrados.pop();
-        delete candidatoPorNumero[numeroDoCandidato];
-    }
+    
 }
 
 /**
