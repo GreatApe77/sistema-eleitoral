@@ -216,37 +216,3 @@ contract Eleicao {
 
     
 }
-
-/**
- * 
- * 
- * 
- * 
- * pragma solidity ^0.4.22;
-
-contract ArrayPagination {
-    bytes32[] arr;
-
-    function add(bytes32 data) public {
-        arr.push(data);
-    }
-
-    function fetchPage(uint256 cursor, uint256 howMany)
-    public
-    view
-    returns (bytes32[] values, uint256 newCursor)
-    {
-        uint256 length = howMany;
-        if (length > arr.length - cursor) {
-            length = arr.length - cursor;
-        }
-
-        values = new bytes32[](length);
-        for (uint256 i = 0; i < length; i++) {
-            values[i] = arr[cursor + i];
-        }
-
-        return (values, cursor + length);
-    }
-}
- */
