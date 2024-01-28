@@ -10,9 +10,14 @@ contract Eleicao {
     error Eleicao__VotosNaoZerados();
     error Eleicao__CandidatoJaExiste();
     error Eleicao__EleicaoNaoEstaAtiva();
-    error Eleicao__EleicaoEncerrada();
+    error Eleicao__SomenteAntesDaEleicao();
     error Eleicao__SomenteAdministrador();
-
+    error Eleicao__PrazoParaVotacaoEncerrado();
+    enum StatusDaEleicao {
+        NAO_INICIADA,
+        ATIVA,
+        ENCERRADA
+    }
     struct Votos {
         uint256 quantidadeDeVotos;
         uint256 quantidadeDeVotosValidos;
@@ -28,16 +33,19 @@ contract Eleicao {
         uint256 indice;
     }
 
+    StatusDaEleicao public statusDaEleicao = StatusDaEleicao.NAO_INICIADA;
+
     Votos public resultado;
 
     Votos private _informacoesDeVotos;
 
     uint16[] public listaDeNumerosCadastrados;
 
-    bool public eleicaoAtiva;
-    bool public eleicaoEncerrada;
+    //bool public eleicaoAtiva;
+    //bool public eleicaoEncerrada;
     address public immutable admin;
 
+    uint256 public dataLimiteParaVotar;
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
 
     mapping(uint16 numeroDeVotacao => Candidato informacoes)
@@ -46,19 +54,30 @@ contract Eleicao {
         if (msg.sender != admin) revert Eleicao__SomenteAdministrador();
         _;
     }
-
+    modifier somenteAntesDaEleicao(){
+        if(statusDaEleicao!=StatusDaEleicao.NAO_INICIADA) revert Eleicao__SomenteAntesDaEleicao();
+        _;
+    }
+    modifier somenteDuranteAEleicao(){
+        if(statusDaEleicao!=StatusDaEleicao.ATIVA) revert Eleicao__EleicaoNaoEstaAtiva();
+        _;
+    }
+    modifier somenteDentroDoPrazoParaVotacao(){
+        if(block.timestamp>dataLimiteParaVotar) revert Eleicao__PrazoParaVotacaoEncerrado();
+        _;
+    }
     constructor(Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
     }
 
-    function iniciarEleicao() public somenteAdmnistrador {
-        eleicaoAtiva = true;
+    function iniciarEleicao() public somenteAdmnistrador somenteAntesDaEleicao {
+        statusDaEleicao = StatusDaEleicao.ATIVA;
+        dataLimiteParaVotar = block.timestamp + TEMPO_DE_VOTACAO;
     }
 
-    function encerrarEleicao() public virtual somenteAdmnistrador {
-        eleicaoAtiva = false;
-        eleicaoEncerrada = true;
+    function encerrarEleicao() public virtual somenteAdmnistrador somenteDuranteAEleicao {
+        statusDaEleicao = StatusDaEleicao.ENCERRADA;
         resultado = _informacoesDeVotos;
         //for (uint i = 0; i < _getVencedorOuEmpatados().length; i++) {
         // resultado.vencedores.push(_getVencedorOuEmpatados()[i]);
@@ -68,7 +87,7 @@ contract Eleicao {
 
     function cadastrarCandidato(
         Candidato memory candidato
-    ) public somenteAdmnistrador {
+    ) public somenteAdmnistrador somenteAntesDaEleicao {
         _cadastrarCandidato(candidato);
     }
 
@@ -76,8 +95,8 @@ contract Eleicao {
         _deletarCandidato(numeroDoCandidato);
     }
 
-    function votar(uint16 numeroDoCandidato) public somenteAdmnistrador {
-        if (!eleicaoAtiva) revert();
+    function votar(uint16 numeroDoCandidato) public somenteAdmnistrador somenteDuranteAEleicao {
+        
         if (!_candidatoExiste(numeroDoCandidato)) {
             if (numeroDoCandidato == 777) {
                 _informacoesDeVotos.quantidadeDeVotosBrancos++;
