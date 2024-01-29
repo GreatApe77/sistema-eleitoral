@@ -236,6 +236,8 @@ contract Eleicao is IEleicao {
      * @param numeroDoCandidato Número de votação do candidato a ser deletado
      */
     function _deletarCandidato(uint16 numeroDoCandidato) private {
+        if (!_candidatoExiste(numeroDoCandidato))
+            revert Eleicao__CandidatoNaoExiste();
         uint256 indiceDeletado = _candidatoPorNumero[numeroDoCandidato].indice;
         uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
         listaDeNumerosCadastrados[indiceDeletado] = listaDeNumerosCadastrados[

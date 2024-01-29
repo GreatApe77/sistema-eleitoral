@@ -27,7 +27,10 @@ interface IEleicao {
      * @dev Erro disparado quando o prazo para votação já foi encerrado
      */
     error Eleicao__PrazoParaVotacaoEncerrado();
-
+    /**
+     * @dev Erro disparado quando o candidato não existe
+     */
+    error Eleicao__CandidatoNaoExiste();
     //Funções de leitura
 
     /**
