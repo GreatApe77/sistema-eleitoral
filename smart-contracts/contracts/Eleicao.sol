@@ -1,43 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
-
+import {EleicaoLib} from "./lib/EleicaoLib.sol";
+import {IEleicao} from "./IEleicao.sol";
 /**
  * @title Eleicao
  * @author Mateus Navarro
  * @notice Contrato para gerenciar uma eleição
  */
-contract Eleicao {
-    error Eleicao__VotosNaoZerados();
-    error Eleicao__CandidatoJaExiste();
-    error Eleicao__EleicaoNaoEstaAtiva();
-    error Eleicao__SomenteAntesDaEleicao();
-    error Eleicao__SomenteAdministrador();
-    error Eleicao__PrazoParaVotacaoEncerrado();
-    enum StatusDaEleicao {
-        NAO_INICIADA,
-        ATIVA,
-        ENCERRADA
-    }
-    struct Votos {
-        uint256 quantidadeDeVotos;
-        uint256 quantidadeDeVotosValidos;
-        uint256 quantidadeDeVotosBrancos;
-        uint256 quantidadeDeVotosNulos;
-    }
-    struct Candidato {
-        string nome;
-        string partido;
-        string fotoDoCandidatoUrl;
-        uint16 numeroDeVotacao;
-        uint256 quantidadeDeVotos;
-        uint256 indice;
-    }
+contract Eleicao is IEleicao {
 
-    StatusDaEleicao public statusDaEleicao = StatusDaEleicao.NAO_INICIADA;
+    
 
-    Votos public resultado;
+    EleicaoLib.StatusDaEleicao public statusDaEleicao = EleicaoLib.StatusDaEleicao.NAO_INICIADA;
 
-    Votos private _informacoesDeVotos;
+    EleicaoLib.Votos private _resultado;
+
+    EleicaoLib.Votos private _informacoesDeVotos;
 
     uint16[] public listaDeNumerosCadastrados;
 
@@ -48,37 +26,37 @@ contract Eleicao {
     uint256 public dataLimiteParaVotar;
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
 
-    mapping(uint16 numeroDeVotacao => Candidato informacoes)
+    mapping(uint16 numeroDeVotacao => EleicaoLib.Candidato informacoes)
         public candidatoPorNumero;
     modifier somenteAdmnistrador() {
         if (msg.sender != admin) revert Eleicao__SomenteAdministrador();
         _;
     }
     modifier somenteAntesDaEleicao(){
-        if(statusDaEleicao!=StatusDaEleicao.NAO_INICIADA) revert Eleicao__SomenteAntesDaEleicao();
+        if(statusDaEleicao!=EleicaoLib.StatusDaEleicao.NAO_INICIADA) revert Eleicao__SomenteAntesDaEleicao();
         _;
     }
     modifier somenteDuranteAEleicao(){
-        if(statusDaEleicao!=StatusDaEleicao.ATIVA) revert Eleicao__EleicaoNaoEstaAtiva();
+        if(statusDaEleicao!=EleicaoLib.StatusDaEleicao.ATIVA) revert Eleicao__EleicaoNaoEstaAtiva();
         _;
     }
     modifier somenteDentroDoPrazoParaVotacao(){
         if(block.timestamp>dataLimiteParaVotar) revert Eleicao__PrazoParaVotacaoEncerrado();
         _;
     }
-    constructor(Candidato[] memory candidatosIniciais) {
+    constructor(EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
     }
 
     function iniciarEleicao() public somenteAdmnistrador somenteAntesDaEleicao {
-        statusDaEleicao = StatusDaEleicao.ATIVA;
+        statusDaEleicao = EleicaoLib.StatusDaEleicao.ATIVA;
         dataLimiteParaVotar = block.timestamp + TEMPO_DE_VOTACAO;
     }
 
     function encerrarEleicao() public virtual somenteAdmnistrador somenteDuranteAEleicao {
-        statusDaEleicao = StatusDaEleicao.ENCERRADA;
-        resultado = _informacoesDeVotos;
+        statusDaEleicao = EleicaoLib.StatusDaEleicao.ENCERRADA;
+        _resultado = _informacoesDeVotos;
         //for (uint i = 0; i < _getVencedorOuEmpatados().length; i++) {
         // resultado.vencedores.push(_getVencedorOuEmpatados()[i]);
 
@@ -86,7 +64,7 @@ contract Eleicao {
     }
 
     function cadastrarCandidato(
-        Candidato memory candidato
+        EleicaoLib.Candidato memory candidato
     ) public somenteAdmnistrador somenteAntesDaEleicao {
         _cadastrarCandidato(candidato);
     }
@@ -117,12 +95,12 @@ contract Eleicao {
     function getCandidatos(
         uint256 indiceDePartida,
         uint256 quantidade
-    ) public view returns (Candidato[] memory) {
+    ) public view returns (EleicaoLib.Candidato[] memory) {
         uint256 length = quantidade;
         if (length > listaDeNumerosCadastrados.length - indiceDePartida) {
             length = listaDeNumerosCadastrados.length - indiceDePartida;
         }
-        Candidato[] memory candidatos = new Candidato[](length);
+        EleicaoLib.Candidato[] memory candidatos = new EleicaoLib.Candidato[](length);
         for (uint i = 0; i < length; i++) {
             candidatos[i] = candidatoPorNumero[
                 listaDeNumerosCadastrados[indiceDePartida + i]
@@ -132,13 +110,13 @@ contract Eleicao {
     }
 
 
-    function _cadastrarCandidatos(Candidato[] memory candidatos) private {
+    function _cadastrarCandidatos(EleicaoLib.Candidato[] memory candidatos) private {
         for (uint i = 0; i < candidatos.length; i++) {
             _cadastrarCandidato(candidatos[i]);
         }
     }
 
-    function _cadastrarCandidato(Candidato memory candidato) private {
+    function _cadastrarCandidato(EleicaoLib.Candidato memory candidato) private {
         uint16 numeroDoCandidato = candidato.numeroDeVotacao;
         if (_candidatoExiste(numeroDoCandidato))
             revert Eleicao__CandidatoJaExiste();
@@ -154,7 +132,7 @@ contract Eleicao {
         return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }
 
-    function _validaVotosZerados(Candidato memory candidato) private pure {
+    function _validaVotosZerados(EleicaoLib.Candidato memory candidato) private pure {
         if (candidato.quantidadeDeVotos != 0) {
             revert Eleicao__VotosNaoZerados();
         }
