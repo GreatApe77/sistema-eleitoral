@@ -2,59 +2,106 @@
 pragma solidity ^0.8.20;
 import {EleicaoLib} from "./lib/EleicaoLib.sol";
 import {IEleicao} from "./IEleicao.sol";
+
 /**
  * @title Eleicao
  * @author Mateus Navarro
  * @notice Contrato para gerenciar uma eleição
  */
 contract Eleicao is IEleicao {
-    EleicaoLib.StatusDaEleicao private _statusDaEleicao = EleicaoLib.StatusDaEleicao.NAO_INICIADA;
+    /**
+     * @dev variável que armazena o status da eleição
+     */
+    EleicaoLib.StatusDaEleicao private _statusDaEleicao =
+        EleicaoLib.StatusDaEleicao.NAO_INICIADA;
 
+    /**
+     * @dev variável que armazena o resultado da eleição
+     */
     EleicaoLib.Votos private _resultado;
-
+    /**
+     * @dev variável que armazena as informações de votos
+     */
     EleicaoLib.Votos private _informacoesDeVotos;
-
+    /**
+     * @dev Lista de números de votação cadastrados
+     */
     uint16[] public listaDeNumerosCadastrados;
 
     //bool public eleicaoAtiva;
     //bool public eleicaoEncerrada;
+    /**
+     * @notice Endereço do administrador do contrato
+     */
     address public immutable admin;
-
+    /**
+     * @notice Data limite para votar
+     */
     uint256 public dataLimiteParaVotar;
+    /**
+     * @notice Tempo de duração da eleição
+     */
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
-
+    /**
+     * @notice Mapeamento de candidatos por número de votação
+     */
     mapping(uint16 numeroDeVotacao => EleicaoLib.Candidato informacoes)
-        public _candidatoPorNumero;
+        private _candidatoPorNumero;
+    /**
+     * 
+     * @dev Modificador que permite que apenas o administrador execute a função
+     */
     modifier somenteAdmnistrador() {
         if (msg.sender != admin) revert Eleicao__SomenteAdministrador();
         _;
     }
+    /**
+     * 
+     * @dev Modificador que permite que a função seja executada apenas antes da eleição
+     */
     modifier somenteAntesDaEleicao() {
         if (_statusDaEleicao != EleicaoLib.StatusDaEleicao.NAO_INICIADA)
             revert Eleicao__SomenteAntesDaEleicao();
         _;
     }
+    /**
+     * 
+     * @dev Modificador que permite que a função seja executada apenas durante a eleição
+     */
     modifier somenteDuranteAEleicao() {
         if (_statusDaEleicao != EleicaoLib.StatusDaEleicao.ATIVA)
             revert Eleicao__EleicaoNaoEstaAtiva();
         _;
     }
+    /**
+     * 
+     * @dev Modificador que permite que a função seja executada apenas dentro do prazo para votação
+     */
     modifier somenteDentroDoPrazoParaVotacao() {
         if (block.timestamp > dataLimiteParaVotar)
             revert Eleicao__PrazoParaVotacaoEncerrado();
         _;
     }
-
+    /**
+     * 
+     * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
+     */
     constructor(EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
     }
 
+    /**
+     * @inheritdoc IEleicao
+     */
     function iniciarEleicao() public somenteAdmnistrador somenteAntesDaEleicao {
         _statusDaEleicao = EleicaoLib.StatusDaEleicao.ATIVA;
         dataLimiteParaVotar = block.timestamp + TEMPO_DE_VOTACAO;
     }
 
+    /**
+     * @inheritdoc IEleicao
+     */
     function encerrarEleicao()
         public
         virtual
@@ -69,16 +116,28 @@ contract Eleicao is IEleicao {
         //  }
     }
 
+    /**
+     *
+     * @inheritdoc IEleicao
+     */
     function cadastrarCandidato(
         EleicaoLib.Candidato memory candidato
     ) public somenteAdmnistrador somenteAntesDaEleicao {
         _cadastrarCandidato(candidato);
     }
 
+    /**
+     *
+     * @inheritdoc IEleicao
+     */
     function deletarCandidato(uint16 numeroDoCandidato) public {
         _deletarCandidato(numeroDoCandidato);
     }
 
+    /**
+     *
+     * @inheritdoc IEleicao
+     */
     function votar(
         uint16 numeroDoCandidato
     ) public somenteAdmnistrador somenteDuranteAEleicao {
@@ -95,10 +154,18 @@ contract Eleicao is IEleicao {
         _informacoesDeVotos.quantidadeDeVotos++;
     }
 
+    /**
+     *
+     * @inheritdoc IEleicao
+     */
     function getQuantidadeDeCandidatos() public view returns (uint256) {
         return listaDeNumerosCadastrados.length;
     }
 
+    /**
+     *
+     * @inheritdoc IEleicao
+     */
     function getCandidatos(
         uint256 indiceDePartida,
         uint256 quantidade
@@ -117,7 +184,10 @@ contract Eleicao is IEleicao {
         }
         return candidatos;
     }
-
+    /**
+     * @notice Cadastra uma lista de candidatos na eleição
+     * @param candidatos Lista de candidatos a serem cadastrados
+     */
     function _cadastrarCandidatos(
         EleicaoLib.Candidato[] memory candidatos
     ) private {
@@ -125,7 +195,10 @@ contract Eleicao is IEleicao {
             _cadastrarCandidato(candidatos[i]);
         }
     }
-
+    /**
+     * @notice Cadastra um único candidato na eleição
+     * @param candidato Informações do candidato a ser cadastrado
+     */
     function _cadastrarCandidato(
         EleicaoLib.Candidato memory candidato
     ) private {
@@ -137,13 +210,20 @@ contract Eleicao is IEleicao {
         candidato.indice = listaDeNumerosCadastrados.length - 1;
         _candidatoPorNumero[numeroDoCandidato] = candidato;
     }
-
+    /**
+     * @notice Verifica se o candidato existe
+     * @param numeroDoCandidato Número de votação do candidato
+     */
     function _candidatoExiste(
         uint16 numeroDoCandidato
     ) private view returns (bool) {
         return _candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }
 
+    /**
+     * @notice Verifica se a quantidade de votos do candidato é zero
+     * @param candidato Informações do candidato
+     */
     function _validaVotosZerados(
         EleicaoLib.Candidato memory candidato
     ) private pure {
@@ -151,7 +231,10 @@ contract Eleicao is IEleicao {
             revert Eleicao__VotosNaoZerados();
         }
     }
-
+    /**
+     * @notice Deleta um candidato da eleição
+     * @param numeroDoCandidato Número de votação do candidato a ser deletado
+     */
     function _deletarCandidato(uint16 numeroDoCandidato) private {
         uint256 indiceDeletado = _candidatoPorNumero[numeroDoCandidato].indice;
         uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
@@ -207,6 +290,9 @@ contract Eleicao is IEleicao {
         return candidatos;
     } */
 
+    /**
+     * @inheritdoc IEleicao
+     */
     function statusDaEleicao()
         external
         view
@@ -216,6 +302,9 @@ contract Eleicao is IEleicao {
         return _statusDaEleicao;
     }
 
+    /**
+     * @inheritdoc IEleicao
+     */
     function resultado()
         external
         view
@@ -225,6 +314,10 @@ contract Eleicao is IEleicao {
         return _resultado;
     }
 
+    /**
+     * 
+     * @inheritdoc IEleicao
+     */
     function candidatoPorNumero(
         uint16 numeroDeVotacao
     ) external view override returns (EleicaoLib.Candidato memory) {
