@@ -8,10 +8,7 @@ import {IEleicao} from "./IEleicao.sol";
  * @notice Contrato para gerenciar uma eleição
  */
 contract Eleicao is IEleicao {
-
-    
-
-    EleicaoLib.StatusDaEleicao public statusDaEleicao = EleicaoLib.StatusDaEleicao.NAO_INICIADA;
+    EleicaoLib.StatusDaEleicao private _statusDaEleicao = EleicaoLib.StatusDaEleicao.NAO_INICIADA;
 
     EleicaoLib.Votos private _resultado;
 
@@ -27,35 +24,44 @@ contract Eleicao is IEleicao {
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
 
     mapping(uint16 numeroDeVotacao => EleicaoLib.Candidato informacoes)
-        public candidatoPorNumero;
+        public _candidatoPorNumero;
     modifier somenteAdmnistrador() {
         if (msg.sender != admin) revert Eleicao__SomenteAdministrador();
         _;
     }
-    modifier somenteAntesDaEleicao(){
-        if(statusDaEleicao!=EleicaoLib.StatusDaEleicao.NAO_INICIADA) revert Eleicao__SomenteAntesDaEleicao();
+    modifier somenteAntesDaEleicao() {
+        if (_statusDaEleicao != EleicaoLib.StatusDaEleicao.NAO_INICIADA)
+            revert Eleicao__SomenteAntesDaEleicao();
         _;
     }
-    modifier somenteDuranteAEleicao(){
-        if(statusDaEleicao!=EleicaoLib.StatusDaEleicao.ATIVA) revert Eleicao__EleicaoNaoEstaAtiva();
+    modifier somenteDuranteAEleicao() {
+        if (_statusDaEleicao != EleicaoLib.StatusDaEleicao.ATIVA)
+            revert Eleicao__EleicaoNaoEstaAtiva();
         _;
     }
-    modifier somenteDentroDoPrazoParaVotacao(){
-        if(block.timestamp>dataLimiteParaVotar) revert Eleicao__PrazoParaVotacaoEncerrado();
+    modifier somenteDentroDoPrazoParaVotacao() {
+        if (block.timestamp > dataLimiteParaVotar)
+            revert Eleicao__PrazoParaVotacaoEncerrado();
         _;
     }
+
     constructor(EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
     }
 
     function iniciarEleicao() public somenteAdmnistrador somenteAntesDaEleicao {
-        statusDaEleicao = EleicaoLib.StatusDaEleicao.ATIVA;
+        _statusDaEleicao = EleicaoLib.StatusDaEleicao.ATIVA;
         dataLimiteParaVotar = block.timestamp + TEMPO_DE_VOTACAO;
     }
 
-    function encerrarEleicao() public virtual somenteAdmnistrador somenteDuranteAEleicao {
-        statusDaEleicao = EleicaoLib.StatusDaEleicao.ENCERRADA;
+    function encerrarEleicao()
+        public
+        virtual
+        somenteAdmnistrador
+        somenteDuranteAEleicao
+    {
+        _statusDaEleicao = EleicaoLib.StatusDaEleicao.ENCERRADA;
         _resultado = _informacoesDeVotos;
         //for (uint i = 0; i < _getVencedorOuEmpatados().length; i++) {
         // resultado.vencedores.push(_getVencedorOuEmpatados()[i]);
@@ -73,8 +79,9 @@ contract Eleicao is IEleicao {
         _deletarCandidato(numeroDoCandidato);
     }
 
-    function votar(uint16 numeroDoCandidato) public somenteAdmnistrador somenteDuranteAEleicao {
-        
+    function votar(
+        uint16 numeroDoCandidato
+    ) public somenteAdmnistrador somenteDuranteAEleicao {
         if (!_candidatoExiste(numeroDoCandidato)) {
             if (numeroDoCandidato == 777) {
                 _informacoesDeVotos.quantidadeDeVotosBrancos++;
@@ -82,7 +89,7 @@ contract Eleicao is IEleicao {
                 _informacoesDeVotos.quantidadeDeVotosNulos++;
             }
         } else {
-            candidatoPorNumero[numeroDoCandidato].quantidadeDeVotos++;
+            _candidatoPorNumero[numeroDoCandidato].quantidadeDeVotos++;
             _informacoesDeVotos.quantidadeDeVotosValidos++;
         }
         _informacoesDeVotos.quantidadeDeVotos++;
@@ -100,56 +107,64 @@ contract Eleicao is IEleicao {
         if (length > listaDeNumerosCadastrados.length - indiceDePartida) {
             length = listaDeNumerosCadastrados.length - indiceDePartida;
         }
-        EleicaoLib.Candidato[] memory candidatos = new EleicaoLib.Candidato[](length);
+        EleicaoLib.Candidato[] memory candidatos = new EleicaoLib.Candidato[](
+            length
+        );
         for (uint i = 0; i < length; i++) {
-            candidatos[i] = candidatoPorNumero[
+            candidatos[i] = _candidatoPorNumero[
                 listaDeNumerosCadastrados[indiceDePartida + i]
             ];
         }
         return candidatos;
     }
 
-
-    function _cadastrarCandidatos(EleicaoLib.Candidato[] memory candidatos) private {
+    function _cadastrarCandidatos(
+        EleicaoLib.Candidato[] memory candidatos
+    ) private {
         for (uint i = 0; i < candidatos.length; i++) {
             _cadastrarCandidato(candidatos[i]);
         }
     }
 
-    function _cadastrarCandidato(EleicaoLib.Candidato memory candidato) private {
+    function _cadastrarCandidato(
+        EleicaoLib.Candidato memory candidato
+    ) private {
         uint16 numeroDoCandidato = candidato.numeroDeVotacao;
         if (_candidatoExiste(numeroDoCandidato))
             revert Eleicao__CandidatoJaExiste();
         _validaVotosZerados(candidato);
         listaDeNumerosCadastrados.push(numeroDoCandidato);
         candidato.indice = listaDeNumerosCadastrados.length - 1;
-        candidatoPorNumero[numeroDoCandidato] = candidato;
+        _candidatoPorNumero[numeroDoCandidato] = candidato;
     }
 
     function _candidatoExiste(
         uint16 numeroDoCandidato
     ) private view returns (bool) {
-        return candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
+        return _candidatoPorNumero[numeroDoCandidato].numeroDeVotacao > 0;
     }
 
-    function _validaVotosZerados(EleicaoLib.Candidato memory candidato) private pure {
+    function _validaVotosZerados(
+        EleicaoLib.Candidato memory candidato
+    ) private pure {
         if (candidato.quantidadeDeVotos != 0) {
             revert Eleicao__VotosNaoZerados();
         }
     }
 
     function _deletarCandidato(uint16 numeroDoCandidato) private {
-        uint256 indiceDeletado = candidatoPorNumero[numeroDoCandidato].indice;
+        uint256 indiceDeletado = _candidatoPorNumero[numeroDoCandidato].indice;
         uint256 indiceUltimoCandidato = listaDeNumerosCadastrados.length - 1;
         listaDeNumerosCadastrados[indiceDeletado] = listaDeNumerosCadastrados[
             indiceUltimoCandidato
         ];
-        candidatoPorNumero[listaDeNumerosCadastrados[indiceUltimoCandidato]]
+        _candidatoPorNumero[listaDeNumerosCadastrados[indiceUltimoCandidato]]
             .indice = indiceDeletado;
         listaDeNumerosCadastrados.pop();
-        delete candidatoPorNumero[numeroDoCandidato];
+        delete _candidatoPorNumero[numeroDoCandidato];
     }
-        /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
+
+    /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
         Candidato memory vencedor;
         uint256 totalDeCandidatos = getQuantidadeDeCandidatos();
         //Candidato[] memory empatados = new Candidato[](totalDeCandidatos);
@@ -192,5 +207,27 @@ contract Eleicao is IEleicao {
         return candidatos;
     } */
 
-    
+    function statusDaEleicao()
+        external
+        view
+        override
+        returns (EleicaoLib.StatusDaEleicao)
+    {
+        return _statusDaEleicao;
+    }
+
+    function resultado()
+        external
+        view
+        override
+        returns (EleicaoLib.Votos memory)
+    {
+        return _resultado;
+    }
+
+    function candidatoPorNumero(
+        uint16 numeroDeVotacao
+    ) external view override returns (EleicaoLib.Candidato memory) {
+        return _candidatoPorNumero[numeroDeVotacao];
+    }
 }
