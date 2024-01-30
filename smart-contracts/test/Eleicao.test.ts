@@ -171,6 +171,71 @@ describe("Eleicao", function () {
       "Eleicao__EleicaoNaoEstaAtiva"
     );
   })
+  it("Nao deve votar fora do prazo de votação", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await eleicao.iniciarEleicao()
+    await time.increase(60*60*24*2) // 2 dias no futuro
+    await expect(eleicao.votar(13)).to.be.revertedWithCustomError(
+      eleicao,
+      "Eleicao__PrazoParaVotacaoEncerrado"
+    );
+  })
+  it("Nao deve iniciar eleicao(NAO É ADMINISTRADOR)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await expect(
+      eleicao.connect(signers[1]).iniciarEleicao()
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
+  })
+  it("Nao deve iniciar eleicao(Eleicao ja começou)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await eleicao.iniciarEleicao()
+    await expect(
+      eleicao.iniciarEleicao()
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAntesDaEleicao");
+  })
+  it("Deve alterar o status da eleicao para ATIVA", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await eleicao.iniciarEleicao()
+    const status = await eleicao.statusDaEleicao()
+    expect(status).to.be.equal(StatusDaEleicao.ATIVA)
+  })
+  it("Nao deve votar (SOMENTE ADMINISTRADOR)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await eleicao.iniciarEleicao()
+    await expect(
+      eleicao.connect(signers[1]).votar(13)
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
+  })
+  it("Nao deve encerrar Eleicao(SOMENTE ADMINISTRADOR)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await eleicao.iniciarEleicao()
+    await expect(
+      eleicao.connect(signers[1]).encerrarEleicao()
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
+   
+  })
+  it("Nao deve encerrar Eleicao(Eleicao nao começou)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    //await eleicao.iniciarEleicao()
+    //await eleicao.encerrarEleicao()
+    await expect(
+      eleicao.encerrarEleicao()
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__EleicaoNaoEstaAtiva");
+  })
   it("Deve cadastrar um candidato depois da criação do contrato e retornar uma pagina de candidatos", async () => {
     const { eleicao, signers, eleicaoAddress } = await loadFixture(
       deployFixture

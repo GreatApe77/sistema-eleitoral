@@ -141,7 +141,7 @@ contract Eleicao is IEleicao {
      */
     function votar(
         uint16 numeroDoCandidato
-    ) public somenteAdmnistrador somenteDuranteAEleicao {
+    ) public somenteAdmnistrador somenteDuranteAEleicao somenteDentroDoPrazoParaVotacao {
         if (!_candidatoExiste(numeroDoCandidato)) {
             if (numeroDoCandidato == NUMERO_PARA_VOTO_BRANCO) {
                 _informacoesDeVotos.quantidadeDeVotosBrancos++;
