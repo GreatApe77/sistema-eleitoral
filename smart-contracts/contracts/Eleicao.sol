@@ -153,6 +153,7 @@ contract Eleicao is IEleicao {
             _informacoesDeVotos.quantidadeDeVotosValidos++;
         }
         _informacoesDeVotos.quantidadeDeVotos++;
+        emit VotoComputado();
     }
 
     /**
@@ -210,6 +211,7 @@ contract Eleicao is IEleicao {
         listaDeNumerosCadastrados.push(numeroDoCandidato);
         candidato.indice = listaDeNumerosCadastrados.length - 1;
         _candidatoPorNumero[numeroDoCandidato] = candidato;
+        emit CandidatoCadastrado(numeroDoCandidato);
     }
     /**
      * @notice Verifica se o candidato existe
@@ -248,6 +250,7 @@ contract Eleicao is IEleicao {
             .indice = indiceDeletado;
         listaDeNumerosCadastrados.pop();
         delete _candidatoPorNumero[numeroDoCandidato];
+        emit CandidatoDeletado(numeroDoCandidato);
     }
 
     /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
