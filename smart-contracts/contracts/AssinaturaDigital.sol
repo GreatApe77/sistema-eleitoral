@@ -12,7 +12,7 @@ abstract contract AssinaturaDigital is EIP712, Nonces {
 
     constructor(string memory name) EIP712(name, "1") {}
     
-    function assinar(address assinante,uint16 numeroDoCandidato,bool votoComputado,uint256 prazo ,uint8 v,bytes32 r,bytes32 s) internal virtual{
+    function assinar(address assinante,uint16 numeroDoCandidato,bool votoComputado,uint256 prazo ,uint8 v,bytes32 r,bytes32 s) public virtual{
         if(block.timestamp > prazo) revert AssinaturaDigital__ForaDoPrazo();
         bytes32 structHash = keccak256(abi.encode(VOTACAO_TYPEHASH,assinante,numeroDoCandidato,votoComputado,_useNonce(assinante),prazo));
         bytes32 hash = _hashTypedDataV4(structHash);
