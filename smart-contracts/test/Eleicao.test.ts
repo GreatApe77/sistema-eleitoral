@@ -12,6 +12,7 @@ enum StatusDaEleicao {
   ATIVA,
   ENCERRADA
 }
+//Esses testes não estão bem escritos, mas servem para testar o contrato
 describe("Eleicao", function () {
   async function deployFixture() {
     const signers = await ethers.getSigners();
