@@ -7,7 +7,11 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { experimentalAddHardhatNetworkMessageTraceHook } from "hardhat/config";
 import { candidatosMock } from "./utils/candidatoMock";
-
+enum StatusDaEleicao {
+  NAO_INICIADA,
+  ATIVA,
+  ENCERRADA
+}
 describe("Eleicao", function () {
   async function deployFixture() {
     const signers = await ethers.getSigners();
@@ -98,6 +102,22 @@ describe("Eleicao", function () {
       EleicaoFactory.deploy(copyCandidatosMock)
     ).to.be.revertedWithCustomError(EleicaoFactory, "Eleicao__VotosNaoZerados");
   });
+  it("Nao deve cadastrar um candidato (Não é administrador)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const candidato = {
+      fotoDoCandidatoUrl: "http://linkDeFoto",
+      nome: "Eduardo Jorge",
+      partido: "PT",
+      numeroDeVotacao: 13,
+      quantidadeDeVotos: 0,
+      indice: 0,
+    };
+    await expect(
+      eleicao.connect(signers[1]).cadastrarCandidato(candidato)
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
+  })
   it("Deve cadastrar um candidato depois da criação do contrato", async () => {
     const { eleicao, signers, eleicaoAddress } = await loadFixture(
       deployFixture
@@ -125,6 +145,32 @@ describe("Eleicao", function () {
       candidato.quantidadeDeVotos
     );
   });
+  it("Nao deve cadastrar um candidato (eleicao ja começou)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const candidato = {
+      fotoDoCandidatoUrl: "http://linkDeFoto",
+      nome: "Eduardo Jorge",
+      partido: "PT",
+      numeroDeVotacao: 13,
+      quantidadeDeVotos: 0,
+      indice: 0,
+    };
+    await eleicao.iniciarEleicao()
+    await expect(
+      eleicao.cadastrarCandidato(candidato)
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAntesDaEleicao");
+  })
+  it("Nao deve votar se a eleicao nao tiver iniciada", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await expect(eleicao.votar(13)).to.be.revertedWithCustomError(
+      eleicao,
+      "Eleicao__EleicaoNaoEstaAtiva"
+    );
+  })
   it("Deve cadastrar um candidato depois da criação do contrato e retornar uma pagina de candidatos", async () => {
     const { eleicao, signers, eleicaoAddress } = await loadFixture(
       deployFixture
@@ -157,6 +203,15 @@ describe("Eleicao", function () {
       );
     });
   });
+  it("Nao deve deletar um candidato que nao existe",async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    await expect(eleicao.deletarCandidato(9999)).to.be.revertedWithCustomError(
+      eleicao,
+      "Eleicao__CandidatoNaoExiste"
+    );
+  })
   it("Deve deletar um candidato depois da criação do contrato", async () => {
     const { eleicao, signers, eleicaoAddress } = await loadFixture(
       deployFixture
@@ -243,6 +298,7 @@ describe("Eleicao", function () {
     await eleicao.cadastrarCandidato(candidato1);
     await eleicao.cadastrarCandidato(candidato2);
     await eleicao.cadastrarCandidato(candidato3);
+    const NUMERO_VOTO_BRANCO = 777
     await eleicao.iniciarEleicao()
     for (let i = 0; i < 20; i++) {
       await eleicao.votar(candidato1.numeroDeVotacao);
@@ -256,10 +312,21 @@ describe("Eleicao", function () {
       await eleicao.votar(candidato2.numeroDeVotacao);
       
     }
+    for (let i = 0; i < 59; i++) {
+      await eleicao.votar(NUMERO_VOTO_BRANCO);
+      
+    }
+    for (let i = 0; i < 2; i++) {
+      await eleicao.votar(0);
+      
+    }
     await eleicao.encerrarEleicao()
     const resultado = await eleicao.resultado()
     //console.log(resultado.quantidadeDeVotos)
-    expect(resultado.quantidadeDeVotos).to.be.equal(59)
+    expect(resultado.quantidadeDeVotos).to.be.equal(120)
+    expect(resultado.quantidadeDeVotosValidos).to.be.equal(20+24+15)
+    expect(resultado.quantidadeDeVotosBrancos).to.be.equal(59)
+    expect(resultado.quantidadeDeVotosNulos).to.be.equal(2)
     //expect(resultado.vencedores).to.be.equal(candidato3.nome)
     //expect(resultado.vencedor.quantidadeDeVotos).to.be.equal(24)
   })

@@ -42,6 +42,7 @@ contract Eleicao is IEleicao {
      * @notice Tempo de duração da eleição
      */
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
+    uint256 public constant NUMERO_PARA_VOTO_BRANCO = 777;
     /**
      * @notice Mapeamento de candidatos por número de votação
      */
@@ -142,7 +143,7 @@ contract Eleicao is IEleicao {
         uint16 numeroDoCandidato
     ) public somenteAdmnistrador somenteDuranteAEleicao {
         if (!_candidatoExiste(numeroDoCandidato)) {
-            if (numeroDoCandidato == 777) {
+            if (numeroDoCandidato == NUMERO_PARA_VOTO_BRANCO) {
                 _informacoesDeVotos.quantidadeDeVotosBrancos++;
             } else {
                 _informacoesDeVotos.quantidadeDeVotosNulos++;
