@@ -14,6 +14,7 @@ contract SistemaEleitoral is Ownable {
      */
     mapping(uint256 => Eleicao) private _eleicoes;
 
+    event EleicaoCriada(uint256 indexed anoDeEleicao,address indexed enderecoDaEleicao);
     constructor() Ownable(_msgSender()){
 
     }
@@ -25,6 +26,8 @@ contract SistemaEleitoral is Ownable {
      * @dev O numero de votos iniciais deve ser igual a ZERO
      */
     function criarEleicao(uint256 anoDeEleicao,EleicaoLib.Candidato[] memory candidatosIniciais) public onlyOwner {
-        _eleicoes[anoDeEleicao] = new Eleicao(candidatosIniciais);
+        Eleicao  eleicao = new Eleicao(anoDeEleicao,candidatosIniciais);
+        _eleicoes[anoDeEleicao] = eleicao;
+        emit EleicaoCriada(anoDeEleicao,address(eleicao));
     }
 }

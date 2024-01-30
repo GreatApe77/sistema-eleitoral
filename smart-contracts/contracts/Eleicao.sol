@@ -41,6 +41,7 @@ contract Eleicao is IEleicao {
     /**
      * @notice Tempo de duração da eleição
      */
+    uint256 public immutable anoDeEleicao;
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
     uint256 public constant NUMERO_PARA_VOTO_BRANCO = 777;
     /**
@@ -87,9 +88,10 @@ contract Eleicao is IEleicao {
      * 
      * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
      */
-    constructor(EleicaoLib.Candidato[] memory candidatosIniciais) {
+    constructor(uint256 ano,EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
+        anoDeEleicao = ano;
     }
 
     /**

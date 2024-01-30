@@ -17,7 +17,7 @@ describe("Eleicao", function () {
   async function deployFixture() {
     const signers = await ethers.getSigners();
     const EleicaoFactory = await ethers.getContractFactory("Eleicao");
-    const eleicao = await EleicaoFactory.deploy(candidatosMock);
+    const eleicao = await EleicaoFactory.deploy(2024,candidatosMock);
     const eleicaoAddress = await eleicao.getAddress();
     return { eleicao, signers, eleicaoAddress };
   }
@@ -80,7 +80,7 @@ describe("Eleicao", function () {
       indice: 0,
     });
     await expect(
-      EleicaoFactory.deploy(copyCandidatosMock)
+      EleicaoFactory.deploy(2022,copyCandidatosMock)
     ).to.be.revertedWithCustomError(
       EleicaoFactory,
       "Eleicao__CandidatoJaExiste"
@@ -100,7 +100,7 @@ describe("Eleicao", function () {
     });
 
     await expect(
-      EleicaoFactory.deploy(copyCandidatosMock)
+      EleicaoFactory.deploy(2022,copyCandidatosMock)
     ).to.be.revertedWithCustomError(EleicaoFactory, "Eleicao__VotosNaoZerados");
   });
   it("Nao deve cadastrar um candidato (Não é administrador)", async () => {
