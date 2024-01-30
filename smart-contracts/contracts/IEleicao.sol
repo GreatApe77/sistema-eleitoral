@@ -32,6 +32,29 @@ interface IEleicao {
      */
     error Eleicao__CandidatoNaoExiste();
     //Funções de leitura
+    //EVENTOS
+    /**
+     * @notice Evento disparado quando um candidato é cadastrado
+     * @param numeroDeVotacao Número de votação do candidato
+     */
+    event CandidatoCadastrado(uint16 indexed numeroDeVotacao);
+    /**
+     * @notice Evento disparado quando um candidato é deletado
+     * @param numeroDeVotacao Número de votação do candidato
+     */
+    event CandidatoDeletado(uint16 indexed numeroDeVotacao);
+    /**
+     * @notice Evento disparado quando um voto é computado
+     */
+    event VotoComputado();
+    /**
+     * @notice Evento disparado quando a eleição é iniciada
+     */
+    event EleicaoIniciada();
+    /**
+     * @notice Evento disparado quando a eleição é encerrada
+     */
+    event EleicaoEncerrada();
 
     /**
      * @notice Retorna o status da eleição

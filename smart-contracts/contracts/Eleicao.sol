@@ -39,7 +39,13 @@ contract Eleicao is IEleicao {
      */
     uint256 public dataLimiteParaVotar;
     /**
-     * @notice Tempo de duração da eleição
+     * @notice Ano da eleição
+     * @dev Tem o seu valor atribuído na criação do contrato
+     * @dev Não pode ser alterado
+     */
+    uint256 public immutable anoDeEleicao;
+    /**
+     * @notice Tempo de duração da votação
      */
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
     uint256 public constant NUMERO_PARA_VOTO_BRANCO = 777;
@@ -87,9 +93,10 @@ contract Eleicao is IEleicao {
      * 
      * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
      */
-    constructor(EleicaoLib.Candidato[] memory candidatosIniciais) {
+    constructor(uint256 ano,EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
+        anoDeEleicao = ano;
     }
 
     /**
@@ -153,6 +160,7 @@ contract Eleicao is IEleicao {
             _informacoesDeVotos.quantidadeDeVotosValidos++;
         }
         _informacoesDeVotos.quantidadeDeVotos++;
+        emit VotoComputado();
     }
 
     /**
@@ -210,6 +218,7 @@ contract Eleicao is IEleicao {
         listaDeNumerosCadastrados.push(numeroDoCandidato);
         candidato.indice = listaDeNumerosCadastrados.length - 1;
         _candidatoPorNumero[numeroDoCandidato] = candidato;
+        emit CandidatoCadastrado(numeroDoCandidato);
     }
     /**
      * @notice Verifica se o candidato existe
@@ -248,6 +257,7 @@ contract Eleicao is IEleicao {
             .indice = indiceDeletado;
         listaDeNumerosCadastrados.pop();
         delete _candidatoPorNumero[numeroDoCandidato];
+        emit CandidatoDeletado(numeroDoCandidato);
     }
 
     /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
