@@ -39,9 +39,14 @@ contract Eleicao is IEleicao {
      */
     uint256 public dataLimiteParaVotar;
     /**
-     * @notice Tempo de duração da eleição
+     * @notice Ano da eleição
+     * @dev Tem o seu valor atribuído na criação do contrato
+     * @dev Não pode ser alterado
      */
     uint256 public immutable anoDeEleicao;
+    /**
+     * @notice Tempo de duração da votação
+     */
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
     uint256 public constant NUMERO_PARA_VOTO_BRANCO = 777;
     /**

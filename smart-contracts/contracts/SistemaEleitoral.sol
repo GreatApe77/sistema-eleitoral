@@ -9,12 +9,25 @@ import {EleicaoLib} from "./lib/EleicaoLib.sol";
  * @notice Contrato para gerenciar Múltiplas Eleições
  */
 contract SistemaEleitoral is Ownable {
+    error SistemaEleitoral__EleicaoJaExiste();
+    
     /**
      * @dev Mapping que armazena as eleições usando o ano como chave. ex: 2022 => Eleicao
      */
     mapping(uint256 => Eleicao) private _eleicoes;
-
+    /**
+     * @notice Evento disparado quando uma eleição é criada
+     * @param anoDeEleicao O ano da eleição
+     * @param enderecoDaEleicao O endereço da eleição criada
+     */
     event EleicaoCriada(uint256 indexed anoDeEleicao,address indexed enderecoDaEleicao);
+
+    modifier somenteNovasEleicoes(uint256 anoDeEleicao){
+        if(_eleicaoExiste(anoDeEleicao)){
+            revert SistemaEleitoral__EleicaoJaExiste();
+        }
+        _;
+    }
     constructor() Ownable(_msgSender()){
 
     }
@@ -29,5 +42,9 @@ contract SistemaEleitoral is Ownable {
         Eleicao  eleicao = new Eleicao(anoDeEleicao,candidatosIniciais);
         _eleicoes[anoDeEleicao] = eleicao;
         emit EleicaoCriada(anoDeEleicao,address(eleicao));
+    }
+
+    function _eleicaoExiste(uint256 anoDeEleicao) internal view returns(bool){
+        return address(_eleicoes[anoDeEleicao]) != address(0);
     }
 }
