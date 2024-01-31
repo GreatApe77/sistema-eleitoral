@@ -44,6 +44,7 @@ contract Eleicao is IEleicao {
      * @dev Não pode ser alterado
      */
     uint256 public immutable anoDeEleicao;
+    uint256 private _quantidadeDeEleitores;
     /**
      * @notice Tempo de duração da votação
      */
@@ -353,17 +354,31 @@ contract Eleicao is IEleicao {
     }
 
     function aprovarEleitores(address[] memory eleitores) external override {
-        _configurarEleitores(eleitores, true);
+        for (uint256 i = 0; i < eleitores.length; i++) {
+            if(_eleitoresAprovadosParaVotar[eleitores[i]]==false){
+                _quantidadeDeEleitores++;
+            
+            }
+            _eleitoresAprovadosParaVotar[eleitores[i]] = true;
+            
+
+        }
+        
     }
 
     function retiraAprovacaoDeEleitores(
         address[] memory eleitores
     ) external override {
-        _configurarEleitores(eleitores, false);
-    }
-    function _configurarEleitores(address[] memory eleitores,bool disponibilidadeParaVoto) internal {
-        for (uint256 i = 0; i < eleitores.length; i++) {
-            _eleitoresAprovadosParaVotar[eleitores[i]] = disponibilidadeParaVoto;
+        for (uint i = 0; i < eleitores.length; i++) {
+            if(_eleitoresAprovadosParaVotar[eleitores[i]]==true){
+                _quantidadeDeEleitores--;
+            
+            }
+            _eleitoresAprovadosParaVotar[eleitores[i]] = false;
         }
+    }
+    
+    function getQuantidadeDeEleitores() external view returns(uint256){
+        return _quantidadeDeEleitores;
     }
 }

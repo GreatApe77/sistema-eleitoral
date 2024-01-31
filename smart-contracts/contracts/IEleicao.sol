@@ -110,8 +110,20 @@ interface IEleicao {
      */
     function votar(uint16 numeroDoCandidato) external;
 
-
+    /**
+     * @notice Aprova eleitores para a eleição
+     * @param eleitores endereco dos eleitores a serem aprovados
+     */
     function aprovarEleitores(address[] memory eleitores) external;
+    /**
+     * @notice Retira a aprovação de eleitores para a eleição
+     * @param eleitores endereco dos eleitores a serem desaprovados
+     */
     function retiraAprovacaoDeEleitores(address[] memory eleitores) external;
+    /**
+     * @notice Retorna a quantidade de eleitores aprovados para a eleição
+     * @return Quantidade de eleitores aprovados
+     */
+    function getQuantidadeDeEleitores() external view returns (uint256);
     
 }
