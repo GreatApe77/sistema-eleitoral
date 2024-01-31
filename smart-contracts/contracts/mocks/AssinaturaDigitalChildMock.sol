@@ -8,4 +8,21 @@ contract AssinaturaDigitalChildMock is AssinaturaDigital{
     constructor(string memory name) AssinaturaDigital(name) {
         
     }
+    function assinar( 
+        address assinante,
+        uint16 numeroDoCandidato,
+        uint256 prazo,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
+    ) public{
+        _assinar(
+            assinante,
+            numeroDoCandidato,
+            prazo,
+            v,
+            r,
+            s
+        );
+    }
 }
