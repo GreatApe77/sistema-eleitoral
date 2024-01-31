@@ -5,7 +5,6 @@ import {
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { experimentalAddHardhatNetworkMessageTraceHook } from "hardhat/config";
 import { candidatosMock } from "./utils/candidatoMock";
 enum StatusDaEleicao {
   NAO_INICIADA,
