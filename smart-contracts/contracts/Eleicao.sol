@@ -357,9 +357,9 @@ contract Eleicao is IEleicao {
         for (uint256 i = 0; i < eleitores.length; i++) {
             if(_eleitoresAprovadosParaVotar[eleitores[i]]==false){
                 _quantidadeDeEleitores++;
+                _eleitoresAprovadosParaVotar[eleitores[i]] = true;
             
             }
-            _eleitoresAprovadosParaVotar[eleitores[i]] = true;
             
 
         }
@@ -372,9 +372,9 @@ contract Eleicao is IEleicao {
         for (uint i = 0; i < eleitores.length; i++) {
             if(_eleitoresAprovadosParaVotar[eleitores[i]]==true){
                 _quantidadeDeEleitores--;
+                _eleitoresAprovadosParaVotar[eleitores[i]] = false;
             
             }
-            _eleitoresAprovadosParaVotar[eleitores[i]] = false;
         }
     }
     
