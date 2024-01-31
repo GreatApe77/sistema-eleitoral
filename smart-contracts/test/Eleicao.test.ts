@@ -166,7 +166,7 @@ describe("Eleicao", function () {
     const { eleicao, signers, eleicaoAddress } = await loadFixture(
       deployFixture
     );
-    await expect(eleicao.votar(13)).to.be.revertedWithCustomError(
+    await expect(eleicao.votar(13,ethers.Wallet.createRandom().address)).to.be.revertedWithCustomError(
       eleicao,
       "Eleicao__EleicaoNaoEstaAtiva"
     );
@@ -177,7 +177,7 @@ describe("Eleicao", function () {
     );
     await eleicao.iniciarEleicao()
     await time.increase(60*60*24*2) // 2 dias no futuro
-    await expect(eleicao.votar(13)).to.be.revertedWithCustomError(
+    await expect(eleicao.votar(13,ethers.Wallet.createRandom().address)).to.be.revertedWithCustomError(
       eleicao,
       "Eleicao__PrazoParaVotacaoEncerrado"
     );
@@ -213,7 +213,7 @@ describe("Eleicao", function () {
     );
     await eleicao.iniciarEleicao()
     await expect(
-      eleicao.connect(signers[1]).votar(13)
+      eleicao.connect(signers[1]).votar(13,ethers.Wallet.createRandom().address)
     ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
   })
   it("Nao deve encerrar Eleicao(SOMENTE ADMINISTRADOR)", async () => {
@@ -366,23 +366,23 @@ describe("Eleicao", function () {
     const NUMERO_VOTO_BRANCO = 777
     await eleicao.iniciarEleicao()
     for (let i = 0; i < 20; i++) {
-      await eleicao.votar(candidato1.numeroDeVotacao);
+      await eleicao.votar(candidato1.numeroDeVotacao,ethers.Wallet.createRandom().address);
       
     }
     for (let i = 0; i < 24; i++) {
-      await eleicao.votar(candidato3.numeroDeVotacao);
+      await eleicao.votar(candidato3.numeroDeVotacao,ethers.Wallet.createRandom().address);
       
     }
     for (let i = 0; i < 15; i++) {
-      await eleicao.votar(candidato2.numeroDeVotacao);
+      await eleicao.votar(candidato2.numeroDeVotacao,ethers.Wallet.createRandom().address);
       
     }
     for (let i = 0; i < 59; i++) {
-      await eleicao.votar(NUMERO_VOTO_BRANCO);
+      await eleicao.votar(NUMERO_VOTO_BRANCO,ethers.Wallet.createRandom().address);
       
     }
     for (let i = 0; i < 2; i++) {
-      await eleicao.votar(0);
+      await eleicao.votar(0,ethers.Wallet.createRandom().address);
       
     }
     await eleicao.encerrarEleicao()

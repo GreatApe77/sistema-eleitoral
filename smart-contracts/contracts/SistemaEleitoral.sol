@@ -112,9 +112,10 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
      */
     function votar(
         uint256 anoDeEleicao,
-        uint16 numeroDeVotacao
+        uint16 numeroDeVotacao,
+        address eleitor
     ) public onlyOwner somenteEleicoesExistentes(anoDeEleicao) {
-        eleicao(anoDeEleicao).votar(numeroDeVotacao);
+        eleicao(anoDeEleicao).votar(numeroDeVotacao,eleitor);
     }
 
     /**

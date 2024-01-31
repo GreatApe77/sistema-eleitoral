@@ -31,6 +31,10 @@ interface IEleicao {
      * @dev Erro disparado quando o candidato não existe
      */
     error Eleicao__CandidatoNaoExiste();
+    /**
+     * @dev Erro disparado quando o eleitor não está aprovado para votar
+     */
+    error Eleicao__EleitorNaoAprovado();
     //Funções de leitura
     //EVENTOS
     /**
@@ -108,7 +112,7 @@ interface IEleicao {
      * @notice Vota em um candidato
      * @param numeroDoCandidato Número de votação do candidato
      */
-    function votar(uint16 numeroDoCandidato) external;
+    function votar(uint16 numeroDoCandidato,address eleitor) external;
 
     /**
      * @notice Aprova eleitores para a eleição

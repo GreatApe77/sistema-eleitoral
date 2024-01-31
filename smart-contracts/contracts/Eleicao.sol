@@ -95,7 +95,10 @@ contract Eleicao is IEleicao {
             revert Eleicao__PrazoParaVotacaoEncerrado();
         _;
     }
-
+    modifier somenteAprovadosParaVotar(address eleitor){
+        if(_eleitoresAprovadosParaVotar[eleitor]==false) revert Eleicao__EleitorNaoAprovado();
+        _;
+    }
     /**
      *
      * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
@@ -154,12 +157,14 @@ contract Eleicao is IEleicao {
      * @inheritdoc IEleicao
      */
     function votar(
-        uint16 numeroDoCandidato
+        uint16 numeroDoCandidato,
+        address eleitor
     )
         public
         somenteAdmnistrador
         somenteDuranteAEleicao
         somenteDentroDoPrazoParaVotacao
+        somenteAprovadosParaVotar(eleitor)
     {
         if (!_candidatoExiste(numeroDoCandidato)) {
             if (numeroDoCandidato == NUMERO_PARA_VOTO_BRANCO) {
@@ -172,6 +177,7 @@ contract Eleicao is IEleicao {
             _informacoesDeVotos.quantidadeDeVotosValidos++;
         }
         _informacoesDeVotos.quantidadeDeVotos++;
+        _eleitoresAprovadosParaVotar[eleitor] = false;
         emit VotoComputado();
     }
 
@@ -353,7 +359,7 @@ contract Eleicao is IEleicao {
         return _candidatoPorNumero[numeroDeVotacao];
     }
 
-    function aprovarEleitores(address[] memory eleitores) external override {
+    function aprovarEleitores(address[] memory eleitores) external override somenteAdmnistrador somenteAntesDaEleicao {
         for (uint256 i = 0; i < eleitores.length; i++) {
             if(_eleitoresAprovadosParaVotar[eleitores[i]]==false){
                 _quantidadeDeEleitores++;
@@ -368,7 +374,7 @@ contract Eleicao is IEleicao {
 
     function retiraAprovacaoDeEleitores(
         address[] memory eleitores
-    ) external override {
+    ) external override  somenteAdmnistrador somenteAntesDaEleicao{
         for (uint i = 0; i < eleitores.length; i++) {
             if(_eleitoresAprovadosParaVotar[eleitores[i]]==true){
                 _quantidadeDeEleitores--;
