@@ -5,13 +5,13 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {Eleicao} from "./Eleicao.sol";
 import {EleicaoLib} from "./lib/EleicaoLib.sol";
 import {IEleicao} from "./IEleicao.sol";
-
+import {AssinaturaDigital} from "./AssinaturaDigital.sol";
 /**
  * @title Sistema Eleitoral
  * @author Mateus Navarro
  * @notice Contrato para gerenciar Múltiplas Eleições
  */
-contract SistemaEleitoral is Ownable {
+contract SistemaEleitoral is Ownable,AssinaturaDigital {
     /**
      * @dev Erro que indica que a eleição já existe
      */
@@ -55,7 +55,7 @@ contract SistemaEleitoral is Ownable {
     /**
      * @notice Atribui o cargo de administrador ao criador do contrato
      */
-    constructor() Ownable(_msgSender()) {}
+    constructor() Ownable(_msgSender()) AssinaturaDigital("Sistema Eleitoral") {}
 
     /**
      * @notice Função para criar uma Eleição

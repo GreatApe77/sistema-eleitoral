@@ -110,5 +110,8 @@ interface IEleicao {
      */
     function votar(uint16 numeroDoCandidato) external;
 
+
+    function aprovarEleitores(address[] memory eleitores) external;
+    function retiraAprovacaoDeEleitores(address[] memory eleitores) external;
     
 }

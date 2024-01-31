@@ -54,8 +54,13 @@ contract Eleicao is IEleicao {
      */
     mapping(uint16 numeroDeVotacao => EleicaoLib.Candidato informacoes)
         private _candidatoPorNumero;
+
     /**
-     * 
+     * @dev mapping que controla quais endereços podem votar
+     */
+    mapping(address => bool) private _eleitoresAprovadosParaVotar;
+    /**
+     *
      * @dev Modificador que permite que apenas o administrador execute a função
      */
     modifier somenteAdmnistrador() {
@@ -63,7 +68,7 @@ contract Eleicao is IEleicao {
         _;
     }
     /**
-     * 
+     *
      * @dev Modificador que permite que a função seja executada apenas antes da eleição
      */
     modifier somenteAntesDaEleicao() {
@@ -72,7 +77,7 @@ contract Eleicao is IEleicao {
         _;
     }
     /**
-     * 
+     *
      * @dev Modificador que permite que a função seja executada apenas durante a eleição
      */
     modifier somenteDuranteAEleicao() {
@@ -81,7 +86,7 @@ contract Eleicao is IEleicao {
         _;
     }
     /**
-     * 
+     *
      * @dev Modificador que permite que a função seja executada apenas dentro do prazo para votação
      */
     modifier somenteDentroDoPrazoParaVotacao() {
@@ -89,11 +94,12 @@ contract Eleicao is IEleicao {
             revert Eleicao__PrazoParaVotacaoEncerrado();
         _;
     }
+
     /**
-     * 
+     *
      * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
      */
-    constructor(uint256 ano,EleicaoLib.Candidato[] memory candidatosIniciais) {
+    constructor(uint256 ano, EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = msg.sender;
         anoDeEleicao = ano;
@@ -148,7 +154,12 @@ contract Eleicao is IEleicao {
      */
     function votar(
         uint16 numeroDoCandidato
-    ) public somenteAdmnistrador somenteDuranteAEleicao somenteDentroDoPrazoParaVotacao {
+    )
+        public
+        somenteAdmnistrador
+        somenteDuranteAEleicao
+        somenteDentroDoPrazoParaVotacao
+    {
         if (!_candidatoExiste(numeroDoCandidato)) {
             if (numeroDoCandidato == NUMERO_PARA_VOTO_BRANCO) {
                 _informacoesDeVotos.quantidadeDeVotosBrancos++;
@@ -193,6 +204,7 @@ contract Eleicao is IEleicao {
         }
         return candidatos;
     }
+
     /**
      * @notice Cadastra uma lista de candidatos na eleição
      * @param candidatos Lista de candidatos a serem cadastrados
@@ -204,6 +216,7 @@ contract Eleicao is IEleicao {
             _cadastrarCandidato(candidatos[i]);
         }
     }
+
     /**
      * @notice Cadastra um único candidato na eleição
      * @param candidato Informações do candidato a ser cadastrado
@@ -220,6 +233,7 @@ contract Eleicao is IEleicao {
         _candidatoPorNumero[numeroDoCandidato] = candidato;
         emit CandidatoCadastrado(numeroDoCandidato);
     }
+
     /**
      * @notice Verifica se o candidato existe
      * @param numeroDoCandidato Número de votação do candidato
@@ -241,6 +255,7 @@ contract Eleicao is IEleicao {
             revert Eleicao__VotosNaoZerados();
         }
     }
+
     /**
      * @notice Deleta um candidato da eleição
      * @param numeroDoCandidato Número de votação do candidato a ser deletado
@@ -328,12 +343,27 @@ contract Eleicao is IEleicao {
     }
 
     /**
-     * 
+     *
      * @inheritdoc IEleicao
      */
     function candidatoPorNumero(
         uint16 numeroDeVotacao
     ) external view override returns (EleicaoLib.Candidato memory) {
         return _candidatoPorNumero[numeroDeVotacao];
+    }
+
+    function aprovarEleitores(address[] memory eleitores) external override {
+        _configurarEleitores(eleitores, true);
+    }
+
+    function retiraAprovacaoDeEleitores(
+        address[] memory eleitores
+    ) external override {
+        _configurarEleitores(eleitores, false);
+    }
+    function _configurarEleitores(address[] memory eleitores,bool disponibilidadeParaVoto) internal {
+        for (uint256 i = 0; i < eleitores.length; i++) {
+            _eleitoresAprovadosParaVotar[eleitores[i]] = disponibilidadeParaVoto;
+        }
     }
 }
