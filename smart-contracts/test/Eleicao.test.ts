@@ -11,6 +11,14 @@ enum StatusDaEleicao {
   ATIVA,
   ENCERRADA
 }
+
+function getRandomAccounts(numberOfAccounts: number) {
+  const accounts = [];
+  for (let i = 0; i < numberOfAccounts; i++) {
+    accounts.push(ethers.Wallet.createRandom());
+  }
+  return accounts;
+}
 //Esses testes não estão bem escritos, mas servem para testar o contrato
 describe("Eleicao", function () {
   async function deployFixture() {
@@ -360,38 +368,50 @@ describe("Eleicao", function () {
       quantidadeDeVotos: 0,
       indice: 0,
     };
+    const VOTOS_CANIDATO_1 = 10
+    const VOTOS_CANIDATO_2 = 9
+    const VOTOS_CANIDATO_3 = 6
+    const VOTOS_BRANCOS = 21
+    const VOTOS_NULOS = 2
+    const eleitoresCandidato1 = getRandomAccounts(VOTOS_CANIDATO_1)
+    const eleitoresCandidato2 = getRandomAccounts(VOTOS_CANIDATO_2)
+    const eleitoresCandidato3 = getRandomAccounts(VOTOS_CANIDATO_3)
+    const eleitoresBrancos = getRandomAccounts(VOTOS_BRANCOS)
+    const eleitoresNulos = getRandomAccounts(VOTOS_NULOS)
     await eleicao.cadastrarCandidato(candidato1);
     await eleicao.cadastrarCandidato(candidato2);
     await eleicao.cadastrarCandidato(candidato3);
     const NUMERO_VOTO_BRANCO = 777
+    const todosOsCandidatos =[...eleitoresCandidato1,...eleitoresCandidato2,...eleitoresCandidato3,...eleitoresBrancos,...eleitoresNulos]
+    await eleicao.aprovarEleitores(todosOsCandidatos.map((eleitor)=>eleitor.address))
     await eleicao.iniciarEleicao()
-    for (let i = 0; i < 20; i++) {
-      await eleicao.votar(candidato1.numeroDeVotacao,ethers.Wallet.createRandom().address);
+    for (let i = 0; i < VOTOS_CANIDATO_1; i++) {
+      await eleicao.votar(candidato1.numeroDeVotacao,eleitoresCandidato1[i].address);
       
     }
-    for (let i = 0; i < 24; i++) {
-      await eleicao.votar(candidato3.numeroDeVotacao,ethers.Wallet.createRandom().address);
+    for (let i = 0; i < VOTOS_CANIDATO_3; i++) {
+      await eleicao.votar(candidato3.numeroDeVotacao,eleitoresCandidato3[i].address);
       
     }
-    for (let i = 0; i < 15; i++) {
-      await eleicao.votar(candidato2.numeroDeVotacao,ethers.Wallet.createRandom().address);
+    for (let i = 0; i < VOTOS_CANIDATO_2; i++) {
+      await eleicao.votar(candidato2.numeroDeVotacao,eleitoresCandidato2[i].address);
       
     }
-    for (let i = 0; i < 59; i++) {
-      await eleicao.votar(NUMERO_VOTO_BRANCO,ethers.Wallet.createRandom().address);
+    for (let i = 0; i < VOTOS_BRANCOS; i++) {
+      await eleicao.votar(NUMERO_VOTO_BRANCO,eleitoresBrancos[i].address);
       
     }
-    for (let i = 0; i < 2; i++) {
-      await eleicao.votar(0,ethers.Wallet.createRandom().address);
+    for (let i = 0; i < VOTOS_NULOS; i++) {
+      await eleicao.votar(0,eleitoresNulos[i].address);
       
     }
     await eleicao.encerrarEleicao()
     const resultado = await eleicao.resultado()
     //console.log(resultado.quantidadeDeVotos)
-    expect(resultado.quantidadeDeVotos).to.be.equal(120)
-    expect(resultado.quantidadeDeVotosValidos).to.be.equal(20+24+15)
-    expect(resultado.quantidadeDeVotosBrancos).to.be.equal(59)
-    expect(resultado.quantidadeDeVotosNulos).to.be.equal(2)
+    expect(resultado.quantidadeDeVotos).to.be.equal(VOTOS_CANIDATO_1+VOTOS_CANIDATO_2+VOTOS_CANIDATO_3+VOTOS_BRANCOS+VOTOS_NULOS)
+    expect(resultado.quantidadeDeVotosValidos).to.be.equal(VOTOS_CANIDATO_1+VOTOS_CANIDATO_2+VOTOS_CANIDATO_3)
+    expect(resultado.quantidadeDeVotosBrancos).to.be.equal(VOTOS_BRANCOS)
+    expect(resultado.quantidadeDeVotosNulos).to.be.equal(VOTOS_NULOS)
     //expect(resultado.vencedores).to.be.equal(candidato3.nome)
     //expect(resultado.vencedor.quantidadeDeVotos).to.be.equal(24)
   })
