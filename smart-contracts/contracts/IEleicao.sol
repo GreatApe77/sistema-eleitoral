@@ -129,5 +129,6 @@ interface IEleicao {
      * @return Quantidade de eleitores aprovados
      */
     function getQuantidadeDeEleitores() external view returns (uint256);
+    function getPermissaoDeVoto(address eleitor) external view returns (bool);
     
 }

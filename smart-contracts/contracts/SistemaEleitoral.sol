@@ -106,16 +106,27 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
     }
 
     /**
-     * @notice Função para deletar um candidato em uma Eleição dada uma chave
+     * @notice Função para deletar um candidato de uma Eleição
      * @param anoDeEleicao O ano da eleição a ser deletada
-     * @param numeroDeVotacao O número de votação do candidato a ser deletado
+     * @param numeroDoCandidato O número de votação do candidato a ser deletado
+     * @param eleitor O endereço do eleitor
+     * @param prazo O prazo para a assinatura
+     * @param v v
+     * @param r r
+     * @param s s
      */
     function votar(
         uint256 anoDeEleicao,
-        uint16 numeroDeVotacao,
-        address eleitor
+        uint16 numeroDoCandidato,
+        address eleitor,
+        uint256 prazo,
+        uint8 v,
+        bytes32 r,
+        bytes32 s
     ) public onlyOwner somenteEleicoesExistentes(anoDeEleicao) {
-        eleicao(anoDeEleicao).votar(numeroDeVotacao,eleitor);
+        
+        _assinar(eleitor,numeroDoCandidato,anoDeEleicao,prazo,v,r,s);
+        eleicao(anoDeEleicao).votar(numeroDoCandidato,eleitor);
     }
 
     /**

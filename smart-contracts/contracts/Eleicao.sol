@@ -282,49 +282,6 @@ contract Eleicao is IEleicao {
         emit CandidatoDeletado(numeroDoCandidato);
     }
 
-    /*  function _getVencedorOuEmpatados() private view returns (Candidato[] memory){
-        Candidato memory vencedor;
-        uint256 totalDeCandidatos = getQuantidadeDeCandidatos();
-        //Candidato[] memory empatados = new Candidato[](totalDeCandidatos);
-        for (uint256 i = 0; i < totalDeCandidatos; i++) {
-            Candidato memory candidato = candidatoPorNumero[
-                listaDeNumerosCadastrados[i]
-            ];
-            if (candidato.quantidadeDeVotos > vencedor.quantidadeDeVotos) {
-                vencedor = candidato;
-            }
-        }
-        uint256 quantidadeDeEmpatados = 0;
-        for (uint i = 0; i < totalDeCandidatos; i++) {
-            if (candidatoPorNumero[listaDeNumerosCadastrados[i]]
-                .quantidadeDeVotos == vencedor.quantidadeDeVotos) {
-                quantidadeDeEmpatados++;
-            }
-        }
-        Candidato[] memory vencedores = new Candidato[](quantidadeDeEmpatados);
-        for (uint i = 0; i < quantidadeDeEmpatados; i++) {
-            vencedores[i] = candidatoPorNumero[listaDeNumerosCadastrados[i]];
-        }
-        return (vencedores);
-       // for (uint i = 0; i < array.length; i++) {
-            
-        //}
-        //resultado.vencedor = vencedor;
-        
-    } */
-
-    /* function getCandidatos(uint256 indiceDePartida,uint256 indiceDeChegada) public view returns(Candidato[] memory){
-        //to do: concluir essa funcao
-        if(indiceDePartida>indiceDeChegada) revert();
-        uint256 tamanhoDaPagina = (indiceDeChegada - indiceDePartida)+ 1;
-        Candidato[] memory candidatos = new Candidato[](tamanhoDaPagina);
-        
-        for (uint256 i = indiceDePartida; i < indiceDeChegada; i++) {
-            candidatos[i] = candidatoPorNumero[listaDeNumerosCadastrados[i]];
-        }
-        return candidatos;
-    } */
-
     /**
      * @inheritdoc IEleicao
      */
@@ -386,5 +343,8 @@ contract Eleicao is IEleicao {
     
     function getQuantidadeDeEleitores() external view returns(uint256){
         return _quantidadeDeEleitores;
+    }
+    function getPermissaoDeVoto(address eleitor) external view returns(bool){
+        return _eleitoresAprovadosParaVotar[eleitor];
     }
 }

@@ -4,7 +4,9 @@ import "solidity-docgen";
 import dotenv from "dotenv"
 dotenv.config()
 const config: HardhatUserConfig = {
-	solidity: { compilers: [{ version: "0.8.20" }] },
+	solidity:{
+    version:"0.8.20"
+  },
   networks:{
     fantomTestnet:{
       url:`${process.env.FANTOM_TESTNET_RPC_URL || "https://rpc.ankr.com/fantom_testnet"}`,

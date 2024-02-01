@@ -11,6 +11,7 @@ contract AssinaturaDigitalChildMock is AssinaturaDigital{
     function assinar( 
         address assinante,
         uint16 numeroDoCandidato,
+        uint256 anoDaEleicao,
         uint256 prazo,
         uint8 v,
         bytes32 r,
@@ -19,6 +20,7 @@ contract AssinaturaDigitalChildMock is AssinaturaDigital{
         _assinar(
             assinante,
             numeroDoCandidato,
+            anoDaEleicao,
             prazo,
             v,
             r,
