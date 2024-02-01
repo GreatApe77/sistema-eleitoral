@@ -5,7 +5,7 @@ import {
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers, network } from "hardhat";
-
+const ANO_DA_ELEICAO = 2022;
 describe("AssinaturaDigital", () => {
   async function deployFixture() {
     const signers = await ethers.getSigners();
@@ -37,6 +37,7 @@ describe("AssinaturaDigital", () => {
       Votacao: [
         { name: "assinante", type: "address" },
         { name: "numeroDoCandidato", type: "uint16" },
+        {name:"anoDaEleicao",type:"uint256"},
         { name: "nonce", type: "uint256" },
         { name: "prazo", type: "uint256" },
       ],
@@ -45,6 +46,7 @@ describe("AssinaturaDigital", () => {
     const values = {
       assinante: assinante.address,
       numeroDoCandidato: 30,
+      anoDaEleicao:ANO_DA_ELEICAO,
       nonce: await assinaturaDigital.nonces(assinante.address),
       prazo: cincoMinutosNoFuturo,
     };
@@ -67,6 +69,7 @@ describe("AssinaturaDigital", () => {
     await assinaturaDigital.assinar(
       assinante.address,
       values.numeroDoCandidato,
+      ANO_DA_ELEICAO,
       cincoMinutosNoFuturo,
       v,
       r,
@@ -80,6 +83,7 @@ describe("AssinaturaDigital", () => {
       deployFixture
     );
     const assinante = signers[1];
+    
     const domain = {
       name: "Assinatura Digital",
       version: "1",
@@ -90,6 +94,7 @@ describe("AssinaturaDigital", () => {
       Votacao: [
         { name: "assinante", type: "address" },
         { name: "numeroDoCandidato", type: "uint16" },
+        {name:"anoDaEleicao",type:"uint256"},
         { name: "nonce", type: "uint256" },
         { name: "prazo", type: "uint256" },
       ],
@@ -98,6 +103,7 @@ describe("AssinaturaDigital", () => {
     const values = {
       assinante: assinante.address,
       numeroDoCandidato: 30,
+      anoDaEleicao:ANO_DA_ELEICAO,
       nonce: await assinaturaDigital.nonces(assinante.address),
       prazo: cincoMinutosNoFuturo,
     };
@@ -113,6 +119,7 @@ describe("AssinaturaDigital", () => {
     await expect(assinaturaDigital.assinar(
       assinante.address,
       values.numeroDoCandidato,
+      ANO_DA_ELEICAO,
       cincoMinutosNoFuturo,
       v,
       r,
