@@ -44,11 +44,17 @@ contract Eleicao is IEleicao {
      * @dev Não pode ser alterado
      */
     uint256 public immutable anoDeEleicao;
+    /**
+     * @dev variavel que armazena a quantidade total de eleitores
+     */
     uint256 private _quantidadeDeEleitores;
     /**
      * @notice Tempo de duração da votação
      */
     uint256 public constant TEMPO_DE_VOTACAO = 1 days;
+    /**
+     * @notice Número para voto branco
+     */
     uint256 public constant NUMERO_PARA_VOTO_BRANCO = 777;
     /**
      * @notice Mapeamento de candidatos por número de votação
@@ -95,6 +101,10 @@ contract Eleicao is IEleicao {
             revert Eleicao__PrazoParaVotacaoEncerrado();
         _;
     }
+    /**
+     *
+     * @dev O Eleito só pode votar se estiver aprovado para votar
+     */
     modifier somenteAprovadosParaVotar(address eleitor){
         if(_eleitoresAprovadosParaVotar[eleitor]==false) revert Eleicao__EleitorNaoAprovado();
         _;
@@ -315,7 +325,10 @@ contract Eleicao is IEleicao {
     ) external view override returns (EleicaoLib.Candidato memory) {
         return _candidatoPorNumero[numeroDeVotacao];
     }
-
+    /**
+     * 
+     * @inheritdoc IEleicao
+     */
     function aprovarEleitores(address[] memory eleitores) external override somenteAdmnistrador somenteAntesDaEleicao {
         for (uint256 i = 0; i < eleitores.length; i++) {
             if(_eleitoresAprovadosParaVotar[eleitores[i]]==false){
@@ -328,7 +341,10 @@ contract Eleicao is IEleicao {
         }
         
     }
-
+    /**
+     * 
+     * @inheritdoc IEleicao
+     */
     function retiraAprovacaoDeEleitores(
         address[] memory eleitores
     ) external override  somenteAdmnistrador somenteAntesDaEleicao{
@@ -340,10 +356,17 @@ contract Eleicao is IEleicao {
             }
         }
     }
-    
+    /**
+     * 
+     * @inheritdoc IEleicao
+     */    
     function getQuantidadeDeEleitores() external view returns(uint256){
         return _quantidadeDeEleitores;
     }
+    /**
+     * 
+     * @inheritdoc IEleicao
+     */
     function getPermissaoDeVoto(address eleitor) external view returns(bool){
         return _eleitoresAprovadosParaVotar[eleitor];
     }
