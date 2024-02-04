@@ -24,7 +24,7 @@ describe("Eleicao", function () {
   async function deployFixture() {
     const signers = await ethers.getSigners();
     const EleicaoFactory = await ethers.getContractFactory("Eleicao");
-    const eleicao = await EleicaoFactory.deploy(2024,candidatosMock);
+    const eleicao = await EleicaoFactory.deploy(2024,signers[0].address,candidatosMock,);
     const eleicaoAddress = await eleicao.getAddress();
     return { eleicao, signers, eleicaoAddress };
   }
@@ -69,6 +69,7 @@ describe("Eleicao", function () {
   });
   it("Nao Deve  cadastar candidato com numero repetido", async () => {
     const EleicaoFactory = await ethers.getContractFactory("Eleicao");
+    const signers = await ethers.getSigners();
     const copyCandidatosMock = [...candidatosMock];
     copyCandidatosMock.push({
       fotoDoCandidatoUrl: "http://linkDeFoto",
@@ -87,7 +88,7 @@ describe("Eleicao", function () {
       indice: 0,
     });
     await expect(
-      EleicaoFactory.deploy(2022,copyCandidatosMock)
+      EleicaoFactory.deploy(2022,signers[0].address,copyCandidatosMock)
     ).to.be.revertedWithCustomError(
       EleicaoFactory,
       "Eleicao__CandidatoJaExiste"
@@ -96,7 +97,7 @@ describe("Eleicao", function () {
   it("Nao Deve cadastar candidato com votos diferentes de ZERO", async () => {
     const EleicaoFactory = await ethers.getContractFactory("Eleicao");
     const copyCandidatosMock = [...candidatosMock];
-
+    const signers = await ethers.getSigners();
     copyCandidatosMock.push({
       fotoDoCandidatoUrl: "http://linkDeFoto",
       nome: "Eduardo Jorge",
@@ -107,7 +108,7 @@ describe("Eleicao", function () {
     });
 
     await expect(
-      EleicaoFactory.deploy(2022,copyCandidatosMock)
+      EleicaoFactory.deploy(2022,signers[0].address,copyCandidatosMock)
     ).to.be.revertedWithCustomError(EleicaoFactory, "Eleicao__VotosNaoZerados");
   });
   it("Nao deve cadastrar um candidato (Não é administrador)", async () => {
