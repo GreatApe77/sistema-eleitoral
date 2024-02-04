@@ -28,7 +28,7 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
      * @param anoDeEleicao O ano da eleição
      * @param enderecoDaEleicao O endereço da eleição criada
      */
-    event EleicaoCriada(
+    event EleicaoAnexada(
         uint256 indexed anoDeEleicao,
         address indexed enderecoDaEleicao
     );
@@ -59,18 +59,20 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
     /**
      * @notice Função para criar uma Eleição
      * @param anoDeEleicao O ano da eleição a ser criada
-     * @param candidatosIniciais Os candidatos iniciais da eleição podem ser criados no futuro tambem
+     * @param enderecoDaEleicao O endereço da eleição a ser anexada
      * @dev O ano da eleição é usado como chave para o mapping de eleições
      * @dev O numero de votos iniciais deve ser igual a ZERO
      */
     function anexarEleicao(
         uint256 anoDeEleicao,
-        address enderecoDaEleicao,
-        EleicaoLib.Candidato[] memory candidatosIniciais
+        address enderecoDaEleicao
     ) public onlyOwner somenteNovasEleicoes(anoDeEleicao) {
         IEleicao eleicaoAnexada = IEleicao(enderecoDaEleicao);
         if(!eleicaoAnexada.supportsInterface(type(IEleicao).interfaceId)) revert SistemaEleitoral__EleicaoNaoExiste();
-        if(eleicaoAnexada.ano)
+        if(eleicaoAnexada.getAnoDeEleicao() != anoDeEleicao) revert SistemaEleitoral__EleicaoNaoExiste();
+        _eleicoes[anoDeEleicao] = eleicaoAnexada;
+        emit EleicaoAnexada(anoDeEleicao, enderecoDaEleicao);
+
     }
 
     /**
