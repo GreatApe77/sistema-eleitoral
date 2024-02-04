@@ -2,7 +2,6 @@
 pragma solidity ^0.8.20;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import {Eleicao} from "./Eleicao.sol";
 import {EleicaoLib} from "./lib/EleicaoLib.sol";
 import {IEleicao} from "./IEleicao.sol";
 import {AssinaturaDigital} from "./AssinaturaDigital.sol";
@@ -23,7 +22,7 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
     /**
      * @dev Mapping que armazena as eleições usando o ano como chave. ex: 2022 => Eleicao
      */
-    mapping(uint256 => Eleicao) private _eleicoes;
+    mapping(uint256 => IEleicao) private _eleicoes;
     /**
      * @notice Evento disparado quando uma eleição é criada
      * @param anoDeEleicao O ano da eleição
@@ -64,13 +63,14 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
      * @dev O ano da eleição é usado como chave para o mapping de eleições
      * @dev O numero de votos iniciais deve ser igual a ZERO
      */
-    function criarEleicao(
+    function anexarEleicao(
         uint256 anoDeEleicao,
+        address enderecoDaEleicao,
         EleicaoLib.Candidato[] memory candidatosIniciais
     ) public onlyOwner somenteNovasEleicoes(anoDeEleicao) {
-        Eleicao eleicaoCriada = new Eleicao(anoDeEleicao, candidatosIniciais);
-        _eleicoes[anoDeEleicao] = eleicaoCriada;
-        emit EleicaoCriada(anoDeEleicao, address(eleicaoCriada));
+        IEleicao eleicaoAnexada = IEleicao(enderecoDaEleicao);
+        if(!eleicaoAnexada.supportsInterface(type(IEleicao).interfaceId)) revert SistemaEleitoral__EleicaoNaoExiste();
+        if(eleicaoAnexada.ano)
     }
 
     /**
@@ -189,7 +189,7 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
      * @notice Consulta o endereço de uma eleição específica
      * @param anoDeEleicao O ano da eleição
      */
-    function eleicao(uint256 anoDeEleicao) public view returns (Eleicao) {
+    function eleicao(uint256 anoDeEleicao) public view returns (IEleicao) {
         return _eleicoes[anoDeEleicao];
     }
 

@@ -43,7 +43,7 @@ contract Eleicao is IEleicao {
      * @dev Tem o seu valor atribuído na criação do contrato
      * @dev Não pode ser alterado
      */
-    uint256 public immutable anoDeEleicao;
+    uint256 private immutable _anoDeEleicao;
     /**
      * @dev variavel que armazena a quantidade total de eleitores
      */
@@ -113,10 +113,10 @@ contract Eleicao is IEleicao {
      *
      * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
      */
-    constructor(uint256 ano, EleicaoLib.Candidato[] memory candidatosIniciais) {
+    constructor(uint256 ano,address _admin, EleicaoLib.Candidato[] memory candidatosIniciais) {
         _cadastrarCandidatos(candidatosIniciais);
-        admin = msg.sender;
-        anoDeEleicao = ano;
+        admin = _admin;
+        _anoDeEleicao = ano;
     }
 
     /**
@@ -369,5 +369,17 @@ contract Eleicao is IEleicao {
      */
     function getPermissaoDeVoto(address eleitor) external view returns(bool){
         return _eleitoresAprovadosParaVotar[eleitor];
+    }
+    /**
+     * @return true Se é compatível com a interface
+     * @param interfaceId Id da interface
+     */
+    function supportsInterface(bytes4 interfaceId) external pure override returns (bool) {
+        return
+            interfaceId == type(IEleicao).interfaceId;
+            
+    }
+    function getAnoDeEleicao() external view returns(uint256){
+        return _anoDeEleicao;
     }
 }

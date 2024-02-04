@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 import {EleicaoLib} from  "./lib/EleicaoLib.sol";
-interface IEleicao {
+import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+interface IEleicao is IERC165 {
     //ERROS
     /**
      * @dev Erro que indica votos não zerados
@@ -135,5 +136,7 @@ interface IEleicao {
      * @return Se o eleitor está aprovado para votar
      */
     function getPermissaoDeVoto(address eleitor) external view returns (bool);
-    
+
+    function getAnoDeEleicao() external view returns (uint256);
+
 }
