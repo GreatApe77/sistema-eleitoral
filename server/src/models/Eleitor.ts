@@ -1,9 +1,14 @@
+import { v4 as uuidv4 } from "uuid";
 export default class Eleitor {
-    chavePublica: string;
-    cpf: string;
+    public readonly id:string
+    public chavePublica: string;
+    public cpf: string;
 
-    constructor(chavePublica: string, cpf: string) {
-        this.chavePublica = chavePublica;
-        this.cpf = cpf;
+    constructor(props:Omit<Eleitor,"id">,id?:string){
+        this.chavePublica = props.chavePublica;
+        this.cpf = props.cpf;
+        id? this.id = id : this.id = uuidv4();
     }
 }
+
+
