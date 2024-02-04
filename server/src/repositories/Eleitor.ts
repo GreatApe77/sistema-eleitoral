@@ -1,4 +1,4 @@
-const COLLECTION_NAME = "eleitores";
+/* const COLLECTION_NAME = "eleitores";
 import connectDB from "../database/connect";
 import Eleitor from "../models/Eleitor";
 export default class EleitorRepository {
@@ -75,3 +75,4 @@ export default class EleitorRepository {
     }
   }
 }
+ */
