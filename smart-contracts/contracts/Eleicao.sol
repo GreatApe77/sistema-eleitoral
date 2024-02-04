@@ -379,6 +379,10 @@ contract Eleicao is IEleicao {
             interfaceId == type(IEleicao).interfaceId;
             
     }
+    /**
+     * 
+     * @inheritdoc IEleicao
+     */
     function getAnoDeEleicao() external view returns(uint256){
         return _anoDeEleicao;
     }

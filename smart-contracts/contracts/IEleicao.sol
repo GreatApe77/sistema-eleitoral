@@ -136,7 +136,10 @@ interface IEleicao is IERC165 {
      * @return Se o eleitor está aprovado para votar
      */
     function getPermissaoDeVoto(address eleitor) external view returns (bool);
-
+    /**
+     * @notice Retorna o ano da eleição
+     * @return Ano da eleição
+     */
     function getAnoDeEleicao() external view returns (uint256);
 
 }
