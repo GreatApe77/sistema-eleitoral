@@ -17,11 +17,11 @@ export default class EleitorRepositoryMongoDB implements IEleitorRepository{
     delete(cpf: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    async findByCpf(cpf: string): Promise<Eleitor> {
+    async findByCpf(cpf: string): Promise<Eleitor | null> {
         const db = await connectDB()
         const eleitor = await db.collection(COLLECTION_NAME).findOne({cpf}) 
         if(!eleitor){
-            throw new Error('Eleitor not found')
+            return null
         }
         return new Eleitor({chavePublica:eleitor.chavePublica,cpf:eleitor.cpf},eleitor.id)
     }
