@@ -3,11 +3,11 @@ import Eleitor from "../../models/Eleitor";
 import { IEleitorRepository } from "../IEleitorRepository";
 const COLLECTION_NAME = "eleitores"
 export default class EleitorRepositoryMongoDB implements IEleitorRepository{
-    async findByChavePublica(chavePublica: string): Promise<Eleitor> {
+    async findByChavePublica(chavePublica: string): Promise<Eleitor | null> {
         const db = await connectDB()
         const eleitor = await db.collection(COLLECTION_NAME).findOne({chavePublica}) 
         if(!eleitor){
-            throw new Error('Eleitor not found')
+           return null
         }
         return new Eleitor({chavePublica:eleitor.chavePublica,cpf:eleitor.cpf},eleitor.id)
     }
