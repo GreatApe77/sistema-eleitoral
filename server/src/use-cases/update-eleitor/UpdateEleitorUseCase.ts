@@ -1,4 +1,4 @@
-import { IEleitorRepository } from "../../repositories/IEleitorRepository";
+/* import { IEleitorRepository } from "../../repositories/IEleitorRepository";
 import {  IUpdateEleitorRequestDTO} from "./UpdateEleitorRequestDTO";
 
 export class UpdateEleitorUseCase {
@@ -9,3 +9,4 @@ export class UpdateEleitorUseCase {
     return eleitor;
   }
 }
+ */

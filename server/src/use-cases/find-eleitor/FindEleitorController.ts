@@ -9,11 +9,11 @@ export default class FindEleitorController{
     }
     
     async handle(req:Request,res:Response):Promise<Response>{
-        const id = req.params.cpf
-        
+        const filter = req.params.filter
+        const value = req.params.value
         
          try {
-            const eleitor = await this.findEleitorUseCase.execute({cpf:id})
+            const eleitor = await this.findEleitorUseCase.execute({filter,value})
             if(!eleitor) return res.status(404).send()
             return res.status(200).json(eleitor)
         } catch (error:any) {

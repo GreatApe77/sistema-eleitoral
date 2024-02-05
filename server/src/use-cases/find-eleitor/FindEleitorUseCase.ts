@@ -5,7 +5,9 @@ import { IFindEleitorRequestDTO } from "./FindEleitorRequestDTO";
 export class FindEleitorUseCase {
   constructor(private eleitorRepository: IEleitorRepository) {}
   async execute(data: IFindEleitorRequestDTO) {
-    const eleitor = await this.eleitorRepository.findByCpf(data.cpf);
+    const {filter,value} = data
+    console.log(data)
+    const eleitor = await this.eleitorRepository.find(filter,value)
     if (!eleitor) throw new Error("Eleitor not found");
     return eleitor;
   }

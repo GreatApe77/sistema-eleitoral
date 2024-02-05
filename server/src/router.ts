@@ -9,7 +9,7 @@ const router = express.Router()
 router.post('/eleitores',validateEleitorRequest, (req,res)=>{
     return createEleitorController.handle(req,res)
 })
-router.get("/eleitores/:cpf",validateFindEleitorRequest,(req,res)=>{
+router.get("/eleitores/:cpfOrIdOrChavePublica",validateFindEleitorRequest,(req,res)=>{
     return findEleitorController.handle(req,res)
 })
 export default router

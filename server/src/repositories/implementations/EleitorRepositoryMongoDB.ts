@@ -3,6 +3,19 @@ import Eleitor from "../../models/Eleitor";
 import { IEleitorRepository } from "../IEleitorRepository";
 const COLLECTION_NAME = "eleitores"
 export default class EleitorRepositoryMongoDB implements IEleitorRepository{
+    async find(filter: string,filterValue:string): Promise<Eleitor | null> {
+        const db = await connectDB()
+        console.log(`FILTER: ${filter}`)
+        console.log(`FILTER VALUE: ${filterValue}`)
+        const queryFilter = {[filter]:filterValue}
+        const eleitor = await db.collection(COLLECTION_NAME).findOne(queryFilter)
+        console.log(eleitor)
+        if(!eleitor){
+            return null
+        }
+        return new Eleitor({chavePublica:eleitor.chavePublica,cpf:eleitor.cpf},eleitor.id)
+    }
+    
     async findByChavePublica(chavePublica: string): Promise<Eleitor | null> {
         const db = await connectDB()
         const eleitor = await db.collection(COLLECTION_NAME).findOne({chavePublica}) 
@@ -11,7 +24,7 @@ export default class EleitorRepositoryMongoDB implements IEleitorRepository{
         }
         return new Eleitor({chavePublica:eleitor.chavePublica,cpf:eleitor.cpf},eleitor.id)
     }
-    update(eleitor: Eleitor): Promise<void> {
+    update(id:string,eleitor: Eleitor): Promise<void> {
         throw new Error("Method not implemented.");
     }
     delete(cpf: string): Promise<void> {
