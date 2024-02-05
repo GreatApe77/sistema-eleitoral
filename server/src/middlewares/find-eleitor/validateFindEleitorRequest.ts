@@ -15,7 +15,7 @@ export async function validateFindEleitorRequest(req:Request,res:Response,next:N
                 filter="id"
                 break;
         }
-        console.log({[filter]:value})
+        
         FindEleitorRequestSchema.parse({[filter]:value})
         req.params.filter = filter
         req.params.value = value

@@ -5,11 +5,10 @@ const COLLECTION_NAME = "eleitores"
 export default class EleitorRepositoryMongoDB implements IEleitorRepository{
     async find(filter: string,filterValue:string): Promise<Eleitor | null> {
         const db = await connectDB()
-        console.log(`FILTER: ${filter}`)
-        console.log(`FILTER VALUE: ${filterValue}`)
+        
         const queryFilter = {[filter]:filterValue}
         const eleitor = await db.collection(COLLECTION_NAME).findOne(queryFilter)
-        console.log(eleitor)
+        
         if(!eleitor){
             return null
         }
