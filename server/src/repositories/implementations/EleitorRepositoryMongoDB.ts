@@ -2,7 +2,22 @@ import connectDB from "../../database/connect";
 import Eleitor from "../../models/Eleitor";
 import { IEleitorRepository } from "../IEleitorRepository";
 const COLLECTION_NAME = "eleitores"
+//const UNIQUE_INDEX_FIELDS = { cpf: 1, chavePublica: 1 };
 export default class EleitorRepositoryMongoDB implements IEleitorRepository{
+
+/*     constructor() {
+        this.createUniqueIndex()
+        .catch((error)=>{
+            console.error(error)
+            process.exit(1)
+        })
+        ; 
+    }
+ */
+    /* private async createUniqueIndex(): Promise<void> {
+        const db = await connectDB();
+        await db.collection(COLLECTION_NAME).createIndex(UNIQUE_INDEX_FIELDS, { unique: true });
+    } */
     async find(filter: string,filterValue:string): Promise<Eleitor | null> {
         const db = await connectDB()
         
@@ -39,7 +54,8 @@ export default class EleitorRepositoryMongoDB implements IEleitorRepository{
     }
     async save(eleitor: Eleitor): Promise<void> {
         const db = await connectDB()
-        await db.collection(COLLECTION_NAME).insertOne(eleitor,{forceServerObjectId:false})
+        
+        await db.collection(COLLECTION_NAME).insertOne(eleitor)
 
     }
     
