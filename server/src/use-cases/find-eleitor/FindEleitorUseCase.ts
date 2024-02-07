@@ -7,7 +7,7 @@ export class FindEleitorUseCase {
   async execute(data: IFindEleitorRequestDTO) {
     const {filter,value} = data
     
-    const eleitor = await this.eleitorRepository.find(filter,value)
+    const eleitor = await this.eleitorRepository.find([{filterKey:filter,filterValue:value}])
     if (!eleitor) throw new Error("Eleitor not found");
     return eleitor;
   }
