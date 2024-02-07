@@ -6,6 +6,8 @@ import { validateFindEleitorRequest } from "./middlewares/find-eleitor/validateF
 import { validateDeleteEleitorRequest } from "./middlewares/delete-eleitor/validateDeleteEleitor"
 import { deleteEleitorController } from "./use-cases/delete-eleitor"
 import { loginAsAdminController } from "./use-cases/login-as-admin"
+import { validateAdminLoginRequest } from "./middlewares/admin-login/validateAdminLoginRequest"
+import { onlyAdmin } from "./middlewares/only-admin/validateAdmin"
 const router = express.Router()
 
 
@@ -15,10 +17,10 @@ router.post('/eleitores',validateEleitorRequest, (req,res)=>{
 router.get("/eleitores/:cpfOrIdOrChavePublica",validateFindEleitorRequest,(req,res)=>{
     return findEleitorController.handle(req,res)
 })
-router.delete("/eleitores/:cpf",validateDeleteEleitorRequest,(req,res)=>{
+router.delete("/eleitores/:cpf",onlyAdmin,validateDeleteEleitorRequest,(req,res)=>{
     return deleteEleitorController.handle(req,res)
 })
-router.post("/admin/login",(req,res)=>{
-    return loginAsAdminController.handle(req,res)
+router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
+    return loginAsAdminController.handle
 })
 export default router
