@@ -5,5 +5,5 @@ export interface IEleitorRepository{
     find(filters:{filterKey:string,filterValue:string}[]):Promise<Eleitor| null>
     save(eleitor:Eleitor):Promise<void>
     update(id:string,eleitor:Eleitor):Promise<void>
-    delete(cpf:string):Promise<void>
+    delete(cpf:string):Promise<boolean>
 }

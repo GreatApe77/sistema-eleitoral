@@ -31,8 +31,10 @@ export default class EleitorRepositoryMongoDB implements IEleitorRepository{
     update(id:string,eleitor: Eleitor): Promise<void> {
         throw new Error("Method not implemented.");
     }
-    delete(cpf: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async delete(cpf: string): Promise<boolean> {
+        const db = await connectDB()
+        const reponse = await db.collection(COLLECTION_NAME).deleteOne({cpf})
+        return reponse.deletedCount === 1  
     }
     async findByCpf(cpf: string): Promise<Eleitor | null> {
         const db = await connectDB()
