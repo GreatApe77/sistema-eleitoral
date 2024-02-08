@@ -1,8 +1,18 @@
 import { ILoginAsEleitorRepository } from "../ILoginAsEleitorRepository";
 import { ethers } from "ethers";
+import jwt from "jsonwebtoken"
+import { environment } from "../../config/environment";
 export class LoginAsEleitorRepository implements ILoginAsEleitorRepository{
-    generateToken(signerPublicKey: string): Promise<string | null> {
-        throw new Error("Method not implemented.");
+    async generateToken(signerPublicKey: string): Promise<string | null> {
+        try {
+            const payload = {
+                chavePublica:signerPublicKey
+            }
+            return jwt.sign(payload,environment.JWT_SECRET,{expiresIn:"24h"})  
+        } catch (error) {
+            console.error(error)
+            return null
+        }
     }
     async verifySignature(signerPublicKey:string,signature: string,timestampInMs:number): Promise<boolean | null> {
         try {

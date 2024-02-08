@@ -8,7 +8,7 @@ export class LoginAsAdminRepository implements ILoginAsAdminRepository{
         const passwordMatch = hashedPassword === environment.ADMIN_SECRET_PASSWORD_HASH
         if(!passwordMatch) return null
         try {
-            const token = jwt.sign({admin:true},environment.JWT_SECRET,{expiresIn:"1h"})
+            const token = jwt.sign({admin:true},environment.JWT_SECRET,{expiresIn:"24h"})
             return token
         } catch (error) {
             console.error(error)
