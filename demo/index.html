@@ -63,10 +63,16 @@
                 const provider = new ethers.BrowserProvider(window.ethereum);
                 const signer = await provider.getSigner()
                 console.log(signer)
-                const message = `Fazer Login no Sistema Eleitoral.Timestamp:${Date.now()}`
+                const timestampInMs = Date.now()
+                const message = `Fazer Login no Sistema Eleitoral.Timestamp:${timestampInMs}`
                 const signature = await signer.signMessage(message);
                 console.log(signature)
-                document.getElementById('signature').innerText = signature
+                const request = {
+                    chavePublica: await signer.getAddress(),
+                    signature: signature,
+                    timestampInMs: timestampInMs
+                }
+                document.getElementById('signature').innerText = JSON.stringify(request, null, 2)
             }
             signButton.addEventListener('click',()=>{
                 signMessage()
