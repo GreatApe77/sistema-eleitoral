@@ -6,4 +6,6 @@ export interface IEleitorRepository{
     save(eleitor:Eleitor):Promise<void>
     update(id:string,eleitor:Eleitor):Promise<void>
     delete(cpf:string):Promise<boolean>
+    entrarEmEleicao(anoDeEleicao:number,eleitor:Eleitor):Promise<string | null>
+    votar(anoDeEleicao:number,numeroDoCandidato:string,assinatura:string):Promise<boolean>
 }

@@ -3,6 +3,12 @@ import Eleitor from "../../models/Eleitor";
 import { IEleitorRepository } from "../IEleitorRepository";
 const COLLECTION_NAME = "eleitores"
 export default class EleitorRepositoryMongoDB implements IEleitorRepository{
+    entrarEmEleicao(anoDeEleicao: number, eleitor: Eleitor): Promise<string | null> {
+        throw new Error("Method not implemented.");
+    }
+    votar(anoDeEleicao: number, numeroDoCandidato: string, assinatura: string): Promise<boolean> {
+        throw new Error("Method not implemented.");
+    }
     
 
 
