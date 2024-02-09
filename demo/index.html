@@ -40,6 +40,12 @@
             <div class="container-md">
                 <h1>Signature</h1>
                 <p id="signature"></p>
+            </div>
+            <div class="container-md">
+                <h1>Signer</h1>
+                <p id="signer"></p>
+            </div>
+            
         </main>
         <footer>
             <!-- place footer here -->
@@ -64,7 +70,7 @@
                 const signer = await provider.getSigner()
                 console.log(signer)
                 const timestampInMs = Date.now()
-                const message = `Fazer Login no Sistema Eleitoral.Timestamp:${timestampInMs}`
+                const message = `Login Sistema Eleitoral: ${timestampInMs}`
                 const signature = await signer.signMessage(message);
                 console.log(signature)
                 const request = {
@@ -73,6 +79,8 @@
                     timestampInMs: timestampInMs
                 }
                 document.getElementById('signature').innerText = JSON.stringify(request, null, 2)
+                const verifiedSigner = ethers.verifyMessage(message, signature)
+                document.getElementById('signer').innerText = verifiedSigner
             }
             signButton.addEventListener('click',()=>{
                 signMessage()

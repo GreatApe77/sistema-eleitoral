@@ -7,13 +7,13 @@ export class LoginAsEleitorController{
 
 
     async handle(req:Request,res:Response){
-        const {signature,chavePublica,timeStampInMs} = req.body
-        console.log(req.body)
+        const {signature,chavePublica,timestampInMs} = req.body
+        
         try {
             const token = await this.loginAsEleitorUseCase.execute({
                 publicKey:chavePublica,
                 signature,
-                timeStampInMs
+                timestampInMs
             })
             if(!token) return res.status(401).json("Could not login as eleitor")
             return res.status(200).json({token})    

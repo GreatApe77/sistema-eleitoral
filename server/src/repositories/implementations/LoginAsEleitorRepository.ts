@@ -16,10 +16,13 @@ export class LoginAsEleitorRepository implements ILoginAsEleitorRepository{
     }
     async verifySignature(signerPublicKey:string,signature: string,timestampInMs:number): Promise<boolean | null> {
         try {
-            const FIVE_MINUTES_MILISECONDS = 30000
+            const FIVE_MINUTES_MILISECONDS = 300000
             const now =Date.now()
             if(now-timestampInMs>FIVE_MINUTES_MILISECONDS) return null
-            const verifiedSigner = ethers.verifyMessage(`Fazer Login no Sistema Eleitoral.Timestamp:${timestampInMs}`,signature)
+            const message = `Login Sistema Eleitoral: ${timestampInMs}`
+            console.log({message,signature})
+            const verifiedSigner = ethers.verifyMessage(message,signature)
+            console.log({verifiedSigner})
             if(verifiedSigner.toLowerCase()===signerPublicKey.toLowerCase()){
                 return true
             }else{

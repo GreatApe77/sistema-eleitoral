@@ -10,11 +10,12 @@ export class LoginAsEleitorUseCase{
 
 
     async execute(data:ILoginAsEleitorDTO){
-        const {publicKey,signature,timeStampInMs} = data
+        const {publicKey,signature,timestampInMs} = data
 
         const eleitor = await this.eleitorRepository.findByChavePublica(publicKey)
+        
         if(!eleitor) return null
-        const signatureMatches = await this.loginAsEleitorRepository.verifySignature(publicKey,signature,timeStampInMs)
+        const signatureMatches = await this.loginAsEleitorRepository.verifySignature(publicKey,signature,timestampInMs)
         if(!signatureMatches) return null
         const token = await this.loginAsEleitorRepository.generateToken(publicKey)
         if(!token) return null
