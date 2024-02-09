@@ -23,8 +23,8 @@ export default class EleitorRepositoryMongoDB implements IEleitorRepository{
     async findByChavePublica(chavePublica: string): Promise<Eleitor | null> {
         const db = await connectDB()
         console.log(`chavePublica: ${chavePublica}`)
-        const eleitor = await db.collection(COLLECTION_NAME).findOne({chavePublica}) 
-        
+        const eleitor = await db.collection(COLLECTION_NAME).findOne({chavePublica:chavePublica}) 
+        console.log({eleitor})
         
         if(!eleitor){
            return null
