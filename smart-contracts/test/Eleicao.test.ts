@@ -406,4 +406,80 @@ describe("Eleicao", function () {
     expect(eleitor0Aprovado).to.be.equal(false)
     expect(eleitor1Aprovado).to.be.equal(false)
   })
+  it("Nao deve retirar a permissao de voto de um eleitor (NAO É ADMINISTRADOR)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    await expect(
+      eleicao.connect(signers[1]).retiraAprovacaoDeEleitores([eleitores[0].address,eleitores[1].address])
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
+  })
+  it("Nao deve retirar a permissao de voto de um eleitor (Eleicao ja começou)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    await eleicao.iniciarEleicao()
+    await expect(
+      eleicao.retiraAprovacaoDeEleitores([eleitores[0].address,eleitores[1].address])
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAntesDaEleicao");
+  })
+  it("Nao deve reverter se tentar reprovar um eleitor ja reprovado", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    await eleicao.retiraAprovacaoDeEleitores([eleitores[0].address,eleitores[1].address])
+    await eleicao.retiraAprovacaoDeEleitores([eleitores[0].address,eleitores[1].address])
+    const eleitor0Aprovado = await eleicao.getPermissaoDeVoto(eleitores[0].address)
+    const eleitor1Aprovado = await eleicao.getPermissaoDeVoto(eleitores[1].address)
+    expect(eleitor0Aprovado).to.be.equal(false)
+    expect(eleitor1Aprovado).to.be.equal(false)
+  })
+  it("Deve simular uma eleição", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const NUMERO_PARA_VOTO_BRANCO = await eleicao.NUMERO_PARA_VOTO_BRANCO()
+    const eleitores = getRandomAccounts(21);
+    const candidatos = [...candidatosMock]
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    await eleicao.retiraAprovacaoDeEleitores([eleitores[20].address])
+    await eleicao.iniciarEleicao()
+
+    await eleicao.votar(candidatos[0].numeroDeVotacao,eleitores[0].address)
+    await eleicao.votar(candidatos[0].numeroDeVotacao,eleitores[1].address)
+    await eleicao.votar(candidatos[0].numeroDeVotacao,eleitores[2].address)
+
+
+    await eleicao.votar(candidatos[1].numeroDeVotacao,eleitores[3].address)
+    await eleicao.votar(candidatos[1].numeroDeVotacao,eleitores[4].address)
+    await eleicao.votar(candidatos[1].numeroDeVotacao,eleitores[5].address)
+    await eleicao.votar(candidatos[1].numeroDeVotacao,eleitores[6].address)
+    expect( eleicao.votar(candidatos[1].numeroDeVotacao,eleitores[20].address)).to.be.revertedWithCustomError(eleicao,"Eleicao__EleitorNaoAprovado")
+
+    await eleicao.votar(candidatos[2].numeroDeVotacao,eleitores[7].address)
+    await eleicao.votar(candidatos[2].numeroDeVotacao,eleitores[8].address)
+
+    await eleicao.votar(0,eleitores[9].address)
+    
+    await eleicao.votar(NUMERO_PARA_VOTO_BRANCO,eleitores[10].address)
+    await expect( eleicao.votar(NUMERO_PARA_VOTO_BRANCO,eleitores[11].address)).to.emit(eleicao,"VotoComputado")
+    await eleicao.encerrarEleicao()
+    const resultado = await eleicao.resultado()
+    expect(resultado.quantidadeDeVotos).to.be.equal(12n)
+    expect(resultado.quantidadeDeVotosBrancos).to.be.equal(2n)
+    expect(resultado.quantidadeDeVotosNulos).to.be.equal(1n)
+    expect(resultado.quantidadeDeVotosValidos).to.be.equal(9n)
+    const candidato0 = await eleicao.candidatoPorNumero(candidatos[0].numeroDeVotacao)
+    const candidato1 = await eleicao.candidatoPorNumero(candidatos[1].numeroDeVotacao)
+    const candidato2 = await eleicao.candidatoPorNumero(candidatos[2].numeroDeVotacao)
+    expect(candidato0.quantidadeDeVotos).to.be.equal(3n)
+    expect(candidato1.quantidadeDeVotos).to.be.equal(4n)
+    expect(candidato2.quantidadeDeVotos).to.be.equal(2n)
+  })
 });
