@@ -2,6 +2,11 @@
 pragma solidity ^0.8.20;
 import {EleicaoLib} from  "./lib/EleicaoLib.sol";
 import {IERC165} from "@openzeppelin/contracts/utils/introspection/IERC165.sol";
+
+/**
+ * @title Interface para o contrato de Eleição
+ * @notice ID: 0x0371ac41
+ */
 interface IEleicao is IERC165 {
     //ERROS
     /**

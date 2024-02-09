@@ -6,19 +6,14 @@ import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
 import { candidatosMock } from "./utils/candidatoMock";
+import { getRandomAccounts } from "./utils/getRandomAccounts";
 enum StatusDaEleicao {
   NAO_INICIADA,
   ATIVA,
   ENCERRADA
 }
 
-function getRandomAccounts(numberOfAccounts: number) {
-  const accounts = [];
-  for (let i = 0; i < numberOfAccounts; i++) {
-    accounts.push(ethers.Wallet.createRandom());
-  }
-  return accounts;
-}
+
 //Esses testes não estão bem escritos, mas servem para testar o contrato
 describe("Eleicao", function () {
   async function deployFixture() {
@@ -341,79 +336,74 @@ describe("Eleicao", function () {
 
     //to do terminar o teste
   });
-  it("Deve simular uma eleição", async () => {
+  it("Deve retornar o ano de eleicao", async () => {
     const { eleicao, signers, eleicaoAddress } = await loadFixture(
       deployFixture
     );
-    const candidato1 = {
-      fotoDoCandidatoUrl: "http://linkDeFoto",
-      nome: "Eduardo Jorge",
-      partido: "PT",
-      numeroDeVotacao: 13,
-      quantidadeDeVotos: 0,
-      indice: 0,
-    };
-    const candidato2 = {
-      fotoDoCandidatoUrl: "http://linkDeFoto",
-      nome: "Italo Lima",
-      partido: "PTdoB",
-      numeroDeVotacao: 14,
-      quantidadeDeVotos: 0,
-      indice: 0,
-    };
-    const candidato3 = {
-      fotoDoCandidatoUrl: "http://linkDeFoto",
-      nome: "Italo Lima",
-      partido: "PTdoB",
-      numeroDeVotacao: 15,
-      quantidadeDeVotos: 0,
-      indice: 0,
-    };
-    const VOTOS_CANIDATO_1 = 10
-    const VOTOS_CANIDATO_2 = 9
-    const VOTOS_CANIDATO_3 = 6
-    const VOTOS_BRANCOS = 21
-    const VOTOS_NULOS = 2
-    const eleitoresCandidato1 = getRandomAccounts(VOTOS_CANIDATO_1)
-    const eleitoresCandidato2 = getRandomAccounts(VOTOS_CANIDATO_2)
-    const eleitoresCandidato3 = getRandomAccounts(VOTOS_CANIDATO_3)
-    const eleitoresBrancos = getRandomAccounts(VOTOS_BRANCOS)
-    const eleitoresNulos = getRandomAccounts(VOTOS_NULOS)
-    await eleicao.cadastrarCandidato(candidato1);
-    await eleicao.cadastrarCandidato(candidato2);
-    await eleicao.cadastrarCandidato(candidato3);
-    const NUMERO_VOTO_BRANCO = 777
-    const todosOsCandidatos =[...eleitoresCandidato1,...eleitoresCandidato2,...eleitoresCandidato3,...eleitoresBrancos,...eleitoresNulos]
-    await eleicao.aprovarEleitores(todosOsCandidatos.map((eleitor)=>eleitor.address))
+    const anoDaEleicao = await eleicao.getAnoDeEleicao()
+    expect(anoDaEleicao).to.be.equal(2024);
+  })
+  it("Deve implementar a interface IEleicao", async () => {
+
+    const IEleicaoInterfaceId = "0x0371ac41"
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleicaoInterface = await eleicao.supportsInterface(IEleicaoInterfaceId)
+    expect(eleicaoInterface).to.be.equal(true)
+  })
+  it("Deve aprovar eleitores para a votacao", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    const getAprovacaoDeTodos = eleitores.map(eleitor=> eleicao.getPermissaoDeVoto(eleitor.address))
+    const aprovadosParaVotar = await Promise.all(getAprovacaoDeTodos)
+    aprovadosParaVotar.map(aprovado => expect(aprovado).to.be.equal(true))
+    const quantidadeDeEleitores = await eleicao.getQuantidadeDeEleitores()
+    expect(quantidadeDeEleitores).to.be.equal(5n)
+  })
+  it("Nao deve aprovar eleitores para a votacao (NAO É ADMINISTRADOR)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+
+    await expect(
+      eleicao.connect(signers[1]).aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAdministrador");
+  })
+  it("Nao deve aprovar eleitores para a votacao (Eleicao ja começou)", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
     await eleicao.iniciarEleicao()
-    for (let i = 0; i < VOTOS_CANIDATO_1; i++) {
-      await eleicao.votar(candidato1.numeroDeVotacao,eleitoresCandidato1[i].address);
-      
-    }
-    for (let i = 0; i < VOTOS_CANIDATO_3; i++) {
-      await eleicao.votar(candidato3.numeroDeVotacao,eleitoresCandidato3[i].address);
-      
-    }
-    for (let i = 0; i < VOTOS_CANIDATO_2; i++) {
-      await eleicao.votar(candidato2.numeroDeVotacao,eleitoresCandidato2[i].address);
-      
-    }
-    for (let i = 0; i < VOTOS_BRANCOS; i++) {
-      await eleicao.votar(NUMERO_VOTO_BRANCO,eleitoresBrancos[i].address);
-      
-    }
-    for (let i = 0; i < VOTOS_NULOS; i++) {
-      await eleicao.votar(0,eleitoresNulos[i].address);
-      
-    }
-    await eleicao.encerrarEleicao()
-    const resultado = await eleicao.resultado()
-    //console.log(resultado.quantidadeDeVotos)
-    expect(resultado.quantidadeDeVotos).to.be.equal(VOTOS_CANIDATO_1+VOTOS_CANIDATO_2+VOTOS_CANIDATO_3+VOTOS_BRANCOS+VOTOS_NULOS)
-    expect(resultado.quantidadeDeVotosValidos).to.be.equal(VOTOS_CANIDATO_1+VOTOS_CANIDATO_2+VOTOS_CANIDATO_3)
-    expect(resultado.quantidadeDeVotosBrancos).to.be.equal(VOTOS_BRANCOS)
-    expect(resultado.quantidadeDeVotosNulos).to.be.equal(VOTOS_NULOS)
-    //expect(resultado.vencedores).to.be.equal(candidato3.nome)
-    //expect(resultado.vencedor.quantidadeDeVotos).to.be.equal(24)
+    await expect(
+      eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    ).to.be.revertedWithCustomError(eleicao, "Eleicao__SomenteAntesDaEleicao");
+  })
+  it("Nao deve reverter se tentar aprovar um eleitor que ja foi aprovado", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    await eleicao.aprovarEleitores([eleitores[1].address])
+    const eleitorJaAprovado = await eleicao.getPermissaoDeVoto(eleitores[1].address)
+    expect(eleitorJaAprovado).to.be.equal(true)
+  })
+  it("Deve retirar a permissao de voto de um eleitor", async () => {
+    const { eleicao, signers, eleicaoAddress } = await loadFixture(
+      deployFixture
+    );
+    const eleitores = getRandomAccounts(5);
+    await eleicao.aprovarEleitores(eleitores.map(eleitor => eleitor.address))
+    await eleicao.retiraAprovacaoDeEleitores([eleitores[0].address,eleitores[1].address])
+    const eleitor0Aprovado = await eleicao.getPermissaoDeVoto(eleitores[0].address)
+    const eleitor1Aprovado = await eleicao.getPermissaoDeVoto(eleitores[1].address)
+    expect(eleitor0Aprovado).to.be.equal(false)
+    expect(eleitor1Aprovado).to.be.equal(false)
   })
 });
