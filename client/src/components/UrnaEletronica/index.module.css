@@ -16,10 +16,21 @@ body {
     background-color: #dbd5c9;
     padding: 30px;
     display: flex;
+    flex-wrap: wrap;
+}
+@media screen and (max-width: 724px){
+    .urna {
+        flex-direction: column;
+        
+    }
+    .teclado{
+        /*how to override margin left?*/
+        margin-left: 0px !important;
+
+    }
 }
 .tela {
-    width: 500px;
-    height: 320px;
+    
     background: linear-gradient(to right, #e8e8e8, #c1c1c1);
     border: 2px solid #555;
     display: flex;
