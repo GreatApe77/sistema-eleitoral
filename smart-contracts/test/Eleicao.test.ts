@@ -7,7 +7,7 @@ import { expect } from "chai";
 import { ethers } from "hardhat";
 import { candidatosMock } from "./utils/candidatoMock";
 import { getRandomAccounts } from "./utils/getRandomAccounts";
-enum StatusDaEleicao {
+export enum StatusDaEleicao {
   NAO_INICIADA,
   ATIVA,
   ENCERRADA
