@@ -58,22 +58,38 @@ body {
     box-shadow: 3px 3px 0px #555;
     cursor: pointer;
 }
+.teclado--botao:hover {
+    background-color: #333;
+}
+
 .botao--branco {
+    padding: 2px;
     background-color: #FFF;
     color: #000;
     font-size: 15px;
 }
 .botao--corrige {
+    padding: 2px;
     background-color: #F09046;
     color: #000;
     font-size: 15px;
 }
 .botao--confirma {
+    padding: 2px;
     background-color: #48C079;
     color: #000;
     font-size: 15px;
     width: 90px;
     height: 50px;
+}
+.botao--confirma:hover{
+    background-color: #66db97;
+}
+.botao--corrige:hover{
+    background-color: #f0b17e;
+}
+.botao--branco:hover{
+    background-color: #e0e0e0;
 }
 
 /*Css da tela */
