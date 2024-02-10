@@ -11,7 +11,7 @@ export default function UrnaEletronica() {
                 <span>SEU VOTO PARA</span>
               </div>
               <div className={styles["d-1-2"]}>
-                <span>VEREADOR</span>
+                <span>PRESIDENTE</span>
               </div>
               <div className={styles["d-1-3"]}>
                 <div className={`${styles["numero"]} ${styles["pisca"]}`}></div>
@@ -20,18 +20,15 @@ export default function UrnaEletronica() {
               <div className={styles["d-1-4"]}>
                 Nome: FULANO DE TAL <br />
                 Partido: IMK <br />
-                Vice-prefeito: CICLANO DE TAL
+                
               </div>
             </div>
             <div className={styles["d-1-right"]}>
               <div className={styles["d-1-image"]}>
-                <img src="images/84.jpg" alt="" />
+                <img src="images/84.jpg" alt="Imagem Prefeito" />
                 Prefeito
               </div>
-              <div className={`${styles["d-1-image"]} ${styles["small"]}`}>
-                <img src="images/84_2.jpg" alt="" />
-                Vice-prefeito
-              </div>
+              
             </div>
           </div>
           <div className={styles["d-2"]}>
