@@ -1,4 +1,4 @@
-import UrnaEletronica from "./components/UrnaEletronica"
+import NavBar from "./components/NavBar"
 
 
 
@@ -7,8 +7,8 @@ function App() {
 
   return (
     <>
-      <h1>Clean</h1>
-      <UrnaEletronica/>
+      <NavBar />
+           
     </>
   )
 }
