@@ -202,4 +202,20 @@ contract SistemaEleitoral is Ownable,AssinaturaDigital {
     function _eleicaoExiste(uint256 anoDeEleicao) internal view returns (bool) {
         return address(eleicao(anoDeEleicao)) != address(0);
     }
+
+    function getPermissaoDeVoto(
+        uint256 anoDeEleicao,
+        address eleitor
+    ) public view returns (bool) {
+        return eleicao(anoDeEleicao).getPermissaoDeVoto(eleitor);
+    }
+    function aprovarEleitores(uint256 anoDeEleicao,address[] memory eleitores) external onlyOwner{
+        eleicao(anoDeEleicao).aprovarEleitores(eleitores);
+    }
+     function retiraAprovacaoDeEleitores(
+        uint256 anoDeEleicao,
+        address[] memory eleitores
+    ) external onlyOwner{
+        eleicao(anoDeEleicao).retiraAprovacaoDeEleitores(eleitores);
+    }
 }

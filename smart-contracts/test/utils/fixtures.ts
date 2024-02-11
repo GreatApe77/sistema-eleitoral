@@ -7,6 +7,6 @@ export async function deploySistemaEleitoralComEleicaoFixture() {
   const sistemaEleitoral = await SistemaEleitoralFactory.deploy();
   const EleicaoFactory = await ethers.getContractFactory("Eleicao")
   const eleicao = await EleicaoFactory.deploy(2024,sistemaEleitoral.target,candidatosMock)
-  
-  return {signers, sistemaEleitoral, eleicao}
+  const network = await ethers.provider.getNetwork()
+  return {signers, sistemaEleitoral, eleicao,network}
 }
