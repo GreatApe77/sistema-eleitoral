@@ -140,5 +140,114 @@ describe("SistemaEleitoral",()=>{
       await expect(sistemaEleitoral.votar(anoDaEleicao,candidato.numeroDeVotacao,eleitor[0].address,prazo,v,r,s)).to.emit(eleicao,eleicao.getEvent("VotoComputado").name)
       const candidatoRetornado = await sistemaEleitoral.candidatoPorNumero(anoDaEleicao,candidato.numeroDeVotacao)
       expect(candidatoRetornado.quantidadeDeVotos).to.be.equal(1)
+      const accountNonce = await sistemaEleitoral.nonces(eleitor[0].address)
+      expect(accountNonce).to.be.equal(1)
+    })
+    it("Não deve votar em um candidato (Eleicao nao Existe)",async()=>{
+      
+      const {sistemaEleitoral,network} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      const anoDaEleicao = 2024
+      const eleitor =  getRandomAccounts(1)
+      const domain = getEIP721Domain("Sistema Eleitoral",network.chainId,await sistemaEleitoral.getAddress())
+      const prazo = Date.now() + 300000 //5 minutos
+      
+      const values = {
+        assinante:eleitor[0].address,
+        numeroDoCandidato:99,
+        anoDaEleicao,
+        nonce: await sistemaEleitoral.nonces(eleitor[0].address),
+        prazo: prazo
+      }
+      const signature = await eleitor[0].signTypedData(domain,VotacaoType,values)
+      const sigComponents = ethers.Signature.from(signature)
+      const {v,r,s} = sigComponents
+      await expect(sistemaEleitoral.votar(anoDaEleicao,99,eleitor[0].address,prazo,v,r,s)).to.be.revertedWithCustomError(sistemaEleitoral,"SistemaEleitoral__EleicaoNaoExiste")
+    })
+    it("Nao deve votar em um candidato (Nao é administrador)",async()=>{
+      const {sistemaEleitoral,eleicao,signers,network} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      const anoDaEleicao = await eleicao.getAnoDeEleicao()
+      await sistemaEleitoral.anexarEleicao(anoDaEleicao,eleicao.target)
+      const candidato:Candidato = {
+        nome: "Carlos Santos",
+        partido: "Partido B",
+        fotoDoCandidatoUrl: "https://exemplo.com/foto-carlos.jpg",
+        quantidadeDeVotos: 0,
+        numeroDeVotacao: 99,
+        indice:0
+      
+      }
+      await sistemaEleitoral.cadastrarCandidato(anoDaEleicao,candidato)
+      const eleitor =  getRandomAccounts(1)
+      await sistemaEleitoral.aprovarEleitores(anoDaEleicao,[eleitor[0].address])
+      await sistemaEleitoral.iniciarEleicao(anoDaEleicao)
+      const domain = getEIP721Domain("Sistema Eleitoral",network.chainId,await sistemaEleitoral.getAddress())
+      const prazo = Date.now() + 300000 //5 minutos
+      const values = {
+        assinante:eleitor[0].address,
+        numeroDoCandidato:candidato.numeroDeVotacao,
+        anoDaEleicao,
+        nonce: await sistemaEleitoral.nonces(eleitor[0].address),
+        prazo: prazo
+      }
+
+      const signature = await eleitor[0].signTypedData(domain,VotacaoType,values)
+      const sigComponents = ethers.Signature.from(signature)
+      const {v,r,s} = sigComponents
+      await expect(sistemaEleitoral.connect(signers[1]).votar(anoDaEleicao,candidato.numeroDeVotacao,eleitor[0].address,prazo,v,r,s)).to.be.revertedWithCustomError(sistemaEleitoral,"OwnableUnauthorizedAccount")
+
+    })
+    it("Deve retornar a quantidade de cnadidatos",async()=>{
+      const {sistemaEleitoral,eleicao} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      await sistemaEleitoral.anexarEleicao(await eleicao.getAnoDeEleicao(),eleicao.target)
+      const candidato:Candidato = {
+        nome: "Carlos Santos",
+        partido: "Partido B",
+        fotoDoCandidatoUrl: "https://exemplo.com/foto-carlos.jpg",
+        quantidadeDeVotos: 0,
+        numeroDeVotacao: 99,
+        indice:0
+      
+      }
+      await sistemaEleitoral.cadastrarCandidato(await eleicao.getAnoDeEleicao(),candidato)
+      expect(await sistemaEleitoral.getQuantidadeDeCandidatos(await eleicao.getAnoDeEleicao())).to.be.equal(candidatosMock.length + 1)
+    })
+    it("Deve retornar uma lista de candidatos",async()=>{
+      const {sistemaEleitoral,eleicao} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      await sistemaEleitoral.anexarEleicao(await eleicao.getAnoDeEleicao(),eleicao.target)
+      const candidato:Candidato = {
+        nome: "Carlos Santos",
+        partido: "Partido B",
+        fotoDoCandidatoUrl: "https://exemplo.com/foto-carlos.jpg",
+        quantidadeDeVotos: 0,
+        numeroDeVotacao: 99,
+        indice:0
+      
+      }
+      await sistemaEleitoral.cadastrarCandidato(await eleicao.getAnoDeEleicao(),candidato)
+      const candidatosRetornados = await sistemaEleitoral.getCandidatos(await eleicao.getAnoDeEleicao(),0,10)
+      const candidatosNessaEleicao = [...candidatosMock,candidato]
+      expect(candidatosRetornados.length).to.be.equal(candidatosNessaEleicao.length)
+      candidatosRetornados.forEach((candidato,index)=>{
+        expect(candidato.nome).to.be.equal(candidatosNessaEleicao[index].nome)
+        expect(candidato.partido).to.be.equal(candidatosNessaEleicao[index].partido)
+        expect(candidato.fotoDoCandidatoUrl).to.be.equal(candidatosNessaEleicao[index].fotoDoCandidatoUrl)
+        expect(candidato.quantidadeDeVotos).to.be.equal(candidatosNessaEleicao[index].quantidadeDeVotos)
+        expect(candidato.numeroDeVotacao).to.be.equal(candidatosNessaEleicao[index].numeroDeVotacao)
+      })
+    })
+    it("Deve Aprovar um eleitor em uma eleicao",async()=>{
+      const {sistemaEleitoral,eleicao} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      await sistemaEleitoral.anexarEleicao(await eleicao.getAnoDeEleicao(),eleicao.target)
+      const eleitor = getRandomAccounts(1)
+      await sistemaEleitoral.aprovarEleitores(await eleicao.getAnoDeEleicao(),[eleitor[0].address])
+      expect(await sistemaEleitoral.getPermissaoDeVoto(await eleicao.getAnoDeEleicao(),eleitor[0].address)).to.be.equal(true)
+    })
+    it("Deve retirar a aprovação de um eleitor em uma eleicao",async()=>{
+      const {sistemaEleitoral,eleicao} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      await sistemaEleitoral.anexarEleicao(await eleicao.getAnoDeEleicao(),eleicao.target)
+      const eleitor = getRandomAccounts(1)
+      await sistemaEleitoral.aprovarEleitores(await eleicao.getAnoDeEleicao(),[eleitor[0].address])
+      await sistemaEleitoral.retiraAprovacaoDeEleitores(await eleicao.getAnoDeEleicao(),[eleitor[0].address])
+      expect(await sistemaEleitoral.getPermissaoDeVoto(await eleicao.getAnoDeEleicao(),eleitor[0].address)).to.be.equal(false)
     })
 })
