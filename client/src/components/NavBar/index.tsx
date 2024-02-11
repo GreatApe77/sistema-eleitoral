@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Button, Drawer, List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText, ListItemIcon, ListItemButton, Button } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
 import GenerateWalletBtn from '../GenerateWalletBtn';
 import { PAGINAS } from '../../constants/PAGINAS';
+import { Link } from 'react-router-dom';
 
 
 export default function NavBar() {
@@ -23,12 +24,12 @@ export default function NavBar() {
             {
               PAGINAS.map((pagina)=>{
                 return (
-                  <ListItem  key={pagina.nome} onClick={()=>{window.location.href=pagina.rota}}>
+                  <ListItemButton  key={pagina.nome} component={Link} to={pagina.rota}>
                     <ListItemIcon>
                       {pagina.icone}
                     </ListItemIcon>
                     <ListItemText primary={pagina.nome} />
-                  </ListItem>
+                  </ListItemButton>
                 )
               })
             }

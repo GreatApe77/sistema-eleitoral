@@ -1,4 +1,3 @@
-import { WalletRounded } from "@mui/icons-material";
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Container, IconButton, Typography } from "@mui/material";
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import KeyIcon from '@mui/icons-material/Key';
