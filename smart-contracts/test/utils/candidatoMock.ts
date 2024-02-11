@@ -67,3 +67,4 @@ export const candidatosMock = [
 
 ];
 
+export type Candidato = typeof candidatosMock[0];

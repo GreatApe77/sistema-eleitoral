@@ -5,7 +5,7 @@ import {
 import { anyValue } from "@nomicfoundation/hardhat-chai-matchers/withArgs";
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { candidatosMock } from "./utils/candidatoMock";
+import { Candidato, candidatosMock } from "./utils/candidatoMock";
 import { getRandomAccounts } from "./utils/getRandomAccounts";
 import { deploySistemaEleitoralComEleicaoFixture } from "./utils/fixtures";
 
@@ -65,5 +65,32 @@ describe("SistemaEleitoral",()=>{
     it("Não deve encerrar uma eleição que não existe",async()=>{
       const {sistemaEleitoral} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
       await expect(sistemaEleitoral.encerrarEleicao(2024)).to.be.revertedWithCustomError(sistemaEleitoral,"SistemaEleitoral__EleicaoNaoExiste")
+    })
+    it("Deve cadastrar Candidato",async()=>{
+      const {sistemaEleitoral,eleicao} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      await sistemaEleitoral.anexarEleicao(await eleicao.getAnoDeEleicao(),eleicao.target)
+      const candidato:Candidato = {
+        nome: "Carlos Santos",
+        partido: "Partido B",
+        fotoDoCandidatoUrl: "https://exemplo.com/foto-carlos.jpg",
+        quantidadeDeVotos: 0,
+        numeroDeVotacao: 99,
+        indice:0
+      
+      }
+      await expect(sistemaEleitoral.cadastrarCandidato(await eleicao.getAnoDeEleicao(),candidato)).to.emit(eleicao,eleicao.getEvent("CandidatoCadastrado").name)
+    })
+    it("Não deve cadastrar Candidato (Não é o administrador)",async()=>{
+      const {sistemaEleitoral,eleicao,signers} = await loadFixture(deploySistemaEleitoralComEleicaoFixture)
+      const candidato:Candidato = {
+        nome: "Carlos Santos",
+        partido: "Partido B",
+        fotoDoCandidatoUrl: "https://exemplo.com/foto-carlos.jpg",
+        quantidadeDeVotos: 0,
+        numeroDeVotacao: 99,
+        indice:0
+      
+      }
+      await expect(sistemaEleitoral.connect(signers[1]).cadastrarCandidato(await eleicao.getAnoDeEleicao(),candidato)).to.be.revertedWithCustomError(sistemaEleitoral,"OwnableUnauthorizedAccount")
     })
 })
