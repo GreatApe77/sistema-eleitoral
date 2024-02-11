@@ -1,9 +1,9 @@
-import { WalletSharp } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import {ethers} from "ethers"
 import { useEffect, useState } from 'react'
 
-export default function GenerateWalletBtn() {
+export default function GenerateWalletBtn({ ...props}: React.ComponentProps<typeof Button>) {
+    
     const [walletAddress, setWalletAddress] = useState('')
     useEffect(() => {
         const walletAddress = localStorage.getItem('walletAddress')
@@ -21,6 +21,6 @@ export default function GenerateWalletBtn() {
         localStorage.setItem('walletPrivateKey', wallet.privateKey)
     }
   return (
-    <Button/*  variant='contained' color='warning' startIcon={<WalletSharp/>} */ onClick={generateWallet}>{walletAddress?formatWalletAddress(walletAddress):"Gerar Carteira"}</Button>
+    <Button   {...props}  onClick={generateWallet}>{walletAddress?formatWalletAddress(walletAddress):"Gerar Carteira"}</Button>
   )
 }
