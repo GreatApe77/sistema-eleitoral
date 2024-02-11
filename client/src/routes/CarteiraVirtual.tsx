@@ -1,8 +1,8 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Container, IconButton, Typography } from "@mui/material";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Container, Typography } from "@mui/material";
 import KeyIcon from '@mui/icons-material/Key';
 import { useEffect, useState } from "react";
 import { generateWallet } from "../utils/generateWallet";
+import CopyToClipboardBtn from "../components/CopyToClipboardBtn";
 export default function CarteiraVirtual() {
     const [publicKey, setPublicKey] = useState('')
     const [privateKey, setPrivateKey] = useState('')
@@ -40,18 +40,14 @@ export default function CarteiraVirtual() {
                 <CardContent>
                     <Typography variant="h6" gutterBottom>
                         Chave Pública
-                        <IconButton>
-                        <ContentCopyIcon/>
-                        </IconButton>
+                        <CopyToClipboardBtn text={publicKey}/>
                     </Typography>
                     <Typography variant="body1" gutterBottom>
                         {publicKey?publicKey:"Nenhuma carteira gerada"}
                     </Typography>
                     <Typography variant="h6" gutterBottom>
                         Chave Privada 
-                        <IconButton>
-                        <ContentCopyIcon/>
-                        </IconButton>
+                        <CopyToClipboardBtn text={privateKey}/>
                     </Typography>
                     <Typography variant="body1" gutterBottom >
                         {privateKey?privateKey:"Nenhuma carteira gerada"}
@@ -61,7 +57,6 @@ export default function CarteiraVirtual() {
                     </CardActions>
                 </CardContent>
             </Card>
-
             
         </Container>
             
