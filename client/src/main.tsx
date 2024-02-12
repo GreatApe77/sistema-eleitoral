@@ -4,6 +4,7 @@ import App from './App.tsx'
 import { CssBaseline } from '@mui/material'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { PAGINAS } from './constants/PAGINAS.tsx'
+import { LocalWalletProvider } from './contexts/LocalWalletContext.tsx'
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <CssBaseline />
+    <LocalWalletProvider>
+
     <RouterProvider router={router}/>
+    </LocalWalletProvider>
   </React.StrictMode>,
 )
