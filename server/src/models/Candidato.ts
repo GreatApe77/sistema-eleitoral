@@ -11,14 +11,14 @@ export class Candidato{
         partido: string,
         fotoDoCandidatoUrl: string,
         numeroDeVotacao: number,
-        quantidadeDeVotos: number,
+        quantidadeDeVotos?: number,
         indice?: number
     ){
         this.nome = nome
         this.partido = partido
         this.fotoDoCandidatoUrl = fotoDoCandidatoUrl
         this.numeroDeVotacao = numeroDeVotacao
-        this.quantidadeDeVotos = quantidadeDeVotos
+        this.quantidadeDeVotos = quantidadeDeVotos?quantidadeDeVotos:0
         this.indice = indice?indice:0
     }
    

@@ -9,6 +9,7 @@ import { loginAsAdminController } from "./use-cases/login-as-admin"
 import { validateAdminLoginRequest } from "./middlewares/admin-login/validateAdminLoginRequest"
 import { onlyAdmin } from "./middlewares/only-admin/validateAdmin"
 import { loginAsEleitorController } from "./use-cases/login-as-eleitor"
+import { configureEleicaoController } from "./use-cases/configure-eleicao"
 
 const router = express.Router()
 
@@ -27,6 +28,10 @@ router.delete("/eleitores/:cpf",onlyAdmin,validateDeleteEleitorRequest,(req,res)
 })
 router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
     return loginAsAdminController.handle(req,res)
+})
+
+router.post("/admin/eleicao",(req,res)=>{
+    return configureEleicaoController.handle(req,res)
 })
 
 export default router
