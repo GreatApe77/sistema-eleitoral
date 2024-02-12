@@ -31,6 +31,10 @@ export default function ToggleColorMode({children}: {children: React.ReactNode})
             secondary: {
               main: '#094d92',
             },
+            
+          },
+          typography: {
+            fontFamily: 'Space Grotesk',
           },
         }),
       [mode],
