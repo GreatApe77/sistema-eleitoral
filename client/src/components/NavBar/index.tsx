@@ -40,7 +40,7 @@ export default function NavBar() {
   );
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" elevation={6}>
         <Toolbar>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>

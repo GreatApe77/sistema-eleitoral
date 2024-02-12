@@ -25,6 +25,12 @@ export default function ToggleColorMode({children}: {children: React.ReactNode})
         createTheme({
           palette: {
             mode,
+            primary: {
+              main: '#388e3c',
+            },
+            secondary: {
+              main: '#094d92',
+            },
           },
         }),
       [mode],
