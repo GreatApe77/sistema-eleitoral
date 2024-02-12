@@ -8,7 +8,7 @@ export async function validateEleitorRequest(req:Request,res:Response,next:NextF
         return next()
     } catch (error:any) {
         console.error(error)
-        return res.status(422).send()
+        return res.status(422).json({message:"Requisição inválida"})
         
     }
 }

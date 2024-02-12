@@ -22,7 +22,7 @@ export async function validateFindEleitorRequest(req:Request,res:Response,next:N
         return next()
     } catch (error:any) {
         console.error(error)
-        return res.status(422).send()
+        return res.status(422).json({message:"Requisição inválida"})
         
     }
 }

@@ -10,6 +10,7 @@ import { validateAdminLoginRequest } from "./middlewares/admin-login/validateAdm
 import { onlyAdmin } from "./middlewares/only-admin/validateAdmin"
 import { loginAsEleitorController } from "./use-cases/login-as-eleitor"
 import { configureEleicaoController } from "./use-cases/configure-eleicao"
+import { validateConfigureEleicaoSchema } from "./middlewares/configure-eleicao/validateConfigureEleicaoSchema"
 
 const router = express.Router()
 
@@ -30,7 +31,7 @@ router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
     return loginAsAdminController.handle(req,res)
 })
 
-router.post("/admin/eleicao",(req,res)=>{
+router.post("/admin/eleicao",validateConfigureEleicaoSchema,(req,res)=>{
     return configureEleicaoController.handle(req,res)
 })
 
