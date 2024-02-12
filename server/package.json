@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "npx tsx --watch src/index.ts",
     "start": "node dist/index.js",
-    "typechain": "npx typechain --target ethers-v6 src/abis/*.json --outDir src/types"
+    "typechain": "npx typechain --target ethers-v6 src/abis/*.json --out-dir src/typechain-types"
   },
   "keywords": [],
   "author": "",

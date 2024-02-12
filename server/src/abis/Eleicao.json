@@ -1,0 +1,558 @@
+[
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "ano",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "_admin",
+          "type": "address"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "nome",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "partido",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "fotoDoCandidatoUrl",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "numeroDeVotacao",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "indice",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct EleicaoLib.Candidato[]",
+          "name": "candidatosIniciais",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__CandidatoJaExiste",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__CandidatoNaoExiste",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__EleicaoNaoEstaAtiva",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__EleitorNaoAprovado",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__PrazoParaVotacaoEncerrado",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__SomenteAdministrador",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__SomenteAntesDaEleicao",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Eleicao__VotosNaoZerados",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint16",
+          "name": "numeroDeVotacao",
+          "type": "uint16"
+        }
+      ],
+      "name": "CandidatoCadastrado",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint16",
+          "name": "numeroDeVotacao",
+          "type": "uint16"
+        }
+      ],
+      "name": "CandidatoDeletado",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "EleicaoEncerrada",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "EleicaoIniciada",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [],
+      "name": "VotoComputado",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "NUMERO_PARA_VOTO_BRANCO",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "TEMPO_DE_VOTACAO",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "admin",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "eleitores",
+          "type": "address[]"
+        }
+      ],
+      "name": "aprovarEleitores",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "nome",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "partido",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "fotoDoCandidatoUrl",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "numeroDeVotacao",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "indice",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct EleicaoLib.Candidato",
+          "name": "candidato",
+          "type": "tuple"
+        }
+      ],
+      "name": "cadastrarCandidato",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "numeroDeVotacao",
+          "type": "uint16"
+        }
+      ],
+      "name": "candidatoPorNumero",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "nome",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "partido",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "fotoDoCandidatoUrl",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "numeroDeVotacao",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "indice",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct EleicaoLib.Candidato",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "dataLimiteParaVotar",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "numeroDoCandidato",
+          "type": "uint16"
+        }
+      ],
+      "name": "deletarCandidato",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "encerrarEleicao",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getAnoDeEleicao",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "indiceDePartida",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "quantidade",
+          "type": "uint256"
+        }
+      ],
+      "name": "getCandidatos",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "nome",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "partido",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "fotoDoCandidatoUrl",
+              "type": "string"
+            },
+            {
+              "internalType": "uint16",
+              "name": "numeroDeVotacao",
+              "type": "uint16"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "indice",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct EleicaoLib.Candidato[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "eleitor",
+          "type": "address"
+        }
+      ],
+      "name": "getPermissaoDeVoto",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getQuantidadeDeCandidatos",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getQuantidadeDeEleitores",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "iniciarEleicao",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "listaDeNumerosCadastrados",
+      "outputs": [
+        {
+          "internalType": "uint16",
+          "name": "",
+          "type": "uint16"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "resultado",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotosValidos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotosBrancos",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "quantidadeDeVotosNulos",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct EleicaoLib.Votos",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "eleitores",
+          "type": "address[]"
+        }
+      ],
+      "name": "retiraAprovacaoDeEleitores",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "statusDaEleicao",
+      "outputs": [
+        {
+          "internalType": "enum EleicaoLib.StatusDaEleicao",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint16",
+          "name": "numeroDoCandidato",
+          "type": "uint16"
+        },
+        {
+          "internalType": "address",
+          "name": "eleitor",
+          "type": "address"
+        }
+      ],
+      "name": "votar",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ]

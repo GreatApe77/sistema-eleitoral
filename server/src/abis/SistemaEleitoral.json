@@ -1,0 +1,659 @@
+[
+  {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "AssinaturaDigital__AssinanteInvalido",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AssinaturaDigital__ForaDoPrazo",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "ECDSAInvalidSignature",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "length",
+        "type": "uint256"
+      }
+    ],
+    "name": "ECDSAInvalidSignatureLength",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "ECDSAInvalidSignatureS",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "currentNonce",
+        "type": "uint256"
+      }
+    ],
+    "name": "InvalidAccountNonce",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidShortString",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnableInvalidOwner",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
+      }
+    ],
+    "name": "OwnableUnauthorizedAccount",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SistemaEleitoral__EleicaoJaExiste",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "SistemaEleitoral__EleicaoNaoExiste",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "str",
+        "type": "string"
+      }
+    ],
+    "name": "StringTooLong",
+    "type": "error"
+  },
+  {
+    "anonymous": false,
+    "inputs": [],
+    "name": "EIP712DomainChanged",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "enderecoDaEleicao",
+        "type": "address"
+      }
+    ],
+    "name": "EleicaoAnexada",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "previousOwner",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "OwnershipTransferred",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "enderecoDaEleicao",
+        "type": "address"
+      }
+    ],
+    "name": "anexarEleicao",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "eleitores",
+        "type": "address[]"
+      }
+    ],
+    "name": "aprovarEleitores",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "nome",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "partido",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "fotoDoCandidatoUrl",
+            "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "numeroDeVotacao",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotos",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "indice",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct EleicaoLib.Candidato",
+        "name": "candidato",
+        "type": "tuple"
+      }
+    ],
+    "name": "cadastrarCandidato",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "numeroDeVotacao",
+        "type": "uint16"
+      }
+    ],
+    "name": "candidatoPorNumero",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "nome",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "partido",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "fotoDoCandidatoUrl",
+            "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "numeroDeVotacao",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotos",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "indice",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct EleicaoLib.Candidato",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "eip712Domain",
+    "outputs": [
+      {
+        "internalType": "bytes1",
+        "name": "fields",
+        "type": "bytes1"
+      },
+      {
+        "internalType": "string",
+        "name": "name",
+        "type": "string"
+      },
+      {
+        "internalType": "string",
+        "name": "version",
+        "type": "string"
+      },
+      {
+        "internalType": "uint256",
+        "name": "chainId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "verifyingContract",
+        "type": "address"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "salt",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "extensions",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      }
+    ],
+    "name": "eleicao",
+    "outputs": [
+      {
+        "internalType": "contract IEleicao",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      }
+    ],
+    "name": "encerrarEleicao",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "indiceDePartida",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "quantidade",
+        "type": "uint256"
+      }
+    ],
+    "name": "getCandidatos",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "string",
+            "name": "nome",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "partido",
+            "type": "string"
+          },
+          {
+            "internalType": "string",
+            "name": "fotoDoCandidatoUrl",
+            "type": "string"
+          },
+          {
+            "internalType": "uint16",
+            "name": "numeroDeVotacao",
+            "type": "uint16"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotos",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "indice",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct EleicaoLib.Candidato[]",
+        "name": "",
+        "type": "tuple[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address",
+        "name": "eleitor",
+        "type": "address"
+      }
+    ],
+    "name": "getPermissaoDeVoto",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      }
+    ],
+    "name": "getQuantidadeDeCandidatos",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      }
+    ],
+    "name": "iniciarEleicao",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      }
+    ],
+    "name": "nonces",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      }
+    ],
+    "name": "resultado",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotos",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotosValidos",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotosBrancos",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "quantidadeDeVotosNulos",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct EleicaoLib.Votos",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "eleitores",
+        "type": "address[]"
+      }
+    ],
+    "name": "retiraAprovacaoDeEleitores",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      }
+    ],
+    "name": "statusDaEleicao",
+    "outputs": [
+      {
+        "internalType": "enum EleicaoLib.StatusDaEleicao",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "anoDeEleicao",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint16",
+        "name": "numeroDoCandidato",
+        "type": "uint16"
+      },
+      {
+        "internalType": "address",
+        "name": "eleitor",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "prazo",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint8",
+        "name": "v",
+        "type": "uint8"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "r",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "bytes32",
+        "name": "s",
+        "type": "bytes32"
+      }
+    ],
+    "name": "votar",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]

@@ -28,4 +28,5 @@ router.delete("/eleitores/:cpf",onlyAdmin,validateDeleteEleitorRequest,(req,res)
 router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
     return loginAsAdminController.handle(req,res)
 })
+
 export default router
