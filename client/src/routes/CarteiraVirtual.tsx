@@ -1,5 +1,4 @@
 import { Avatar, Button, Card, CardActions, CardContent, CardHeader, Container, Typography } from "@mui/material";
-import KeyIcon from '@mui/icons-material/Key';
 import {  useContext } from "react";
 import { generateWallet } from "../utils/generateWallet";
 import CopyToClipboardBtn from "../components/CopyToClipboardBtn";

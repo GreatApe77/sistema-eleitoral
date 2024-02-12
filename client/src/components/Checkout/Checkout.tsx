@@ -14,7 +14,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import EleitorForm from './EleitorForm';
 import Review from './Review';
-import { FormularioCpfContext, FormularioCpfProvider } from '../../contexts/FormularioCpfContext';
+import { FormularioCpfContext } from '../../contexts/FormularioCpfContext';
 import { Alert, Divider, Snackbar, Stack } from '@mui/material';
 import { Link as ReactRouterDomLink } from 'react-router-dom';
 import { register } from '../../services/register';
