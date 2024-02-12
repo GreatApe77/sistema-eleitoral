@@ -1,7 +1,8 @@
 import { ethers } from "hardhat";
 import {saveDeployment} from "deployment-history"
 async function main() {
-  const SistemaEleitoralFactory = await ethers.getContractFactory("SistemaEleitoral")
+  const signers = await ethers.getSigners();
+  const SistemaEleitoralFactory = await ethers.getContractFactory("SistemaEleitoral",signers[1])
   const sistemaEleitoral = await SistemaEleitoralFactory.deploy()
   await sistemaEleitoral.waitForDeployment()
   saveDeployment(await sistemaEleitoral.getAddress(),"SistemaEleitoral")

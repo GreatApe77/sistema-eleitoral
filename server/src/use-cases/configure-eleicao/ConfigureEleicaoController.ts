@@ -1,3 +1,5 @@
+import { unknown } from "zod"
+import { ApiError } from "../../errors/ApiError"
 import { Candidato } from "../../models/Candidato"
 import { ConfigureEleicaoUseCase } from "./ConfigureEleicaoUseCase"
 import { Request, Response } from "express"
@@ -13,8 +15,8 @@ export class ConfigureEleicaoController{
         try {
             const result = await this.configureEleciaoUseCase.execute({anoDaEleicao,candidatosIniciais})
             return res.status(201).json(result)
-        } catch (error) {
-            return res.status(500).send()
+        } catch (error: any) {
+            return res.status(error.statusCode || 500).json({message:error.message})
         }
     }
 }

@@ -34,4 +34,6 @@ router.post("/admin/eleicao",(req,res)=>{
     return configureEleicaoController.handle(req,res)
 })
 
+router.post("/admin/eleicao/candidatos",(req,res)=>{})
+
 export default router
