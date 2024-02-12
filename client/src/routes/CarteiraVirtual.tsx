@@ -4,6 +4,7 @@ import {  useContext } from "react";
 import { generateWallet } from "../utils/generateWallet";
 import CopyToClipboardBtn from "../components/CopyToClipboardBtn";
 import { LocalWalletContext } from "../contexts/LocalWalletContext";
+import { generateAvatarURL } from "@cfx-kit/wallet-avatar";
 export default function CarteiraVirtual() {
     const {localWallet,setLocalWallet} = useContext(LocalWalletContext)
     
@@ -26,7 +27,7 @@ export default function CarteiraVirtual() {
 
             <Card elevation={4}>
                 <CardHeader
-                avatar={<Avatar><KeyIcon/></Avatar>}
+                avatar={<Avatar src={generateAvatarURL(localWallet.localWalletPublicKey)}></Avatar>}
                 >
 
                     
