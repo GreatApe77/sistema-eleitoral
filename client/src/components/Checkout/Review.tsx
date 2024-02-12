@@ -8,9 +8,11 @@ import ListItemText from '@mui/material/ListItemText';
 import { formatCpfToScreen } from '../../utils/formatCpfToScreen';
 import { LocalWalletContext } from '../../contexts/LocalWalletContext';
 import { FormularioCpfContext } from '../../contexts/FormularioCpfContext';
-
-
-
+import { formatWalletToScreen } from '../../utils/formatWalletToScreen';
+import { ListItemIcon } from '@mui/material';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import LockIcon from '@mui/icons-material/Lock';
+import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 
 export default function Review() {
     const {localWallet} = React.useContext(LocalWalletContext)
@@ -23,14 +25,24 @@ export default function Review() {
       <List disablePadding>
        
           <ListItem  sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={"Chave Pública"} secondary={localWallet.localWalletPublicKey} />
+            <ListItemIcon>
+              <LockOpenIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Chave Pública"} secondary={formatWalletToScreen(localWallet.localWalletPublicKey)} />
             
           </ListItem>
           <ListItem  sx={{ py: 1, px: 0 }}>
-            <ListItemText primary={"Chave Pública"} secondary={localWallet.localWalletPrivateKey} />
+            <ListItemIcon>
+              <LockIcon />
+            </ListItemIcon>
+            <ListItemText primary={"Chave Privada"} secondary={formatWalletToScreen(localWallet.localWalletPrivateKey)} />
             
           </ListItem>
+          
           <ListItem  sx={{ py: 1, px: 0 }}>
+          <ListItemIcon>
+            <PermIdentityIcon />
+          </ListItemIcon>
             <ListItemText primary={"CPF"} secondary={formatCpfToScreen(formularioCpf.cpf)} />
             
           </ListItem>

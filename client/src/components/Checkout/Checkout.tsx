@@ -14,9 +14,11 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import EleitorForm from './EleitorForm';
 import Review from './Review';
-import { FormularioCpfProvider } from '../../contexts/FormularioCpfContext';
-import { Divider, Stack } from '@mui/material';
+import { FormularioCpfContext, FormularioCpfProvider } from '../../contexts/FormularioCpfContext';
+import { Alert, Divider, Snackbar, Stack } from '@mui/material';
 import { Link as ReactRouterDomLink } from 'react-router-dom';
+import { register } from '../../services/register';
+import { LocalWalletContext } from '../../contexts/LocalWalletContext';
 
 
 
@@ -36,23 +38,87 @@ function getStepContent(step: number) {
 
 export default function Checkout() {
   const [activeStep, setActiveStep] = React.useState(0);
-
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
+  const [requiredMessage, setRequiredMessage] = React.useState("");
+  const {formularioCpf} = React.useContext(FormularioCpfContext)
+  
+  const {localWallet} = React.useContext(LocalWalletContext)
   const handleNext = () => {
-    setActiveStep(activeStep + 1);
+    /* if(activeStep==1){
+      register(localWallet.localWalletPublicKey,formularioCpf.cpf)
+      .then((response)=>{
+        if(response.statusCode===201){
+          setActiveStep(activeStep + 1);
+        }else{
+          setOpen(true);
+        }
+      })
+      .catch((error:unknown)=>{
+        console.error(error)
+        setOpen(true);
+      }).finally(()=>{
+        setLoading(false);
+      
+      })
+
+    }else{
+      
+      setActiveStep(activeStep + 1);
+    } */
+    setRequiredMessage("");
+    switch (activeStep) {
+      case 0:
+        if(formularioCpf.cpf.length!==11 || !localWallet.localWalletPublicKey || !localWallet.localWalletPrivateKey){
+          setRequiredMessage("Preencha todos os campos corretamente");
+          return 
+        }
+        setActiveStep(activeStep + 1);
+        break;
+      case 1:
+        setLoading(true);
+        register(localWallet.localWalletPublicKey,formularioCpf.cpf)
+        .then((response)=>{
+          if(response.statusCode===201){
+            setActiveStep(activeStep + 1);
+          }else if(response.statusCode===400){
+            setOpen(true);
+            setRequiredMessage("Cidadão já está cadastrado!");
+          }
+        })
+        .catch((error:unknown)=>{
+          console.error(error)
+          setOpen(true);
+        }).finally(()=>{
+          setLoading(false);
+        
+        })
+        break;
+      default:
+        break;
+    }
   };
 
   const handleBack = () => {
+    setRequiredMessage("");
+
     setActiveStep(activeStep - 1);
   };
+  const handleClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
 
+    setOpen(false);
+  };
   return (
     <React.Fragment>
-     <FormularioCpfProvider>
+     
       
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper  variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Registre sua Cidadania
+            Registre sua Cidadania 
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
@@ -82,18 +148,23 @@ export default function Checkout() {
           ) : (
             <React.Fragment>
               {getStepContent(activeStep)}
+              {requiredMessage && <Typography color="error">{requiredMessage}</Typography>}
               <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+              
                 {activeStep !== 0 && (
                   <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
+                    Voltar
                   </Button>
                 )}
                 <Button
                   variant="contained"
                   onClick={handleNext}
+                  disabled={loading}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 'Place order' : 'Next'}
+                  {activeStep === steps.length - 1 ? 
+                  `${loading ? 'Registrando...' : 'Registrar Cidadania'}` : 
+                  'Próximo'}
                 </Button>
               </Box>
             </React.Fragment>
@@ -101,8 +172,23 @@ export default function Checkout() {
         </Paper>
         
       </Container>
-
-      </FormularioCpfProvider>
+      <Snackbar
+            anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'left',
+            }}
+            open={open}
+            autoHideDuration={2000}
+            onClose={handleClose}
+            
+            
+        >
+          <Alert severity='error' onClose={handleClose}>
+            Erro ao registrar seus dados. Tente novamente.
+          </Alert>
+        </Snackbar>
+        
+      
     </React.Fragment>
   );
 }
