@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState } from 'react';
-import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItem, ListItemText, ListItemIcon, ListItemButton, Button } from '@mui/material';
+import { AppBar, Toolbar, Typography, IconButton, Drawer, List, ListItemText, ListItemIcon, ListItemButton, Stack } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 
-import GenerateWalletBtn from '../GenerateWalletBtn';
+
 import { PAGINAS } from '../../constants/PAGINAS';
 import { Link } from 'react-router-dom';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 
 export default function NavBar() {
@@ -45,17 +46,21 @@ export default function NavBar() {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Sistema Eleitoral
           </Typography>
+          
+          <Stack direction="row" spacing={2}>
 
-
+            
+          <ThemeSwitcher/>
           <IconButton
             edge="start"
             color="inherit"
             aria-label="menu"
             onClick={toggleDrawer}
             sx={{ mr: 2 }}
-          >
+            >
             <MenuIcon />
           </IconButton>
+            </Stack>
         </Toolbar>
       </AppBar>
       <Drawer anchor="right" open={drawerOpen} onClose={toggleDrawer}>
