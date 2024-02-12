@@ -5,7 +5,6 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Toolbar from '@mui/material/Toolbar';
 import Paper from '@mui/material/Paper';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
@@ -16,9 +15,9 @@ import Typography from '@mui/material/Typography';
 import AddressForm from './AddressForm';
 import Review from './Review';
 import { FormularioCpfProvider } from '../../contexts/FormularioCpfContext';
-import { Divider, List, Stack } from '@mui/material';
+import { Divider, Stack } from '@mui/material';
 import { Link as ReactRouterDomLink } from 'react-router-dom';
-import { PAGINAS } from '../../constants/PAGINAS';
+
 
 
 const steps = ['Preencha seus dados', 'Envie seus Dados'];
