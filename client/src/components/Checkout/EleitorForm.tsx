@@ -12,7 +12,7 @@ import { generateCpf } from '../../utils/generateCpf';
 import { FormularioCpfContext } from '../../contexts/FormularioCpfContext';
 import { formatCpfToScreen } from '../../utils/formatCpfToScreen';
 
-export default function AddressForm() {
+export default function EleitorForm() {
     const {localWallet,setLocalWallet} = React.useContext(LocalWalletContext)
     const {formularioCpf,setFormularioCpf} = React.useContext(FormularioCpfContext)
     function handleGenerateNewWallet(){

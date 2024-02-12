@@ -12,7 +12,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import AddressForm from './AddressForm';
+import EleitorForm from './EleitorForm';
 import Review from './Review';
 import { FormularioCpfProvider } from '../../contexts/FormularioCpfContext';
 import { Divider, Stack } from '@mui/material';
@@ -25,7 +25,7 @@ const steps = ['Preencha seus dados', 'Envie seus Dados'];
 function getStepContent(step: number) {
   switch (step) {
     case 0:
-      return <AddressForm />;
+      return <EleitorForm />;
     
     case 1:
       return <Review />;
