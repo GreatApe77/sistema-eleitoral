@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import { Box, Button, Container, InputAdornment, TextField, Typography } from "@mui/material";
 import CandidatoCard, { Candidato } from "../components/CandidatoCard";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -18,7 +20,7 @@ export default function Resultados() {
           Informações dos Candidatos
 
         </Typography>
-        <Box>
+        {/* <Box>
           <TextField
             required
             id="anoDaEleicao"
@@ -40,9 +42,9 @@ export default function Resultados() {
         </Box>
         <Button variant="contained" color="primary">
           Buscar
-        </Button>
+        </Button> */}
 
-        <CandidatoCard candidato={candidato} />
+        {/* <CandidatoCard candidato={candidato} /> */}
 
       </Container>
 
