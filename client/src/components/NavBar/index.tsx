@@ -9,47 +9,44 @@ import { Link } from 'react-router-dom';
 
 
 export default function NavBar() {
-    const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-    const toggleDrawer = () => {
-        setDrawerOpen(!drawerOpen);
-    };
-    const list = () => (
-        <div
-          role="presentation"
-          onClick={toggleDrawer}
-          onKeyDown={toggleDrawer}
-        >
-          <List>
-            {
-              PAGINAS.map((pagina)=>{
-                return (
-                  <ListItemButton  key={pagina.nome} component={Link} to={pagina.rota}>
-                    <ListItemIcon>
-                      {pagina.icone}
-                    </ListItemIcon>
-                    <ListItemText primary={pagina.nome} />
-                  </ListItemButton>
-                )
-              })
-            }
-          </List>
-          
-        </div>
-      );
-    return (
-        <>
-            <AppBar position="static">
+  const toggleDrawer = () => {
+    setDrawerOpen(!drawerOpen);
+  };
+  const list = () => (
+    <div
+      role="presentation"
+      onClick={toggleDrawer}
+      onKeyDown={toggleDrawer}
+    >
+      <List>
+        {
+          PAGINAS.map((pagina) => {
+            return (
+              <ListItemButton key={pagina.nome} component={Link} to={pagina.rota}>
+                <ListItemIcon>
+                  {pagina.icone}
+                </ListItemIcon>
+                <ListItemText primary={pagina.nome} />
+              </ListItemButton>
+            )
+          })
+        }
+      </List>
+
+    </div>
+  );
+  return (
+    <>
+      <AppBar position="static">
         <Toolbar>
-          
-          
-            
-          
+
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Sistema Eleitoral
           </Typography>
-          {}
-          <GenerateWalletBtn/>
+
+
           <IconButton
             edge="start"
             color="inherit"
@@ -66,6 +63,6 @@ export default function NavBar() {
       </Drawer>
       <Toolbar /> {/* To push the content down so it's not covered by the app bar */}
 
-        </>
-    )
+    </>
+  )
 }

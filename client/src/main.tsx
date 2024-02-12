@@ -1,31 +1,20 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
 import { CssBaseline } from '@mui/material'
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { PAGINAS } from './constants/PAGINAS.tsx'
+import { RouterProvider } from 'react-router-dom'
 import { LocalWalletProvider } from './contexts/LocalWalletContext.tsx'
-
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <App />,
-    children:PAGINAS.map((pagina)=>{
-      return {
-        path: pagina.rota,
-        element: pagina.componente
-      }
-    }) ,
-  },
-
-])
+import { router } from './router.tsx'
+import { ThemeProvider } from '@emotion/react'
+import { theme } from './theme.ts'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
+    <ThemeProvider theme={theme}>
     <CssBaseline />
     <LocalWalletProvider>
 
     <RouterProvider router={router}/>
     </LocalWalletProvider>
+    </ThemeProvider>
   </React.StrictMode>,
 )
