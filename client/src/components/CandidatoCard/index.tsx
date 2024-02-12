@@ -15,7 +15,7 @@ export interface Candidato {
 
 export default function CandidatoCard({ candidato }: { candidato: Candidato })  {
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 345 }} elevation={8}>
       <CardMedia
         component="img"
         alt={candidato.nome}
