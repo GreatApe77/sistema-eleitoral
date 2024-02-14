@@ -9,9 +9,11 @@ export async function login(chavePublica: string, signature: string,timestampInM
         },
         body: JSON.stringify({ chavePublica, signature,timestampInMs }),
     });
+    const data = await response.json();
     
     return {
         statusCode: response.status,
+        data,
     } as ApiCall
     
   
