@@ -5,11 +5,16 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SearchEleicao from "../components/SearchEleicao";
 import CandidatosTable from "../components/CandidatosTable";
 import { CandidatosProvider } from "../contexts/CandidatosContext";
+import TabelaVotos from "../components/TabelaVotos";
+import { VotosContext, VotosProvider } from "../contexts/ResultadoContext";
+import { useContext } from "react";
 
 export default function Resultados() {
+  const {votos} = useContext(VotosContext)
   return (
     <>
     <CandidatosProvider>
+      
       <Container>
         <Typography variant="h4" gutterBottom>
           Resultados
@@ -17,33 +22,14 @@ export default function Resultados() {
         <SearchEleicao/>
         
         <CandidatosTable/>
-        {/* <Box>
-          <TextField
-            required
-            id="anoDaEleicao"
-            name="anoDaEleicao"
-            label="Ano da Eleição"
-            type="number"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <CalendarMonthIcon />
-                </InputAdornment>
-              ),
-            }}
-
-            autoComplete="anoDaEleicao"
-            variant="filled"
-
-          />
-        </Box>
-        <Button variant="contained" color="primary">
-          Buscar
-        </Button> */}
-
-        {/* <CandidatoCard candidato={candidato} /> */}
-
+        {
+          votos.quantidadeDeVotos > 0 &&
+        <TabelaVotos/>
+        }
+      
       </Container>
+      
+      
       </CandidatosProvider>
     </>
   )

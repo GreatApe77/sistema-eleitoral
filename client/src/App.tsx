@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import NavBar from "./components/NavBar"
+import { VotosProvider } from "./contexts/ResultadoContext"
 
 
 
@@ -9,8 +10,10 @@ function App() {
   return (
     <>
       <NavBar />
+        <VotosProvider>
 
         <Outlet />  
+        </VotosProvider>
     </>
   )
 }
