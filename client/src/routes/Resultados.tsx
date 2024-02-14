@@ -4,10 +4,12 @@ import { Box, Button, Container, Divider, InputAdornment, TextField, Toolbar, Ty
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SearchEleicao from "../components/SearchEleicao";
 import CandidatosTable from "../components/CandidatosTable";
+import { CandidatosProvider } from "../contexts/CandidatosContext";
 
 export default function Resultados() {
   return (
     <>
+    <CandidatosProvider>
       <Container>
         <Typography variant="h4" gutterBottom>
           Resultados
@@ -42,7 +44,7 @@ export default function Resultados() {
         {/* <CandidatoCard candidato={candidato} /> */}
 
       </Container>
-
+      </CandidatosProvider>
     </>
   )
 }

@@ -2,17 +2,9 @@ import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { Avatar } from '@mui/material';
-import { Candidato } from '../../types/Candidato';
-const candidato: Candidato = {
-    nome: "Carlos Santos",
-    partido: "Partido B",
-    fotoDoCandidatoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjA7danCZ0VWhzi4j7vjzm4rjBY9eN9mrCog-AHF9cKS2_4Mj8NCLPcZy_fyb1RE6Q2J0&usqp=CAU",
-    quantidadeDeVotos: 0,
-    numeroDeVotacao: 99,
-    indice: 0
-  
-  } 
-const candidatosMockArray: Candidato[] = new Array(20).fill(candidato)
+import { CandidatosContext } from '../../contexts/CandidatosContext';
+
+
 const columns: GridColDef[] = [
     {
         field: 'fotoDoCandidatoUrl',
@@ -41,18 +33,20 @@ const columns: GridColDef[] = [
   }, */
 ];
 
-const rows = candidatosMockArray.map((candidato, index) => {
+/* const rows = candidatosMockArray.map((candidato, index) => {
     return {
         ...candidato,
         id: index
     }
-})
+}) */
 
 export default function CandidatosTable() {
+  const {candidatos} = React.useContext(CandidatosContext)
   return (
+    
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
-        rows={rows}
+        rows={candidatos.map((candidato, index) => {return {...candidato, id: index}})}
         columns={columns}
         initialState={{
           pagination: {

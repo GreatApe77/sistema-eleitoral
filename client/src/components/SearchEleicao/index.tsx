@@ -7,6 +7,10 @@ import InputBase from '@mui/material/InputBase';
 
 import SearchIcon from '@mui/icons-material/Search';
 import { Button } from '@mui/material';
+import { useContext, useState } from 'react';
+import { getCandidatos } from '../../web3-services/getCandidatos';
+import { CandidatosContext } from '../../contexts/CandidatosContext';
+import { Candidato } from '../../types/Candidato';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -51,7 +55,31 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function SearchEleicao() {
-    
+  const [ano, setAno] = useState<string>("");
+  const {setCandidatos} = useContext(CandidatosContext)
+    function handleCandidatosSearch(){
+      if(ano.length !== 4) return
+      getCandidatos(ano,0,20)
+      .then((candidatos) => {
+        setCandidatos(candidatos.map((candidato)=>{
+          return {
+            fotoDoCandidatoUrl: candidato.fotoDoCandidatoUrl,
+            nome: candidato.nome,
+            indice: Number(candidato.indice),
+            partido: candidato.partido,
+            numeroDeVotacao: Number(candidato.numeroDeVotacao),
+            quantidadeDeVotos: Number(candidato.quantidadeDeVotos),
+
+          } as Candidato
+        }))
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+    }
+    function handleAnoChange(event: React.ChangeEvent<HTMLInputElement>){
+      setAno(event.target.value)
+    }
   return (
     <Box sx={{ flexGrow: 1}} >
       <AppBar position="static" color='transparent' elevation={0}>
@@ -65,9 +93,12 @@ export default function SearchEleicao() {
             <StyledInputBase
               placeholder="Ano..."
               inputProps={{ 'aria-label': 'search' }}
+              value={ano}
+              type='number'
+              onChange={handleAnoChange}
             />
           </Search>
-          <Button variant="text" color="primary">
+          <Button variant="text" color="primary" onClick={handleCandidatosSearch}>
             Buscar
             </Button>
             
