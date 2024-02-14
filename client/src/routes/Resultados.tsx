@@ -14,7 +14,7 @@ export default function Resultados() {
           Resultados
         </Typography>
         <SearchEleicao/>
-        <Divider />
+        
         <CandidatosTable/>
         {/* <Box>
           <TextField

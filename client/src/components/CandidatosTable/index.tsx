@@ -13,20 +13,21 @@ const candidato: Candidato = {
   } 
 const candidatosMockArray: Candidato[] = new Array(20).fill(candidato)
 const columns: GridColDef[] = [
-  { field: 'quantidadeDeVotos', headerName: 'Número de votos', width: 150 },
-  { field: 'nome', headerName: 'Nome', width: 130 },
+    {
+        field: 'fotoDoCandidatoUrl',
+        headerName: 'Foto',
+        renderCell: ({row}) =>{
+            return <Avatar src={row.fotoDoCandidatoUrl} />
+        },
+        
+        
+        sortable: false,
+        width: 90,
+      },
+      { field: 'nome', headerName: 'Nome', width: 130 },
+  { field: 'quantidadeDeVotos', headerName: 'Votos', width: 100 },
   { field: 'partido', headerName: 'Partido', width: 130 },
-  {
-    field: 'fotoDoCandidatoUrl',
-    headerName: 'Foto',
-    renderCell: ({row}) =>{
-        return <Avatar src={row.fotoDoCandidatoUrl} />
-    },
-    minWidth: 100,
-    
-    sortable: false,
-    width: 90,
-  },
+  
   { field: 'numeroDeVotacao', headerName: 'Número', width: 130 },
   /* {
     field: 'fullName',
