@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 
 import SearchIcon from '@mui/icons-material/Search';
-import { Button } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useContext, useState } from 'react';
 import { getCandidatos } from '../../web3-services/getCandidatos';
 import { CandidatosContext } from '../../contexts/CandidatosContext';
@@ -56,9 +56,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchEleicao() {
   const [ano, setAno] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false)
   const {setCandidatos} = useContext(CandidatosContext)
     function handleCandidatosSearch(){
       if(ano.length !== 4) return
+      setLoading(true)
       getCandidatos(ano,0,20)
       .then((candidatos) => {
         setCandidatos(candidatos.map((candidato)=>{
@@ -75,6 +77,10 @@ export default function SearchEleicao() {
       })
       .catch((err) => {
         console.error(err)
+      })
+      .finally(()=>{
+        setLoading(false)
+      
       })
     }
     function handleAnoChange(event: React.ChangeEvent<HTMLInputElement>){
@@ -98,8 +104,8 @@ export default function SearchEleicao() {
               onChange={handleAnoChange}
             />
           </Search>
-          <Button variant="text" color="primary" onClick={handleCandidatosSearch}>
-            Buscar
+          <Button disabled={loading}  variant="text" color="primary" onClick={handleCandidatosSearch}>
+            {loading ? <CircularProgress size={24} color="primary"/> : "Buscar"}
             </Button>
             
         </Toolbar>
