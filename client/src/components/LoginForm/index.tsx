@@ -12,21 +12,31 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { getLoginMessage } from '../../utils/getLoginMessage';
-
+import { Link as LinkReactRouterDom, useNavigate } from 'react-router-dom';
+import { LocalWalletContext } from '../../contexts/LocalWalletContext';
+import { signMessage } from '../../utils/signMessage';
 
 
 
 
 export default function SignIn() {
   const [currentTimestamp, setCurrentTimestamp] = React.useState<number>(Date.now());
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const [signature, setSignature] = React.useState<string>('')
+  const navigate = useNavigate()
+  const {localWallet} = React.useContext(LocalWalletContext)
+   function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    throw new Error("Function not implemented.");
+   }
+  function handleSignature(){
+    signMessage(localWallet.localWalletPrivateKey,getLoginMessage(currentTimestamp))
+    .then((signature)=>{
+      setSignature(signature)
+    })
+    .catch((error)=>{
+      console.error(error)
+      navigate("/registrar-cidadania")
+    })
+  }
   React.useEffect(()=>{
     setInterval(()=>{
         setCurrentTimestamp(Date.now())
@@ -59,7 +69,7 @@ export default function SignIn() {
               label="Chave Pública"
               name="publicKey"
               autoComplete="publicKey"
-              autoFocus
+              value={localWallet.localWalletPublicKey}
             />
             <TextField
               margin="normal"
@@ -70,6 +80,7 @@ export default function SignIn() {
               type="text"
               id="signature"
               autoComplete="signature"
+              value={signature}
             />
             <Typography variant="subtitle1" color="text.primary" >
                 Assine a mensagem abaixo para se autenticar
@@ -77,23 +88,29 @@ export default function SignIn() {
             <Typography variant="body2" color="text.secondary" align="center">
                 {getLoginMessage(currentTimestamp)}
             </Typography>
+            {localWallet.localWalletPrivateKey?<Button
+              type="button"
+              fullWidth
+              variant="outlined"
+              color='secondary'
+              onClick={handleSignature}
+              sx={{ mt: 3 }}
+            >
+              Assinar mensagem
+            </Button>: <></>}
             <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Login
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+              
               <Grid item>
-                <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link underline='hover'  variant="body2" component={LinkReactRouterDom} to={"/registrar-cidadania"}>
+                  Não tem cadastro? Registre-se como cidadão AQUI
                 </Link>
               </Grid>
             </Grid>
