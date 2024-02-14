@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { Box, Button, Container, InputAdornment, TextField, Typography } from "@mui/material";
+import { Box, Button, Container, InputAdornment, TextField, Toolbar, Typography } from "@mui/material";
 import CandidatoCard, { Candidato } from "../components/CandidatoCard";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import SearchEleicao from "../components/SearchEleicao";
 const candidato: Candidato = {
   nome: "Carlos Santos",
   partido: "Partido B",
@@ -16,10 +17,11 @@ export default function Resultados() {
   return (
     <>
       <Container>
-        <Typography variant="h2" gutterBottom>
-          Informações dos Candidatos
-
+        <Typography variant="h4" gutterBottom>
+          Resultados
         </Typography>
+        <SearchEleicao/>
+        
         {/* <Box>
           <TextField
             required
