@@ -1,0 +1,1 @@
+export const ETH_NODE_URL = import.meta.env.VITE_ETH_NODE_URL as string;

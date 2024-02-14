@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Box, Button, Container, Divider, InputAdornment, TextField, Toolbar, Typography } from "@mui/material";
-import CandidatoCard, { Candidato } from "../components/CandidatoCard";
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import SearchEleicao from "../components/SearchEleicao";
 import CandidatosTable from "../components/CandidatosTable";

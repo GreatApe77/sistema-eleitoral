@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import { Candidato } from '../CandidatoCard';
+
 import { Avatar } from '@mui/material';
+import { Candidato } from '../../types/Candidato';
 const candidato: Candidato = {
     nome: "Carlos Santos",
     partido: "Partido B",

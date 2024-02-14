@@ -2,16 +2,10 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
+import { Candidato } from '../../types/Candidato';
 
 // Define the Candidato interface
-export interface Candidato {
-  nome: string;
-  partido: string;
-  fotoDoCandidatoUrl: string;
-  quantidadeDeVotos: number;
-  numeroDeVotacao: number;
-  indice: number;
-}
+
 
 export default function CandidatoCard({ candidato }: { candidato: Candidato })  {
   return (
