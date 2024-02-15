@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom"
 import NavBar from "./components/NavBar"
 import { VotosProvider } from "./contexts/ResultadoContext"
 import { CandidatosProvider } from "./contexts/CandidatosContext"
+import { StatusProvider } from "./contexts/StatusContext"
 
 
 
@@ -13,7 +14,10 @@ function App() {
       <NavBar />
       <VotosProvider>
         <CandidatosProvider>
+          <StatusProvider>
+
           <Outlet />
+          </StatusProvider>
 
         </CandidatosProvider>
 

@@ -10,9 +10,11 @@ import { Button, CircularProgress } from '@mui/material';
 import { useContext, useState } from 'react';
 import { getCandidatos } from '../../web3-services/getCandidatos';
 import { CandidatosContext } from '../../contexts/CandidatosContext';
-import { Candidato } from '../../types/Candidato';
+
 import { VotosContext } from '../../contexts/ResultadoContext';
 import { getResultado } from '../../web3-services/getResultado';
+import { getStatus } from '../../web3-services/getStatus';
+import { StatusContext } from '../../contexts/StatusContext';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -61,14 +63,17 @@ export default function SearchEleicao() {
   const [loading, setLoading] = useState<boolean>(false)
   const {setCandidatos} = useContext(CandidatosContext)
   const {setVotos} = useContext(VotosContext)
-    async function handleCandidatosSearch(){
+  const {setStatusDaEleicao} = useContext(StatusContext) 
+  
+  async function handleCandidatosSearch(){
       if(ano.length !== 4) return
       setLoading(true)
 
       try{
-        const [candidatos,votos] = await Promise.all([getCandidatos(ano,0,20),getResultado(ano)])
+        const [candidatos,votos,status] = await Promise.all([getCandidatos(ano,0,20),getResultado(ano),getStatus(ano)])
         setCandidatos(candidatos)
         setVotos(votos)
+        setStatusDaEleicao(status)
       }catch(err){
         console.error(err)
       }finally{

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { Avatar } from '@mui/material';
+import { Avatar, Paper } from '@mui/material';
 import { CandidatosContext } from '../../contexts/CandidatosContext';
 
 
@@ -44,6 +44,7 @@ export default function CandidatosTable() {
   const {candidatos} = React.useContext(CandidatosContext)
   return (
     
+
     <div style={{ height: 400, width: '100%' }}>
       <DataGrid
         rows={candidatos.map((candidato, index) => {return {...candidato, id: index}})}
@@ -54,6 +55,7 @@ export default function CandidatosTable() {
           },
         }}
         pageSizeOptions={[5, 10]}
+        
         
       />
     </div>

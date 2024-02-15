@@ -9,10 +9,13 @@ import TabelaVotos from "../components/TabelaVotos";
 import { VotosContext, VotosProvider } from "../contexts/ResultadoContext";
 import { useContext } from "react";
 import ResultadosFallback from "../components/ResultadosFallback";
+import { IndicadorDeStatus } from "../components/IndicadorDeStatus";
+import { StatusContext } from "../contexts/StatusContext";
 
 export default function Resultados() {
   const { votos } = useContext(VotosContext)
   const { candidatos } = useContext(CandidatosContext)
+  const {statusDaEleicao} = useContext(StatusContext)
   return (
     <>
       <>
@@ -22,6 +25,10 @@ export default function Resultados() {
             Resultados
           </Typography>
           <SearchEleicao />
+          {
+            statusDaEleicao!==null &&
+          <IndicadorDeStatus/>
+          }
           {
             candidatos.length ?
               <CandidatosTable />
