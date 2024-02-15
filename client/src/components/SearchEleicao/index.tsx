@@ -11,6 +11,8 @@ import { useContext, useState } from 'react';
 import { getCandidatos } from '../../web3-services/getCandidatos';
 import { CandidatosContext } from '../../contexts/CandidatosContext';
 import { Candidato } from '../../types/Candidato';
+import { VotosContext } from '../../contexts/ResultadoContext';
+import { getResultado } from '../../web3-services/getResultado';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -58,22 +60,24 @@ export default function SearchEleicao() {
   const [ano, setAno] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false)
   const {setCandidatos} = useContext(CandidatosContext)
-    function handleCandidatosSearch(){
+  const {setVotos} = useContext(VotosContext)
+    async function handleCandidatosSearch(){
       if(ano.length !== 4) return
       setLoading(true)
-      getCandidatos(ano,0,20)
-      .then((candidatos) => {
-        setCandidatos(candidatos.map((candidato)=>{
-          return {
-            fotoDoCandidatoUrl: candidato.fotoDoCandidatoUrl,
-            nome: candidato.nome,
-            indice: Number(candidato.indice),
-            partido: candidato.partido,
-            numeroDeVotacao: Number(candidato.numeroDeVotacao),
-            quantidadeDeVotos: Number(candidato.quantidadeDeVotos),
 
-          } as Candidato
-        }))
+      try{
+        const [candidatos,votos] = await Promise.all([getCandidatos(ano,0,20),getResultado(ano)])
+        setCandidatos(candidatos)
+        setVotos(votos)
+      }catch(err){
+        console.error(err)
+      }finally{
+        setLoading(false)
+      }
+
+      /* getCandidatos(ano,0,20)
+      .then((candidatos) => {
+        setCandidatos()
       })
       .catch((err) => {
         console.error(err)
@@ -81,7 +85,7 @@ export default function SearchEleicao() {
       .finally(()=>{
         setLoading(false)
       
-      })
+      }) */
     }
     function handleAnoChange(event: React.ChangeEvent<HTMLInputElement>){
       setAno(event.target.value)
