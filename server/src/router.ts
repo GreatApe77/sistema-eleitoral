@@ -15,6 +15,8 @@ import { iniciarEleicaoController } from "./use-cases/iniciar-eleicao"
 import { encerrarEleicaoController } from "./use-cases/encerrar-eleicao"
 import { validateIniciarEleicao } from "./middlewares/iniciar-eleicao/validateIniciarEleicao"
 import { validateEncerrarEleicao } from "./middlewares/encerrear-eleicao/validateEncerrarEleicao"
+import { configureEleitorController } from "./use-cases/configure-eleitor"
+import { validateConfigureEleitor } from "./middlewares/configure-eleitor/validateConfigureEleitor"
 const router = express.Router()
 
 
@@ -45,8 +47,8 @@ router.post("/admin/eleicao/encerrar",onlyAdmin,validateEncerrarEleicao,(req,res
 })
 
 router.post("/admin/eleicao/candidatos",(req,res)=>{})
-router.post("/admin/eleicao/eleitores",(req,res)=>{
-    
+router.post("/admin/eleicao/eleitores",validateConfigureEleitor,(req,res)=>{
+    return configureEleitorController.handle(req,res)
 })
 
 router.post("/admin/eleicao/candidatos",(req,res)=>{})

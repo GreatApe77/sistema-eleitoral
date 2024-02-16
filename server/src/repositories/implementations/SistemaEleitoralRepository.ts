@@ -5,13 +5,28 @@ import { iniciarEleicao as iniciarEleicaoService } from "../../web3-services/inc
 import { encerrarEleicao as encerrarEleicaoService } from "../../web3-services/encerrarEleicao";
 import { StatusDaEleicao } from "../../types/StatusDaEleicao";
 import { getEleicaoStatus } from "../../web3-services/getEleicaoStatus";
+import { anexarEleitores as anexarEleitoresService } from "../../web3-services/anexarEleitores";
+import { removerEleitores as removerEleitoresService } from "../../web3-services/removerEleitores";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
-    anexarEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
-        throw new Error("Method not implemented.");
+    async anexarEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
+        try {
+            const response = await anexarEleitoresService(anoDaEleicao, eleitores)
+            return response
+        } catch (error) {
+            console.error(error)
+            return null
+        }
     }
-    removerEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
-        throw new Error("Method not implemented.");
+    async removerEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
+        
+        try {
+            const response = await removerEleitoresService(anoDaEleicao, eleitores)
+            return response
+        } catch (error) {
+            console.error(error)
+            return null
+        }
     }
     async getEleicaoStatus(anoDaEleicao: string): Promise<StatusDaEleicao | null> {
         try {
