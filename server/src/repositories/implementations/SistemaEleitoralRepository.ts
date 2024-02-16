@@ -3,8 +3,24 @@ import { sistemaEleitoraInstance } from "../../web3-services/config";
 import { ISistemaEleitoralRepository } from "../ISistemaEleitoralRepository";
 import { iniciarEleicao as iniciarEleicaoService } from "../../web3-services/inciarEleicao";
 import { encerrarEleicao as encerrarEleicaoService } from "../../web3-services/encerrarEleicao";
+import { StatusDaEleicao } from "../../types/StatusDaEleicao";
+import { getEleicaoStatus } from "../../web3-services/getEleicaoStatus";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
+    anexarEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
+        throw new Error("Method not implemented.");
+    }
+    removerEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
+        throw new Error("Method not implemented.");
+    }
+    async getEleicaoStatus(anoDaEleicao: string): Promise<StatusDaEleicao | null> {
+        try {
+            const status = await getEleicaoStatus(anoDaEleicao)
+            return status  
+        } catch (error) {
+            return null
+        }
+    }
     async iniciarEleicao(anoDaEleicao: string): Promise<string | null> {
         try {
             const transactionHash = await iniciarEleicaoService(anoDaEleicao)

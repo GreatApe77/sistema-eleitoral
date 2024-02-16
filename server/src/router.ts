@@ -44,6 +44,10 @@ router.post("/admin/eleicao/encerrar",onlyAdmin,validateEncerrarEleicao,(req,res
     return encerrarEleicaoController.handle(req,res)
 })
 
+router.post("/admin/eleicao/candidatos",(req,res)=>{})
+router.post("/admin/eleicao/eleitores",(req,res)=>{
+    
+})
 
 router.post("/admin/eleicao/candidatos",(req,res)=>{})
 
