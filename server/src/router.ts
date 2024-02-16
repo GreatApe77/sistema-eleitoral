@@ -11,7 +11,7 @@ import { onlyAdmin } from "./middlewares/only-admin/validateAdmin"
 import { loginAsEleitorController } from "./use-cases/login-as-eleitor"
 import { configureEleicaoController } from "./use-cases/configure-eleicao"
 import { validateConfigureEleicaoSchema } from "./middlewares/configure-eleicao/validateConfigureEleicaoSchema"
-
+import { iniciarEleicaoController } from "./use-cases/iniciar-eleicao"
 const router = express.Router()
 
 
@@ -34,7 +34,16 @@ router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
 router.post("/admin/eleicao",validateConfigureEleicaoSchema,(req,res)=>{
     return configureEleicaoController.handle(req,res)
 })
+router.post("/admin/eleicao/iniciar",(req,res)=>{
+    return iniciarEleicaoController.handle(req,res)
+})
+router.post("/admin/eleicao/encerrar",(req,res)=>{
+    
+})
 
+router.get("/admin/eleicao/encerrar",(req,res)=>{
+
+})
 router.post("/admin/eleicao/candidatos",(req,res)=>{})
 
 export default router
