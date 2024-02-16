@@ -10,7 +10,8 @@ import Login from '../routes/Login';
 import Resultados from '../routes/Resultados';
 import CarteiraVirtual from '../routes/CarteiraVirtual';
 import RegistrarCidadania from '../routes/RegistrarCidadania';
-
+import Votar from '../routes/Votar';
+import HowToVoteIcon from '@mui/icons-material/HowToVote';
 
 export const PAGINAS = [
     {
@@ -19,7 +20,12 @@ export const PAGINAS = [
         rota: "/",
         componente: <Home/>
     },
-    
+    {
+        nome: "Votar",
+        icone: <HowToVoteIcon/>,
+        rota: "/votar",
+        componente: <Votar/>
+    },
     
     {
         nome: "Resultados",
