@@ -23,7 +23,7 @@
         <nav>
             <ul>
                 <li>
-                    <a href="./typed-data.html">Sign TypedData</a>
+                    <a href="./index.html">Sign message</a>
                 </li>
             </ul>
         </nav>
@@ -71,23 +71,24 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.umd.min.js" integrity="sha512-O+pv4/QL+b3vRcPZ64zjoh+t6yhvo8L/OgQQuQIUI9GbMC6VwsujvLiUV+aIxlPLSo+SLVgf8orHcb15S5ieiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <script>
             const signButton = document.getElementById('sign-button');
-            async function signMessage() {
-                const provider = new ethers.BrowserProvider(window.ethereum);
-                const signer = await provider.getSigner()
-                console.log(signer)
-                const timestampInMs = Date.now()
-                const message = `Login Sistema Eleitoral: ${timestampInMs}`
-                const signature = await signer.signMessage(message);
-                console.log(signature)
-                const request = {
-                    chavePublica: await signer.getAddress(),
-                    signature: signature,
-                    timestampInMs: timestampInMs
-                }
-                document.getElementById('signature').innerText = JSON.stringify(request, null, 2)
-                const verifiedSigner = ethers.verifyMessage(message, signature)
-                document.getElementById('signer').innerText = verifiedSigner
-            }
+           // async function signMessage() {
+            //    const provider = new ethers.BrowserProvider(window.ethereum);
+             //   const signer = await provider.getSigner()
+             //   console.log(signer)
+            //    const timestampInMs = Date.now()
+            //    const message = `Login Sistema Eleitoral: ${timestampInMs}`
+            //    const signature = await signer.signMessage(message);
+            //    console.log(signature)
+            //    const request = {
+            //        chavePublica: await signer.getAddress(),
+            //        signature: signature,
+             //       timestampInMs: timestampInMs
+            //    }
+            //    document.getElementById('signature').innerText = JSON.stringify(request, null, 2)
+           //     const verifiedSigner = ethers.verifyMessage(message, signature)
+            //    document.getElementById('signer').innerText = verifiedSigner
+           // }
+
             signButton.addEventListener('click',()=>{
                 signMessage()
             });

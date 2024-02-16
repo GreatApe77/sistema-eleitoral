@@ -1,3 +1,4 @@
+import { Domain } from "../types/Domain"
 import { StatusDaEleicao } from "../types/StatusDaEleicao"
 
 export interface ISistemaEleitoralRepository {
@@ -8,4 +9,6 @@ export interface ISistemaEleitoralRepository {
     getEleicaoStatus(anoDaEleicao: string): Promise<StatusDaEleicao | null>
     anexarEleitores(anoDaEleicao: string,eleitores:string[]): Promise<string | null>
     removerEleitores(anoDaEleicao: string,eleitores:string[]): Promise<string | null>
+    votar(anoDaEleicao:string,chavePublica:string,numeroDoCandidato:string,timestamp:number,signature:string): Promise<string | null>
+    getDomain(): Promise<Domain | null>
 }
