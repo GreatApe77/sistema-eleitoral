@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
 import { Box, Button, Container, Divider, InputAdornment, TextField, Toolbar, Typography } from "@mui/material";
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+
 import SearchEleicao from "../components/SearchEleicao";
 import CandidatosTable from "../components/CandidatosTable";
 import { CandidatosContext, CandidatosProvider } from "../contexts/CandidatosContext";
 import TabelaVotos from "../components/TabelaVotos";
 import { VotosContext, VotosProvider } from "../contexts/ResultadoContext";
 import { useContext } from "react";
-import ResultadosFallback from "../components/ResultadosFallback";
+
 import { IndicadorDeStatus } from "../components/IndicadorDeStatus";
 import { StatusContext } from "../contexts/StatusContext";
 
@@ -20,10 +20,8 @@ export default function Resultados() {
     <>
       <>
 
-        <Container>
-          <Typography variant="h4" gutterBottom>
-            Resultados
-          </Typography>
+        <Container maxWidth="xl">
+          
           <SearchEleicao />
           {
             statusDaEleicao!==null &&
@@ -34,7 +32,7 @@ export default function Resultados() {
               <CandidatosTable />
               :
               <>
-              <ResultadosFallback/>
+              
               </>
           }
           {
