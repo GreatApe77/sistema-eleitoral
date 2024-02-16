@@ -12,6 +12,9 @@ import { loginAsEleitorController } from "./use-cases/login-as-eleitor"
 import { configureEleicaoController } from "./use-cases/configure-eleicao"
 import { validateConfigureEleicaoSchema } from "./middlewares/configure-eleicao/validateConfigureEleicaoSchema"
 import { iniciarEleicaoController } from "./use-cases/iniciar-eleicao"
+import { encerrarEleicaoController } from "./use-cases/encerrar-eleicao"
+import { validateIniciarEleicao } from "./middlewares/iniciar-eleicao/validateIniciarEleicao"
+import { validateEncerrarEleicao } from "./middlewares/encerrear-eleicao/validateEncerrarEleicao"
 const router = express.Router()
 
 
@@ -34,16 +37,14 @@ router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
 router.post("/admin/eleicao",validateConfigureEleicaoSchema,(req,res)=>{
     return configureEleicaoController.handle(req,res)
 })
-router.post("/admin/eleicao/iniciar",(req,res)=>{
+router.post("/admin/eleicao/iniciar",validateIniciarEleicao,(req,res)=>{
     return iniciarEleicaoController.handle(req,res)
 })
-router.post("/admin/eleicao/encerrar",(req,res)=>{
-    
+router.post("/admin/eleicao/encerrar",validateEncerrarEleicao,(req,res)=>{
+    return encerrarEleicaoController.handle(req,res)
 })
 
-router.get("/admin/eleicao/encerrar",(req,res)=>{
 
-})
 router.post("/admin/eleicao/candidatos",(req,res)=>{})
 
 export default router
