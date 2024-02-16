@@ -6,6 +6,7 @@ export class EncerrarEleicaoUseCase {
     constructor(private sistemaEleitoralRepository: SistemaEleitoralRepository) {}
 
     async execute(data: EncerrarEleicaoDTO) {
+        //Todo: verificar status da eleicao
         const eleicaoAddress = await this.sistemaEleitoralRepository.getEleicaoAddress(data.anoDaEleicao)
         if (!eleicaoAddress) throw new ApiError("Eleição não existe", 400)
         const response = await this.sistemaEleitoralRepository.encerrarEleicao(data.anoDaEleicao)

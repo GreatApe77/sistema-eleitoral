@@ -34,13 +34,13 @@ router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
     return loginAsAdminController.handle(req,res)
 })
 
-router.post("/admin/eleicao",validateConfigureEleicaoSchema,(req,res)=>{
+router.post("/admin/eleicao",onlyAdmin,validateConfigureEleicaoSchema,(req,res)=>{
     return configureEleicaoController.handle(req,res)
 })
-router.post("/admin/eleicao/iniciar",validateIniciarEleicao,(req,res)=>{
+router.post("/admin/eleicao/iniciar",onlyAdmin,validateIniciarEleicao,(req,res)=>{
     return iniciarEleicaoController.handle(req,res)
 })
-router.post("/admin/eleicao/encerrar",validateEncerrarEleicao,(req,res)=>{
+router.post("/admin/eleicao/encerrar",onlyAdmin,validateEncerrarEleicao,(req,res)=>{
     return encerrarEleicaoController.handle(req,res)
 })
 

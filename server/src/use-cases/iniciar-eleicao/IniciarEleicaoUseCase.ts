@@ -11,6 +11,7 @@ export class IniciarEleicaoUseCase {
     ) { }
 
     async execute(data: IniciarEleicaoDTO) {
+        //Todo: verificar status da eleição
         const retrievedEleicaoAddress = await this.sistemaEleitoralRepository.getEleicaoAddress(data.anoDaEleicao)
         if(!retrievedEleicaoAddress) throw new ApiError("Eleição não existe",400)
         const transactionHash = await this.sistemaEleitoralRepository.iniciarEleicao(data.anoDaEleicao)
