@@ -1,97 +1,117 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>Sign Message
-        </title>
-        <!-- Required meta tags -->
-        <meta charset="utf-8" />
-        <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1, shrink-to-fit=no"
-        />
 
-        <!-- Bootstrap CSS v5.2.1 -->
-        <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-            crossorigin="anonymous"
-        />
-    </head>
+<head>
+    <title>Sign Message
+    </title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-    <body>
-        <nav>
-            <ul>
-                <li>
-                    <a href="./index.html">Sign message</a>
-                </li>
-            </ul>
-        </nav>
-        <main>
-            <div
-                class="container-md"
-            >
-                <h1>Sign Message</h1>
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    id="sign-button"
-                >
-                    Sign
-                </button>
+    <!-- Bootstrap CSS v5.2.1 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li>
+                <a href="./index.html">Sign message</a>
+            </li>
+        </ul>
+    </nav>
+    <main>
+       
+        <div class="container">
+            <h1>
+                Sign Typed Data
+
+            </h1>
+            <form>
                 
+                <div class="mb-3">
+                    <label for="number" class="form-label">Numero Do Candidato</label>
+                    <input type="number" class="form-control" id="number" aria-describedby="numberHelp" />
+
                 
-            </div>
-            <br>
-            <div class="container-md">
-                <h1>Signature</h1>
-                <p id="signature"></p>
-            </div>
-            <div class="container-md">
-                <h1>Signer</h1>
-                <p id="signer"></p>
-            </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label for="year" class="form-label">Ano da Eleicao</label>
+                    <input type="number" class="form-control" id="year" aria-describedby="yearHelp" />
+                    <div id="yearHelp" class="form-text">O ano da Eleicao</div>
+                
+                <button type="button" class="btn btn-primary" id="sign-button">Sign</button>
+        </div>
+    </main>
+    <footer>
+        <!-- place footer here -->
+    </footer>
+    <!-- Bootstrap JavaScript Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+        integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.umd.min.js"
+        integrity="sha512-O+pv4/QL+b3vRcPZ64zjoh+t6yhvo8L/OgQQuQIUI9GbMC6VwsujvLiUV+aIxlPLSo+SLVgf8orHcb15S5ieiQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="module">
+        import SistemaEleitoralAbi from "../client/src/abis/SistemaEleitoral.json" assert { type: "json" };
+        
+        const SISTEMA_ELEITORAL_CONTRACT_ADDRESS = "0xd0cA4eCa3C0f8aA273a4fB0f4d29873f94b80172";
+        const DOMAIN_TYPE = {
+            name: "Sistema Eleitoral",
+            version: "1",
+            chainId: 4002,
+            verifyingContract: SISTEMA_ELEITORAL_CONTRACT_ADDRESS,
+        };
+        const VotacaoType = {
+            Votacao: [
+                { name: "assinante", type: "address" },
+                { name: "numeroDoCandidato", type: "uint16" },
+                { name: "anoDaEleicao", type: "uint256" },
+                { name: "nonce", type: "uint256" },
+                { name: "prazo", type: "uint256" },
+            ],
+        };
+        const signButton = document.getElementById('sign-button');
+        async function signTypedData() {
+            const provider = new ethers.BrowserProvider(window.ethereum);
             
-        </main>
-        <footer>
-            <!-- place footer here -->
-        </footer>
-        <!-- Bootstrap JavaScript Libraries -->
-        <script
-            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-            crossorigin="anonymous"
-        ></script>
+            const signer = await provider.getSigner();
+            const contract = new ethers.Contract(SISTEMA_ELEITORAL_CONTRACT_ADDRESS, SistemaEleitoralAbi, signer);
+            console.log(contract);
+            const address = await signer.getAddress();
+            const number = document.getElementById('number').value;
+            const year = document.getElementById('year').value;
+            console.log(
+                {
+                    address,
+                    number,
+                    year
+                }
+            )
+            const nonce = await contract.nonces(address);
+            const prazo = Math.floor(Date.now() / 1000) +600 // 10 minutes in the future
+            const Votacao = {
+                assinante: address,
+                numeroDoCandidato: number,
+                anoDaEleicao: year,
+                nonce: nonce,
+                prazo: prazo,
+            };
+            const signature = await signer.signTypedData(DOMAIN_TYPE, VotacaoType, Votacao);
+            console.log(signature);
+        }
 
-        <script
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-            crossorigin="anonymous"
-        ></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.10.0/ethers.umd.min.js" integrity="sha512-O+pv4/QL+b3vRcPZ64zjoh+t6yhvo8L/OgQQuQIUI9GbMC6VwsujvLiUV+aIxlPLSo+SLVgf8orHcb15S5ieiQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script>
-            const signButton = document.getElementById('sign-button');
-           // async function signMessage() {
-            //    const provider = new ethers.BrowserProvider(window.ethereum);
-             //   const signer = await provider.getSigner()
-             //   console.log(signer)
-            //    const timestampInMs = Date.now()
-            //    const message = `Login Sistema Eleitoral: ${timestampInMs}`
-            //    const signature = await signer.signMessage(message);
-            //    console.log(signature)
-            //    const request = {
-            //        chavePublica: await signer.getAddress(),
-            //        signature: signature,
-             //       timestampInMs: timestampInMs
-            //    }
-            //    document.getElementById('signature').innerText = JSON.stringify(request, null, 2)
-           //     const verifiedSigner = ethers.verifyMessage(message, signature)
-            //    document.getElementById('signer').innerText = verifiedSigner
-           // }
+        signButton.addEventListener('click', () => {
+            signTypedData()
+        });
+    </script>
+</body>
 
-            signButton.addEventListener('click',()=>{
-                signMessage()
-            });
-        </script>
-    </body>
 </html>
