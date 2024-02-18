@@ -105,7 +105,8 @@
                 prazo: prazo,
             };
             const signature = await signer.signTypedData(DOMAIN_TYPE, VotacaoType, Votacao);
-            console.log(signature);
+            const {v, r, s} = ethers.Signature.from(signature)
+            console.log({v, r, s,prazo,signature})
         }
 
         signButton.addEventListener('click', () => {
