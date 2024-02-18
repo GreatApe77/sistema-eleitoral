@@ -1,8 +1,8 @@
-import { BigNumberish, BytesLike } from "ethers";
+import { AddressLike, BigNumberish, BytesLike } from "ethers";
 import { sistemaEleitoraInstance } from "./config";
 
-export async function votar(anoDaEleicao: string,numeroDoCandidato:string,eleitor:string,prazo:number,v:BigNumberish,r:BytesLike,s:BytesLike): Promise<string> {
-    const response = await sistemaEleitoraInstance.votar(anoDaEleicao,numeroDoCandidato,eleitor,prazo,v,r,s)
+export async function votar(anoDeEleicao: BigNumberish, numeroDoCandidato: BigNumberish, eleitor: AddressLike, prazo: BigNumberish, v: BigNumberish, r: BytesLike, s: BytesLike): Promise<string> {
+    const response = await sistemaEleitoraInstance.votar(anoDeEleicao,numeroDoCandidato,eleitor,prazo,v,r,s)
     return response.hash;
 }
 

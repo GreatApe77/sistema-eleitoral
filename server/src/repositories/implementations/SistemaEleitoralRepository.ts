@@ -13,6 +13,9 @@ import { votar } from "../../web3-services/votar";
 import { getNonce } from "../../web3-services/getNonce";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
+    getPermissaoDeVoto(anoDaEleicao: string, chavePublica: string): Promise<boolean | null> {
+        throw new Error("Method not implemented.");
+    }
     async getNonce(chavePublica: string): Promise<number | null> {
         try {
             const nonce = await getNonce(chavePublica)
@@ -35,8 +38,8 @@ export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
     async votar(anoDaEleicao: string,chavePublica:string, numeroDoCandidato: string, timestamp: number, signature: string): Promise<string | null> {
             
             const sigComponents = ethers.Signature.from(signature)
+            console.log(sigComponents)
             const { v, r, s } = sigComponents
-           console.log(v,r,s)
             try {
                 const response = await votar(anoDaEleicao,numeroDoCandidato,chavePublica,timestamp ,v,r,s)
                 

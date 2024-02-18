@@ -12,4 +12,5 @@ export interface ISistemaEleitoralRepository {
     votar(anoDaEleicao:string,chavePublica:string,numeroDoCandidato:string,timestamp:number,signature:string): Promise<string | null>
     getDomain(): Promise<Domain | null>
     getNonce(chavePublica:string): Promise<number | null>
+    getPermissaoDeVoto(anoDaEleicao:string,chavePublica:string): Promise<boolean | null>
 }
