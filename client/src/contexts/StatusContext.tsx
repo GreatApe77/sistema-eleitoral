@@ -3,7 +3,7 @@ import { StatusDaEleicao } from "../types/StatusDaEleicao";
 
 type StatusContextType= {
     statusDaEleicao: StatusDaEleicao| null,
-    setStatusDaEleicao: (statusDaEleicao:StatusDaEleicao)=> void
+    setStatusDaEleicao: (statusDaEleicao:StatusDaEleicao | null)=> void
 }
 export const StatusContext = createContext({} as StatusContextType)
 

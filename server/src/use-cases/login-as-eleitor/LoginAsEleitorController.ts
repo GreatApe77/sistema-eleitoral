@@ -1,3 +1,4 @@
+import { handleErrors } from "../../errors/handleErrors";
 import { LoginAsEleitorUseCase } from "./LoginAsEleitorUseCase";
 import { Request,Response } from "express";
 export class LoginAsEleitorController{
@@ -15,11 +16,10 @@ export class LoginAsEleitorController{
                 signature,
                 timestampInMs
             })
-            if(!token) return res.status(401).json("Could not login as eleitor")
+            
             return res.status(200).json({token})    
         } catch (error) {
-            console.error(error)
-            return res.status(500).json("Internal server error")
+           return handleErrors(error,res)
         }
         
     }

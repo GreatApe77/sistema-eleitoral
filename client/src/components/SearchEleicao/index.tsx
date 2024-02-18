@@ -6,7 +6,7 @@ import Toolbar from '@mui/material/Toolbar';
 import InputBase from '@mui/material/InputBase';
 
 import SearchIcon from '@mui/icons-material/Search';
-import { Button, CircularProgress } from '@mui/material';
+import { Button, CircularProgress, Typography } from '@mui/material';
 import { useContext, useState } from 'react';
 import { getCandidatos } from '../../web3-services/getCandidatos';
 import { CandidatosContext } from '../../contexts/CandidatosContext';
@@ -15,6 +15,7 @@ import { VotosContext } from '../../contexts/ResultadoContext';
 import { getResultado } from '../../web3-services/getResultado';
 import { getStatus } from '../../web3-services/getStatus';
 import { StatusContext } from '../../contexts/StatusContext';
+import { Votos } from '../../types/Votos';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -60,6 +61,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function SearchEleicao() {
   const [ano, setAno] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("")
   const [loading, setLoading] = useState<boolean>(false)
   const {setCandidatos} = useContext(CandidatosContext)
   const {setVotos} = useContext(VotosContext)
@@ -68,7 +70,7 @@ export default function SearchEleicao() {
   async function handleCandidatosSearch(){
       if(ano.length !== 4) return
       setLoading(true)
-
+      setErrorMessage("")
       try{
         const [candidatos,votos,status] = await Promise.all([getCandidatos(ano,0,20),getResultado(ano),getStatus(ano)])
         setCandidatos(candidatos)
@@ -76,6 +78,10 @@ export default function SearchEleicao() {
         setStatusDaEleicao(status)
       }catch(err){
         console.error(err)
+        setErrorMessage("Eleição não encontrada")
+        setCandidatos([])
+        setVotos({} as Votos)
+        setStatusDaEleicao(null)
       }finally{
         setLoading(false)
       }
@@ -111,13 +117,20 @@ export default function SearchEleicao() {
               value={ano}
               type='number'
               onChange={handleAnoChange}
+              
             />
+
           </Search>
           <Button disabled={loading}  variant="text" color="primary" onClick={handleCandidatosSearch}>
             {loading ? <CircularProgress size={24} color="primary"/> : "Buscar"}
             </Button>
-            
+          
+
         </Toolbar>
+        {
+          errorMessage && <Typography variant="caption" color="error" align="center">{errorMessage}</Typography>
+        }
+        
       </AppBar>
     </Box>
   );
