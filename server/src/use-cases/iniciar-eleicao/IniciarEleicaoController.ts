@@ -1,3 +1,4 @@
+import { handleErrors } from "../../errors/handleErrors"
 import { IniciarEleicaoUseCase } from "./IniciarEleicaoUseCase"
 import { Request, Response } from "express"
 export class IniciarEleicaoController {
@@ -7,10 +8,8 @@ export class IniciarEleicaoController {
         try {
             await this.iniciarEleicaoUseCase.execute({ anoDaEleicao })
             return response.status(200).send()
-        } catch (error:any) {
-            return response.status(error.statusCode).json({
-                message: error.message || 'Unexpected error.'
-            })
+        } catch (error) {
+            return handleErrors(error, response)
         }
     }
 }

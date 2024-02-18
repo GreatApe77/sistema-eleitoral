@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { LoginAsAdminUseCase } from "./LoginAsAdminUseCase";
+import { handleErrors } from "../../errors/handleErrors";
 
 export class LoginAsAdminController{
 
@@ -10,10 +11,9 @@ export class LoginAsAdminController{
         const { ultraSecretPassword } = req.body
         try {
             const token = await this.loginAsAdminUseCase.execute({ultraSecretPassword})
-            if(!token) return res.status(401).send()
             return res.status(200).json({token})
         } catch (error) {
-            return res.status(400).send()
+            return handleErrors(error,res)
         }
     }
 }

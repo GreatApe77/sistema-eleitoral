@@ -1,6 +1,7 @@
 import { ILoginAsEleitorRepository } from "../../repositories/ILoginAsEleitorRepository";
 import { IEleitorRepository } from "../../repositories/IEleitorRepository";
 import { ILoginAsEleitorDTO } from "./LoginAsEleitorDTO";
+import { ApiError } from "../../errors/ApiError";
 export class LoginAsEleitorUseCase{
 
 
@@ -13,12 +14,11 @@ export class LoginAsEleitorUseCase{
         const {publicKey,signature,timestampInMs} = data
 
         const eleitor = await this.eleitorRepository.findByChavePublica(publicKey)
-        
-        if(!eleitor) return null
+        if(!eleitor) throw new ApiError("Eleitor não Cadastrado",404)
         const signatureMatches = await this.loginAsEleitorRepository.verifySignature(publicKey,signature,timestampInMs)
-        if(!signatureMatches) return null
+        if(!signatureMatches)  throw new ApiError("Assinatura inválida",400)
         const token = await this.loginAsEleitorRepository.generateToken(publicKey)
-        if(!token) return null
+        if(!token) throw new ApiError("Erro ao gerar token",500) 
         return token
     }
 }
