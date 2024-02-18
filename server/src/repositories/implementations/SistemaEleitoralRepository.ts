@@ -10,8 +10,19 @@ import { removerEleitores as removerEleitoresService } from "../../web3-services
 import { getDomain } from "../../web3-services/getDomain";
 import { Domain } from "../../types/Domain";
 import { votar } from "../../web3-services/votar";
+import { getNonce } from "../../web3-services/getNonce";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
+    async getNonce(chavePublica: string): Promise<number | null> {
+        try {
+            const nonce = await getNonce(chavePublica)
+            return nonce
+            
+        } catch (error) {
+            console.error(error)
+            return null
+        }
+    }
     async getDomain(): Promise<Domain | null> {
             try {
                     const domain = await getDomain()
@@ -22,8 +33,7 @@ export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
             }
     }
     async votar(anoDaEleicao: string,chavePublica:string, numeroDoCandidato: string, timestamp: number, signature: string): Promise<string | null> {
-            const domain = await this.getDomain()
-            if(domain===null) return null
+            
             const sigComponents = ethers.Signature.from(signature)
             const { v, r, s } = sigComponents
             try {

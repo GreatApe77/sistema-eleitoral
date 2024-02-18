@@ -11,4 +11,5 @@ export interface ISistemaEleitoralRepository {
     removerEleitores(anoDaEleicao: string,eleitores:string[]): Promise<string | null>
     votar(anoDaEleicao:string,chavePublica:string,numeroDoCandidato:string,timestamp:number,signature:string): Promise<string | null>
     getDomain(): Promise<Domain | null>
+    getNonce(chavePublica:string): Promise<number | null>
 }
