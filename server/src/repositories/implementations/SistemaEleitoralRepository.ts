@@ -13,8 +13,14 @@ import { votar } from "../../web3-services/votar";
 import { getNonce } from "../../web3-services/getNonce";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
-    getPermissaoDeVoto(anoDaEleicao: string, chavePublica: string): Promise<boolean | null> {
-        throw new Error("Method not implemented.");
+    async getPermissaoDeVoto(anoDaEleicao: string, chavePublica: string): Promise<boolean | null> {
+        try {
+            const permissaoDeVoto = await  sistemaEleitoraInstance.getPermissaoDeVoto(anoDaEleicao, chavePublica)
+            return permissaoDeVoto
+        } catch (error) {
+            console.error(error)
+            return null
+        }
     }
     async getNonce(chavePublica: string): Promise<number | null> {
         try {
