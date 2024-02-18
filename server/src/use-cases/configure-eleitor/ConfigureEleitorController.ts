@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ConfigureEleitorUseCase } from "./ConfigureEleitorUseCase";
+import { handleErrors } from "../../errors/handleErrors";
 export class ConfigureEleitorController {
     constructor(
         private readonly configureEleitorUseCase: ConfigureEleitorUseCase
@@ -11,10 +12,8 @@ export class ConfigureEleitorController {
         try {
            const transactionHash =  await this.configureEleitorUseCase.execute({ anoDaEleicao, method, eleitores })
             return response.status(200).json({transactionHash})
-        } catch (error:any) {
-            return response.status(error.statusCode).json({
-                message: error.message || 'Unexpected error.'
-            })
+        } catch (error) {
+            return handleErrors(error,response)
         }
     }
 }

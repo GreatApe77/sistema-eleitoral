@@ -18,7 +18,7 @@ export class ConfigureEleitorUseCase {
         }
         const statusDaEleicao = await this.sistemaEleitoralRepository.getEleicaoStatus(data.anoDaEleicao)
         if(statusDaEleicao===null) throw new ApiError("Eleição não encontrada",404)
-        if(statusDaEleicao!==StatusDaEleicao.NAO_INICIADA) throw new ApiError("Eleição já iniciada",400)
+        if(statusDaEleicao!==StatusDaEleicao.NAO_INICIADA) throw new ApiError("Eleição já iniciada ou encerrada",400)
         switch (data.method) {
             case "anexar":
                 const transactionHashAnexar = await this.sistemaEleitoralRepository.anexarEleitores(data.anoDaEleicao,data.eleitores)

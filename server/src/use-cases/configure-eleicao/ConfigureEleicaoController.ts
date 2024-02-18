@@ -3,6 +3,7 @@ import { ApiError } from "../../errors/ApiError"
 import { Candidato } from "../../models/Candidato"
 import { ConfigureEleicaoUseCase } from "./ConfigureEleicaoUseCase"
 import { Request, Response } from "express"
+import { handleErrors } from "../../errors/handleErrors"
 export class ConfigureEleicaoController{
 
     constructor(
@@ -15,8 +16,8 @@ export class ConfigureEleicaoController{
         try {
             const result = await this.configureEleciaoUseCase.execute({anoDaEleicao,candidatosIniciais})
             return res.status(201).json(result)
-        } catch (error: any) {
-            return res.status(error.statusCode || 500).json({message:error.message})
+        } catch (error) {
+            return handleErrors(error,res)
         }
     }
 }

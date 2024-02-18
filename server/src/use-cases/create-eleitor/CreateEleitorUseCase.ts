@@ -1,3 +1,4 @@
+import { ApiError } from "../../errors/ApiError";
 import Eleitor from "../../models/Eleitor";
 import { IEleitorRepository } from "../../repositories/IEleitorRepository";
 import { ICreateEleitorRequestDTO } from "./CreateEleitorDTO";
@@ -14,7 +15,7 @@ export class CreateEleitorUseCase {
       { filterKey: "cpf", filterValue: data.cpf },
     ]);
     
-    if (alreadyExists) throw new Error("Eleitor already exists");
+    if (alreadyExists) throw new ApiError("Eleitor already exists",400);
     const eleitor = new Eleitor(data);
     await this.eleitorRepository.save(eleitor);
   }

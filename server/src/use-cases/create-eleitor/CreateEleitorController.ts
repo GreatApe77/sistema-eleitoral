@@ -1,5 +1,6 @@
 import { Request,Response } from "express";
 import { CreateEleitorUseCase } from "./CreateEleitorUseCase";
+import { handleErrors } from "../../errors/handleErrors";
 
 export default class CreateEleitorController{
 
@@ -14,11 +15,8 @@ export default class CreateEleitorController{
             
             await this.createEleitorUseCase.execute({chavePublica,cpf})
             return res.status(201).send()
-        } catch (error:any) {
-            console.error(error)
-            return res.status(400).json({
-                message:error.message || 'Unexpected error'
-            })
+        } catch (error) {
+            return handleErrors(error,res)
         }
     }
 }

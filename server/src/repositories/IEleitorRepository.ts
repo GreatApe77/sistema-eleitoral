@@ -5,7 +5,7 @@ export interface IEleitorRepository{
     find(filters:{filterKey:string,filterValue:string}[]):Promise<Eleitor| null>
     save(eleitor:Eleitor):Promise<void>
     update(id:string,eleitor:Eleitor):Promise<void>
-    delete(cpf:string):Promise<boolean>
+    delete(cpf:string):Promise<boolean | null>
     entrarEmEleicao(anoDeEleicao:number,eleitor:Eleitor):Promise<string | null>
     votar(anoDeEleicao:number,numeroDoCandidato:string,assinatura:string):Promise<boolean>
 }
