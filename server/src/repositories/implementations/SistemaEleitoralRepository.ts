@@ -36,6 +36,7 @@ export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
             
             const sigComponents = ethers.Signature.from(signature)
             const { v, r, s } = sigComponents
+           console.log(v,r,s)
             try {
                 const response = await votar(anoDaEleicao,numeroDoCandidato,chavePublica,timestamp ,v,r,s)
                 

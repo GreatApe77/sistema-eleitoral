@@ -8,6 +8,7 @@ export class VotarUseCase{
     async execute(data: VotarDTO): Promise<string>{
         const { anoDaEleicao, chavePublica, numeroDoCandidato, prazo, signature } = data
         const nonce = await this.sistemaEleitoralRepository.getNonce(chavePublica)
+        console.log(nonce)
         if(nonce===null) throw new ApiError("Could not get nonce",500)
         const timestamp = getCurrentTimeStamp()
         if(timestamp>prazo) throw new ApiError("Prazo expirado",400)

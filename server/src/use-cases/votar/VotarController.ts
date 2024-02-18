@@ -9,6 +9,7 @@ export class VotarController {
 
   async handle(req: Request, res: Response) {
     const data = req.body as VotarDTO;
+    console.log(data);
     try {
       const transactionHash = await this.votarUseCase.execute(data);
       res.status(200).json({ transactionHash });
