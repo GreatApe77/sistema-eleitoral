@@ -1,14 +1,12 @@
-import { Container, Typography } from "@mui/material";
+import Hero from "../components/Hero";
 
 export default function Home() {
   return (
-    <div>
-        <Container>
-            <Typography variant="h1" align="center">Bem vindo ao Sistema Eleitoral</Typography>
-            
-        </Container>
-
+    <>
+       <Hero />
+      
+      
         
-    </div>
-  )
+    </>
+  );
 }

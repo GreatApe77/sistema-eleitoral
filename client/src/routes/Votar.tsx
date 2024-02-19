@@ -1,13 +1,17 @@
 import { Container } from "@mui/material";
-import UrnaEletronica from "../components/UrnaEletronica";
-import Urna from "../components/Urna";
+import VotoCheckout from "../components/VotoCheckout";
+import { FormularioCpfProvider } from "../contexts/FormularioCpfContext";
+
 
 export default function Votar() {
   return (
     <>
+    <FormularioCpfProvider>
+
         <Container>
-            <Urna/>
+            <VotoCheckout />
         </Container>
+    </FormularioCpfProvider>
     
     
     </>

@@ -1,45 +1,6 @@
-import { Avatar, Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
+import { brancoBtnStyle, buttonStyle, confirmaBtnStyle, corrigirBtnStyle, numeroCandidatoStyle } from "./styles";
 
-const buttonStyle = {
-    bgcolor: "black",
-    color: "white",
-    ":hover": {
-        bgcolor: "black"
-    }
-
-}
-const confirmaBtnStyle = {
-    bgcolor: "green",
-    color: "white",
-    ":hover": {
-        bgcolor: "green"
-    }
-
-}
-const corrigirBtnStyle = {
-    bgcolor: "red",
-    color: "white",
-    ":hover": {
-        bgcolor: "red"
-    }
-
-}
-const brancoBtnStyle = {
-    bgcolor: "white",
-    color: "black",
-    ":hover": {
-        bgcolor: "white"
-    }
-
-}
-const numeroCandidatoStyle = {
-    border: 1,
-    borderRadius: 0,
-    padding: 0.5,
-    width: "30px",
-    height: "30px",
-    textAlign: "center"
-}
 export default function Urna() {
     return (
        
