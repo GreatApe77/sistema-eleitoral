@@ -51,7 +51,7 @@ export default function Resultados() {
           {
             candidatos.length ?
               <>
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom marginTop={3}>
                   Tabela de Candidatos
                 </Typography>
 
@@ -64,7 +64,12 @@ export default function Resultados() {
           }
           {
             votos.quantidadeDeVotos > 0 &&
+            <>
+            <Typography variant="h6" gutterBottom marginTop={3}>
+              Tabela de Votos
+            </Typography>
             <TabelaVotos />
+            </>
           }
 
         </Container>
