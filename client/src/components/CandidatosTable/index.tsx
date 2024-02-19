@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import { Avatar, Paper } from '@mui/material';
+import { Avatar } from '@mui/material';
 import { CandidatosContext } from '../../contexts/CandidatosContext';
 
 

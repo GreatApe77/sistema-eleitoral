@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { Candidato } from '../../types/Candidato';
 
-// Define the Candidato interface
+
 
 
 export default function CandidatoCard({ candidato }: { candidato: Candidato })  {

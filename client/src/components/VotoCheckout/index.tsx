@@ -16,10 +16,7 @@ import Typography from '@mui/material/Typography';
 import { FormularioCpfContext } from '../../contexts/FormularioCpfContext';
 import { Alert, Divider, Snackbar, Stack } from '@mui/material';
 import { Link as ReactRouterDomLink } from 'react-router-dom';
-import { register } from '../../services/register';
 import { LocalWalletContext } from '../../contexts/LocalWalletContext';
-import EleitorForm from '../Checkout/EleitorForm';
-import Review from '../Checkout/Review';
 import InputAnoEleicao from './InputAnoEleicao';
 import Urna from '../Urna';
 
@@ -44,11 +41,11 @@ function getStepContent(step: number) {
 export default function VotoCheckout() {
   const [activeStep, setActiveStep] = React.useState(0);
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [requiredMessage, setRequiredMessage] = React.useState("");
-  const {formularioCpf} = React.useContext(FormularioCpfContext)
+  const [loading] = React.useState(false);
+  const [requiredMessage] = React.useState("");
+  React.useContext(FormularioCpfContext)
   
-  const {localWallet} = React.useContext(LocalWalletContext)
+  React.useContext(LocalWalletContext)
   const handleNext = () => {
    setActiveStep(prev=>prev+1)
   };
