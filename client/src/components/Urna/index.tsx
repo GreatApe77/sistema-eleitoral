@@ -43,10 +43,10 @@ const numeroCandidatoStyle = {
 export default function Urna() {
     return (
        
-        <Box maxWidth={"sm"} padding={3} bgcolor={"#dad3c3"} borderRadius={1} >
+        <Box maxWidth={"sm"} padding={2} bgcolor={"#dad3c3"} borderRadius={1} >
              
-            <Box bgcolor={"#e1e1e1"} padding={2} display={"flex"} justifyContent={"space-between"}>
-                <Box >
+            <Box bgcolor={"#e1e1e1"} padding={1} display={"flex"} justifyContent={"space-between"}>
+                <Box  sx={{color:"black"}}>
                     <Typography variant={"body1"} gutterBottom>SEU VOTO PARA</Typography>
                     <Typography variant={"h5"} marginLeft={3} gutterBottom>PRESIDENTE</Typography>
                     <Box display={"flex"}>
