@@ -1,17 +1,20 @@
 import { Container } from "@mui/material";
 import VotoCheckout from "../components/VotoCheckout";
-import { FormularioCpfProvider } from "../contexts/FormularioCpfContext";
+import { DadosDeVotacaoProvider } from "../contexts/DadosDeVotacaoContext";
 
 
 export default function Votar() {
   return (
     <>
-    <FormularioCpfProvider>
+      <DadosDeVotacaoProvider>
+
+
 
         <Container>
             <VotoCheckout />
         </Container>
-    </FormularioCpfProvider>
+    
+      </DadosDeVotacaoProvider>
     
     
     </>

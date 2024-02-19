@@ -20,18 +20,22 @@ import { register } from '../../services/register';
 import { LocalWalletContext } from '../../contexts/LocalWalletContext';
 import EleitorForm from '../Checkout/EleitorForm';
 import Review from '../Checkout/Review';
+import InputAnoEleicao from './InputAnoEleicao';
+import Urna from '../Urna';
 
 
 
-const steps = ['Preencha seus dados', 'Envie seus Dados'];
+const steps = ['Escolha a Eleição', 'Escolha o seu Candidato'];
 
 function getStepContent(step: number) {
   switch (step) {
     case 0:
-      return <EleitorForm />;
+      return <InputAnoEleicao />;
     
     case 1:
-      return <Review />;
+      return <Urna />;
+      
+        
     default:
       throw new Error('Unknown step');
   }
@@ -46,64 +50,13 @@ export default function VotoCheckout() {
   
   const {localWallet} = React.useContext(LocalWalletContext)
   const handleNext = () => {
-    /* if(activeStep==1){
-      register(localWallet.localWalletPublicKey,formularioCpf.cpf)
-      .then((response)=>{
-        if(response.statusCode===201){
-          setActiveStep(activeStep + 1);
-        }else{
-          setOpen(true);
-        }
-      })
-      .catch((error:unknown)=>{
-        console.error(error)
-        setOpen(true);
-      }).finally(()=>{
-        setLoading(false);
-      
-      })
-
-    }else{
-      
-      setActiveStep(activeStep + 1);
-    } */
-    setRequiredMessage("");
-    switch (activeStep) {
-      case 0:
-        if(formularioCpf.cpf.length!==11 || !localWallet.localWalletPublicKey || !localWallet.localWalletPrivateKey){
-          setRequiredMessage("Preencha todos os campos corretamente");
-          return 
-        }
-        setActiveStep(activeStep + 1);
-        break;
-      case 1:
-        setLoading(true);
-        register(localWallet.localWalletPublicKey,formularioCpf.cpf)
-        .then((response)=>{
-          if(response.statusCode===201){
-            setActiveStep(activeStep + 1);
-          }else if(response.statusCode===400){
-            setOpen(true);
-            setRequiredMessage("Cidadão já está cadastrado!");
-          }
-        })
-        .catch((error:unknown)=>{
-          console.error(error)
-          setOpen(true);
-        }).finally(()=>{
-          setLoading(false);
-        
-        })
-        break;
-      default:
-        break;
-    }
+   setActiveStep(prev=>prev+1)
   };
 
   const handleBack = () => {
-    setRequiredMessage("");
+    
 
-    setActiveStep(activeStep - 1);
+    setActiveStep(prev=>prev-1);
   };
   const handleClose = (_event: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
@@ -119,7 +72,9 @@ export default function VotoCheckout() {
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper  variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Registre sua Cidadania 
+            {
+                activeStep === steps.length ? "Revisão do Voto" : "Votação"
+            }
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
@@ -157,16 +112,20 @@ export default function VotoCheckout() {
                     Voltar
                   </Button>
                 )}
-                <Button
+                {
+                    activeStep === steps.length -1?
+                    <></>
+                    :
+                    <Button
                   variant="contained"
                   onClick={handleNext}
                   disabled={loading}
                   sx={{ mt: 3, ml: 1 }}
                 >
-                  {activeStep === steps.length - 1 ? 
-                  `${loading ? 'Registrando...' : 'Registrar Cidadania'}` : 
-                  'Próximo'}
+                    Próximo
                 </Button>
+                }
+                
               </Box>
             </React.Fragment>
           )}
