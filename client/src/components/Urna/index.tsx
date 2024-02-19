@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, Paper, Typography } from "@mui/material";
 
 const buttonStyle = {
     bgcolor: "black",
@@ -32,46 +32,54 @@ const brancoBtnStyle = {
     }
 
 }
-const tecaldoContainerStyle = {
-    
+const numeroCandidatoStyle = {
+    border: 1,
+    borderRadius: 0,
+    padding: 0.5,
+    width: "30px",
+    height: "30px",
+    textAlign: "center"
 }
 export default function Urna() {
     return (
-        <Box maxWidth={"sm"}>
-            <Box display={"flex"} justifyContent={"space-between"}>
-                <Box>
-                    <Typography variant={"h6"}>SEU VOTO PARA</Typography>
-                    <Typography variant={"h6"} textAlign={"center"}>PRESIDENTE</Typography>
+       
+        <Box maxWidth={"sm"} padding={3} bgcolor={"#dad3c3"} borderRadius={1} >
+             
+            <Box bgcolor={"#e1e1e1"} padding={2} display={"flex"} justifyContent={"space-between"}>
+                <Box >
+                    <Typography variant={"body1"} gutterBottom>SEU VOTO PARA</Typography>
+                    <Typography variant={"h5"} marginLeft={3} gutterBottom>PRESIDENTE</Typography>
                     <Box display={"flex"}>
-                    <Typography variant={"h6"} marginRight={5} >
-                        Número: 
-                    </Typography>
-                    <Box sx={{display:"flex"}}>
-                            <Box sx={{border: 1 ,borderRadius: 0, padding: 0.5,width:"30px",height:"30px",textAlign:"center"}}>
+                        <Typography variant={"body1"} marginRight={5} gutterBottom >
+                            Número:
+                        </Typography>
+                        <Box sx={{ display: "flex" }}>
+                            <Box sx={ numeroCandidatoStyle}>
                                 1
                             </Box>
-                            <Box sx={{border: 1 ,borderRadius: 0, padding: 0.5,width:"30px",height:"30px", textAlign:"center"}}>2</Box>
+                            <Box sx={numeroCandidatoStyle}>2</Box>
                         </Box>
                     </Box>
-                    
+                    <Typography variant={"body1"} gutterBottom>Nome do candidato: Oswaldo da silva</Typography>
+                    <Typography variant={"body1"} gutterBottom>Partido: PSL</Typography>
                 </Box>
                 <Box>
-                    <Avatar/>
+                    <Avatar variant="square"  sx={{ width: 50, height: 50 }} />
                 </Box>
             </Box>
-            <Box sx={{borderRadius:4}} bgcolor={"#313336"}>
+            <Box sx={{borderRadius:"0px 0px 10px 10px"}} bgcolor={"#313336"}>
                 <Grid justifyContent={"center"} padding={3} container gap={2} columns={16}>
 
-                    <Grid item  xs={4}>
+                    <Grid item xs={4}>
                         <Button fullWidth sx={buttonStyle}>1</Button>
 
                     </Grid>
 
-                    <Grid item  xs={4}>
+                    <Grid item xs={4}>
 
                         <Button fullWidth sx={buttonStyle}>2</Button>
                     </Grid>
-                    <Grid item  xs={4}>
+                    <Grid item xs={4}>
 
                         <Button fullWidth sx={buttonStyle}>3</Button>
                     </Grid>
@@ -113,18 +121,20 @@ export default function Urna() {
                 </Grid >
                 <Grid justifyContent={"center"} padding={2} container gap={2} columns={16}>
                     <Grid item xs={4}>
-                    
-                    <Button fullWidth sx={brancoBtnStyle}>Branco</Button>
+
+                        <Button fullWidth sx={brancoBtnStyle}>Branco</Button>
                     </Grid>
                     <Grid item xs={4}>
-                    <Button fullWidth sx={corrigirBtnStyle}>Corrige</Button>
+                        <Button fullWidth sx={corrigirBtnStyle}>Corrige</Button>
                     </Grid>
                     <Grid item xs={4}>
-                    <Button fullWidth sx={confirmaBtnStyle}>Confirma</Button> 
+                        <Button fullWidth sx={confirmaBtnStyle}>Confirma</Button>
                     </Grid>
                 </Grid>
-                
+
             </Box>
+            
         </Box>
+        
     )
 }
