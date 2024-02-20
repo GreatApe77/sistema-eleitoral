@@ -18,6 +18,8 @@ import { validateEncerrarEleicao } from "./middlewares/encerrear-eleicao/validat
 import { configureEleitorController } from "./use-cases/configure-eleitor"
 import { validateConfigureEleitor } from "./middlewares/configure-eleitor/validateConfigureEleitor"
 import { votarController } from "./use-cases/votar"
+import { onlyLoggedEleitor } from "./middlewares/only-logged-eleitor/onlyLoggedEleitor"
+import { validateVotar } from "./middlewares/validate-votar/validateVotar"
 const router = express.Router()
 
 
@@ -36,7 +38,7 @@ router.delete("/eleitores/:cpf",onlyAdmin,validateDeleteEleitorRequest,(req,res)
 router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
     return loginAsAdminController.handle(req,res)
 })
-router.post("/admin/eleicao/votar",(req,res)=>{
+router.post("/admin/eleicao/votar",onlyLoggedEleitor,validateVotar,(req,res)=>{
     return votarController.handle(req,res)
 })
 router.post("/admin/eleicao",onlyAdmin,validateConfigureEleicaoSchema,(req,res)=>{
@@ -49,8 +51,8 @@ router.post("/admin/eleicao/encerrar",onlyAdmin,validateEncerrarEleicao,(req,res
     return encerrarEleicaoController.handle(req,res)
 })
 
-router.post("/admin/eleicao/candidatos",(req,res)=>{})
-router.post("/admin/eleicao/eleitores",validateConfigureEleitor,(req,res)=>{
+router.post("/admin/eleicao/candidatos",onlyAdmin,(req,res)=>{})
+router.post("/admin/eleicao/eleitores",onlyAdmin,validateConfigureEleitor,(req,res)=>{
     return configureEleitorController.handle(req,res)
 })
 
