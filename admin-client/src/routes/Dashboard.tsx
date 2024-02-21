@@ -14,8 +14,9 @@ import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import { mainListItems } from '../components/ListItems';
+import { ListItems } from '../components/ListItems';
 import { useNavigate } from 'react-router-dom';
+import CriarEleicaoCheckout from '../components/CriarEleicaoCheckout';
 
 
 interface AppBarProps extends MuiAppBarProps {
@@ -70,6 +71,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export function Dashboard() {
   const navigate = useNavigate()
+  const [value, setValue] = React.useState(0);
+
+  const updateValue = (value:number)=>{
+    setValue(value)
+  }
   React.useEffect(()=>{
     if(!localStorage.getItem("token")){
       navigate("/login")
@@ -129,7 +135,7 @@ export function Dashboard() {
         </Toolbar>
         <Divider />
         <List component="nav">
-          {mainListItems}
+          <ListItems value={value} updateValue={updateValue}/>
           <Divider sx={{ my: 1 }} />
 
         </List>
@@ -148,8 +154,9 @@ export function Dashboard() {
       >
         <Toolbar />
         <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <Grid container spacing={3}>
-            {/* Chart */}
+          {value===5 && <CriarEleicaoCheckout/>}
+         {/*  <Grid container spacing={3}>
+            
             <Grid item xs={12} md={8} lg={9}>
               <Paper
                 sx={{
@@ -162,7 +169,7 @@ export function Dashboard() {
 
               </Paper>
             </Grid>
-            {/* Recent Deposits */}
+          
             <Grid item xs={12} md={4} lg={3}>
               <Paper
                 sx={{
@@ -175,13 +182,13 @@ export function Dashboard() {
 
               </Paper>
             </Grid>
-            {/* Recent Orders */}
+            
             <Grid item xs={12}>
               <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
 
               </Paper>
             </Grid>
-          </Grid>
+          </Grid> */}
 
         </Container>
       </Box>
