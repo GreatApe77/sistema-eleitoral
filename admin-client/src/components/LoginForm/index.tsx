@@ -10,17 +10,41 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { adminLogin } from '../../services/adminLogin';
+import { useNavigate } from 'react-router-dom';
+import { PAGES } from '../../constants/PAGES';
 
 
 export  function LoginForm() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [password, setPassword] = React.useState("")
+  const [loading, setLoading] = React.useState(false)
+  const [errorMsg, setErrorMsg] = React.useState("")
+  const navigate = useNavigate()
+  function handleSubmit (event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+    if(!password) return
+    setLoading(true)
+    setErrorMsg("")
+    adminLogin(password)
+    .then((response)=>{
+      console.log(response)
+      if(response.statusCode===200){
+        localStorage.setItem("token",response.data.token)
+        navigate(PAGES.find(page=>page.name==="Dashboard")?.path||"/")
+      }
+      else{
+        setErrorMsg(response.data.message||"Ocorreu um erro")
+      }
+    })
+    .catch((error)=>{
+      console.error(error)
+      setErrorMsg(error.message||"Ocorreu um erro")
+    })
+    .finally(()=>{
+      setLoading(false)
+    })
+    
+  }
 
   return (
     
@@ -46,15 +70,16 @@ export  function LoginForm() {
               margin="normal"
               required
               fullWidth
-              name="Senha"
+              disabled={loading}
               variant='outlined'
-              label="Password"
+              label="Senha"
               type="password"
               id="password"
               autoComplete="current-password"
+              onChange={e=>setPassword(e.target.value)}
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
+              control={<Checkbox value="remember"  color="primary" />}
               label="Manter conectado ?"
             />
             <Button
@@ -63,8 +88,9 @@ export  function LoginForm() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Login
+              {loading?"Carregando...":"Entrar"}
             </Button>
+            <Typography  color="error">{errorMsg}</Typography>
             
           </Box>
         </Box>

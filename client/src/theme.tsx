@@ -12,7 +12,7 @@ export default function ToggleColorMode({children}: {children: React.ReactNode})
       () => ({
         toggleColorMode: () => {
           setMode((prevMode) => {
-            localStorage.setItem('theme', prevMode === 'light' ? 'dark' : 'light');
+            localStorage.setItem('theme', prevMode w=== 'light' ? 'dark' : 'light');
             return prevMode === 'light' ? 'dark' : 'light'
         });
         },
