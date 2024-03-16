@@ -10,7 +10,7 @@ export class LoginAsAdminController{
     async handle(req:Request,res:Response){
         const { ultraSecretPassword } = req.body
         try {
-            const token = await this.loginAsAdminUseCase.execute({ultraSecretPassword})
+            const token =  this.loginAsAdminUseCase.execute({ultraSecretPassword})
             return res.status(200).json({token})
         } catch (error) {
             return handleErrors(error,res)
