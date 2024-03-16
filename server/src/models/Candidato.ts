@@ -1,4 +1,6 @@
-export class Candidato{
+import { ICandidato } from "./interfaces/ICandidato"
+
+export class Candidato implements ICandidato{
     nome:string
     partido:string
     fotoDoCandidatoUrl:string

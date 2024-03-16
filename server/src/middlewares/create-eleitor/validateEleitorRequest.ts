@@ -3,8 +3,9 @@ import { CreateEleitorSchema } from "./CreateEleitorSchema";
 
 export async function validateEleitorRequest(req:Request,res:Response,next:NextFunction){
     try {
-        const {cpf,chavePublica} = req.body
-        CreateEleitorSchema.parse({cpf,chavePublica})
+         
+        CreateEleitorSchema.parse(req.body)
+        
         return next()
     } catch (error:any) {
         console.error(error)
