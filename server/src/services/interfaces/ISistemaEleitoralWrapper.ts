@@ -1,7 +1,6 @@
-import { Domain } from "../types/Domain"
-import { StatusDaEleicao } from "../types/StatusDaEleicao"
-
-export interface ISistemaEleitoralRepository {
+import { StatusDaEleicao } from "../../types/StatusDaEleicao"
+import { Domain } from "../../types/Domain"
+export interface ISistemaEleitoralWrapper {
     anexarEleicao(anoDaEleicao: string,enderecoDeContrato:string): Promise<string>
     getEleicaoAddress(anoDaEleicao: string): Promise<string | null>
     iniciarEleicao(anoDaEleicao: string): Promise<string>
