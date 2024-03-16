@@ -1,11 +1,11 @@
 import EleitorRepositoryMongoDB from "../../repositories/implementations/EleitorRepositoryMongoDB";
-import { LoginAsEleitorRepository } from "../../repositories/implementations/LoginAsEleitorRepository";
 import { LoginAsEleitorUseCase } from "./LoginAsEleitorUseCase";
 import { LoginAsEleitorController } from "./LoginAsEleitorController";
+import { EleitorAuthService } from "../../services/implementations/EleitorAuthService";
 
 const eleitorRepository = new EleitorRepositoryMongoDB()
-const loginAsEleitorRepository = new LoginAsEleitorRepository()
-const loginAsEleitorUseCase = new LoginAsEleitorUseCase(loginAsEleitorRepository,eleitorRepository)
+const eleitorAuthService = new EleitorAuthService(eleitorRepository)
+const loginAsEleitorUseCase = new LoginAsEleitorUseCase(eleitorAuthService,eleitorRepository)
 const loginAsEleitorController = new LoginAsEleitorController(loginAsEleitorUseCase)
 
 export { loginAsEleitorUseCase,loginAsEleitorController }

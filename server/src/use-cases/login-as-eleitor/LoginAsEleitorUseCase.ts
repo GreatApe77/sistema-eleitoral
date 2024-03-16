@@ -1,11 +1,11 @@
-import { ILoginAsEleitorRepository } from "../../repositories/ILoginAsEleitorRepository";
 import { IEleitorRepository } from "../../repositories/IEleitorRepository";
 import { ILoginAsEleitorDTO } from "./LoginAsEleitorDTO";
 import { ApiError } from "../../errors/ApiError";
+import { IEleitorAuthService } from "../../services/interfaces/IEleitorAuthService";
 export class LoginAsEleitorUseCase{
 
 
-    constructor(private loginAsEleitorRepository:ILoginAsEleitorRepository,private eleitorRepository:IEleitorRepository){
+    constructor(private eleitorAuthService:IEleitorAuthService,private eleitorRepository:IEleitorRepository){
 
     }
 
@@ -15,10 +15,10 @@ export class LoginAsEleitorUseCase{
 
         const eleitor = await this.eleitorRepository.findByChavePublica(publicKey)
         if(!eleitor) throw new ApiError("Eleitor não Cadastrado",404)
-        const signatureMatches = await this.loginAsEleitorRepository.verifySignature(publicKey,signature,timestampInMs)
+        const signatureMatches =  this.eleitorAuthService.verifySignature(publicKey,signature,timestampInMs)
         if(!signatureMatches)  throw new ApiError("Assinatura inválida",400)
-        const token = await this.loginAsEleitorRepository.generateToken(publicKey)
-        if(!token) throw new ApiError("Erro ao gerar token",500) 
+        const token =  this.eleitorAuthService.generateToken(publicKey)
+        //if(!token) throw new ApiError("Erro ao gerar token",500) 
         return token
     }
 }
