@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
-export default class Eleitor {
-    public readonly id:string
+import { IEleitor } from "./interfaces/IEleitor";
+export default class Eleitor implements IEleitor {
+    public  id:string
     public chavePublica: string;
     public cpf: string;
 

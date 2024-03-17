@@ -1,17 +1,20 @@
 import { ApiError } from "../../errors/ApiError";
-import { ILoginAsAdminRepository } from "../../repositories/ILoginAsAdminRepository";
+import { IAdminAuthService } from "../../services/interfaces/IAdminAuthService";
 import { ILoginAsAdminDTO } from "./LoginAsAdminDTO";
 
 export class LoginAsAdminUseCase{
 
-    constructor(private loginAsAdminRepository:ILoginAsAdminRepository){}
+    constructor(private adminAuthservice:IAdminAuthService){}
 
 
-    async execute(data:ILoginAsAdminDTO){
+     execute(data:ILoginAsAdminDTO){
 
         const {ultraSecretPassword} = data
-        const token = await this.loginAsAdminRepository.login(ultraSecretPassword)
-        if(!token) throw new ApiError("Senha inválida",401)
+        
+        const validPassword = this.adminAuthservice.validatePassword(ultraSecretPassword)
+        if(!validPassword)
+        throw new ApiError("Administrador invalido",401)
+        const token = this.adminAuthservice.generateToken()
         return token
     }
 }

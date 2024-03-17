@@ -13,7 +13,7 @@ import { votar } from "../../web3-services/votar";
 import { getNonce } from "../../web3-services/getNonce";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
-    async getPermissaoDeVoto(anoDaEleicao: string, chavePublica: string): Promise<boolean | null> {
+    async getPermissaoDeVoto(anoDaEleicao: string, chavePublica: string): Promise<boolean> {
         try {
             const permissaoDeVoto = await  sistemaEleitoraInstance.getPermissaoDeVoto(anoDaEleicao, chavePublica)
             return permissaoDeVoto
@@ -22,15 +22,12 @@ export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
             return null
         }
     }
-    async getNonce(chavePublica: string): Promise<number | null> {
-        try {
+    async getNonce(chavePublica: string): Promise<number > {
+        
             const nonce = await getNonce(chavePublica)
             return nonce
             
-        } catch (error) {
-            console.error(error)
-            return null
-        }
+        
     }
     async getDomain(): Promise<Domain | null> {
             try {
