@@ -1,5 +1,6 @@
 import { StatusDaEleicao } from "../../types/StatusDaEleicao"
 import { Domain } from "../../types/Domain"
+import { ICandidato } from "../../models/interfaces/ICandidato"
 export interface ISistemaEleitoralWrapper {
     anexarEleicao(anoDaEleicao: string,enderecoDeContrato:string): Promise<string>
     getEleicaoAddress(anoDaEleicao: string): Promise<string | null>
@@ -12,4 +13,5 @@ export interface ISistemaEleitoralWrapper {
     getDomain(): Promise<Domain >
     getNonce(chavePublica:string): Promise<number >
     getPermissaoDeVoto(anoDaEleicao:string,chavePublica:string): Promise<boolean>
+    cadastrarCandidato(anoDeEleicao:number,candidato:ICandidato): Promise<string>
 }

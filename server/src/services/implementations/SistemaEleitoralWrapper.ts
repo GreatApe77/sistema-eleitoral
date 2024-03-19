@@ -11,7 +11,16 @@ import { getEleicaoStatus } from "../../web3-services/getEleicaoStatus";
 import { StatusDaEleicao } from "../../types/StatusDaEleicao";
 import { iniciarEleicao as iniciarEleicaoService } from "../../web3-services/inciarEleicao";
 import { encerrarEleicao as encerrarEleicaoService } from "../../web3-services/encerrarEleicao";
+import { ICandidato } from "../../models/interfaces/ICandidato";
+import { cadastrarCandidato } from "../../web3-services/cadastrarCandidatos";
 export class SistemaEleitoralWrapper implements ISistemaEleitoralWrapper {
+  public async cadastrarCandidato(
+    anoDeEleicao: number,
+    candidato: ICandidato
+  ): Promise<string> {
+    const hash = await cadastrarCandidato(anoDeEleicao, candidato);
+    return hash;
+  }
   async getPermissaoDeVoto(
     anoDaEleicao: string,
     chavePublica: string
@@ -80,12 +89,10 @@ export class SistemaEleitoralWrapper implements ISistemaEleitoralWrapper {
     return transactionHash;
   }
   async getEleicaoAddress(anoDaEleicao: string): Promise<string | null> {
-    
-      const endereco = await sistemaEleitoraInstance.eleicao(anoDaEleicao);
-      if (endereco === ethers.ZeroAddress) return null;
+    const endereco = await sistemaEleitoraInstance.eleicao(anoDaEleicao);
+    if (endereco === ethers.ZeroAddress) return null;
 
-      return endereco;
-    
+    return endereco;
   }
   async anexarEleicao(
     anoDaEleicao: string,
