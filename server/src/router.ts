@@ -20,6 +20,8 @@ import { validateConfigureEleitor } from "./middlewares/configure-eleitor/valida
 import { votarController } from "./use-cases/votar"
 import { onlyLoggedEleitor } from "./middlewares/only-logged-eleitor/onlyLoggedEleitor"
 import { validateVotar } from "./middlewares/validate-votar/validateVotar"
+import { cadastrarCandidatoController } from "./use-cases/cadastrar-candidato"
+import { validateCadastrarCandidatoRequest } from "./middlewares/cadastrar-candidato/validateCadastrarCandidatoRequest"
 const router = express.Router()
 
 //ELEITORES
@@ -52,7 +54,9 @@ router.post("/admin/eleicao/iniciar",onlyAdmin,validateIniciarEleicao,(req,res)=
 router.post("/admin/eleicao/encerrar",onlyAdmin,validateEncerrarEleicao,(req,res)=>{
     return encerrarEleicaoController.handle(req,res)
 })
-router.post("/admin/eleicao/candidatos",onlyAdmin,(req,res)=>{})
+router.post("/admin/eleicao/candidatos",onlyAdmin,validateCadastrarCandidatoRequest,(req,res)=>{
+    return cadastrarCandidatoController.handle(req,res)
+})
 router.post("/admin/eleicao/eleitores",onlyAdmin,validateConfigureEleitor,(req,res)=>{
     return configureEleitorController.handle(req,res)
 })

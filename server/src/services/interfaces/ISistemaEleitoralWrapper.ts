@@ -14,4 +14,5 @@ export interface ISistemaEleitoralWrapper {
     getNonce(chavePublica:string): Promise<number >
     getPermissaoDeVoto(anoDaEleicao:string,chavePublica:string): Promise<boolean>
     cadastrarCandidato(anoDeEleicao:number,candidato:ICandidato): Promise<string>
+    candidatoPorNumero(anoDaEleicao:number,numeroDeVotacao:number): Promise<ICandidato>
 }

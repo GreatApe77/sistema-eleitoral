@@ -13,7 +13,12 @@ import { iniciarEleicao as iniciarEleicaoService } from "../../web3-services/inc
 import { encerrarEleicao as encerrarEleicaoService } from "../../web3-services/encerrarEleicao";
 import { ICandidato } from "../../models/interfaces/ICandidato";
 import { cadastrarCandidato } from "../../web3-services/cadastrarCandidatos";
+import { candidatoPorNumero } from "../../web3-services/candidatoPorNumero";
 export class SistemaEleitoralWrapper implements ISistemaEleitoralWrapper {
+  async candidatoPorNumero(anoDaEleicao: number, numeroDeVotacao: number): Promise<ICandidato> {
+    const candidato = await candidatoPorNumero(anoDaEleicao,numeroDeVotacao)
+    return candidato
+  }
   public async cadastrarCandidato(
     anoDeEleicao: number,
     candidato: ICandidato
