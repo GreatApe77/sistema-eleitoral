@@ -9,7 +9,9 @@ const EnvironmentSchema = z.object({
     JWT_SECRET: z.string(),
     ETH_NODE_URL: z.string(),
     ADMIN_WALLET_PRIVATE_KEY: z.string().length(64),
-    SISTEMA_ELEITORAL_CONTRACT_ADDRESS: z.string().length(42)
+    SISTEMA_ELEITORAL_CONTRACT_ADDRESS: z.string().length(42),
+    NODE_ENV: z.enum(["development","test","production"]).default("development").optional(),
+    ALLOWED_CORS: z.string()
 })
 
 
