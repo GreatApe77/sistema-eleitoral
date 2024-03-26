@@ -14,13 +14,10 @@ import { getNonce } from "../../web3-services/getNonce";
 
 export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
     async getPermissaoDeVoto(anoDaEleicao: string, chavePublica: string): Promise<boolean> {
-        try {
+        
             const permissaoDeVoto = await  sistemaEleitoraInstance.getPermissaoDeVoto(anoDaEleicao, chavePublica)
             return permissaoDeVoto
-        } catch (error) {
-            console.error(error)
-            return null
-        }
+        
     }
     async getNonce(chavePublica: string): Promise<number > {
         
@@ -29,85 +26,62 @@ export class SistemaEleitoralRepository implements ISistemaEleitoralRepository{
             
         
     }
-    async getDomain(): Promise<Domain | null> {
-            try {
+    async getDomain(): Promise<Domain > {
+            
                     const domain = await getDomain()
                     return domain
-            } catch (error) {
-                console.error(error)
-                return null
-            }
+            
     }
-    async votar(anoDaEleicao: string,chavePublica:string, numeroDoCandidato: string, timestamp: number, signature: string): Promise<string | null> {
+    async votar(anoDaEleicao: string,chavePublica:string, numeroDoCandidato: string, timestamp: number, signature: string): Promise<string > {
             
             const sigComponents = ethers.Signature.from(signature)
             console.log(sigComponents)
             const { v, r, s } = sigComponents
-            try {
+            
                 const response = await votar(anoDaEleicao,numeroDoCandidato,chavePublica,timestamp ,v,r,s)
                 
                 return response
-            } catch (error) {
-                console.error(error)
-                return null
-            }
+            
     }
-    async anexarEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
-        try {
+    async anexarEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string> {
+        
             const response = await anexarEleitoresService(anoDaEleicao, eleitores)
             return response
-        } catch (error) {
-            console.error(error)
-            return null
-        }
-    }
-    async removerEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string | null> {
         
-        try {
+    }
+    async removerEleitores(anoDaEleicao: string, eleitores: string[]): Promise<string > {
+        
+        
             const response = await removerEleitoresService(anoDaEleicao, eleitores)
             return response
-        } catch (error) {
-            console.error(error)
-            return null
-        }
+        
     }
-    async getEleicaoStatus(anoDaEleicao: string): Promise<StatusDaEleicao | null> {
-        try {
+    async getEleicaoStatus(anoDaEleicao: string): Promise<StatusDaEleicao > {
+        
             const status = await getEleicaoStatus(anoDaEleicao)
             return status  
-        } catch (error) {
-            return null
-        }
+        
     }
-    async iniciarEleicao(anoDaEleicao: string): Promise<string | null> {
-        try {
+    async iniciarEleicao(anoDaEleicao: string): Promise<string > {
+       
             const transactionHash = await iniciarEleicaoService(anoDaEleicao)
             return transactionHash
-        } catch (error) {
-            console.error(error)
-            return null
-        }
+        
     }
-    async encerrarEleicao(anoDaEleicao: string): Promise<string | null> {
-        try {
+    async encerrarEleicao(anoDaEleicao: string): Promise<string > {
+        
             const transactionHash = await encerrarEleicaoService(anoDaEleicao)
             return transactionHash
-        } catch (error) {
-            console.error(error)
-            return null
-        }
+        
     }
     async getEleicaoAddress(anoDaEleicao: string): Promise<string | null> {
-        try {
+       
             const endereco = await sistemaEleitoraInstance.eleicao(anoDaEleicao)
             if(endereco===ethers.ZeroAddress) return null
 
                 return endereco
             
-        } catch (error) {
-            console.error(error)
-            return null
-        }
+        
     }
     async anexarEleicao(anoDaEleicao: string, enderecoDeContrato: string): Promise<string> {
         try {
