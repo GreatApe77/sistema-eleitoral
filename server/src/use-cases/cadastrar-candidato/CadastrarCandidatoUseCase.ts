@@ -17,7 +17,7 @@ export class CadastrarCandidatoUseCase {
     );
 
     try {
-      const [retrievedCandidato,status] = await Promise.all([
+      const [retrievedCandidato, status] = await Promise.all([
         this.sistemaEleitoralWrapper.candidatoPorNumero(
           data.anoDaEleicao,
           data.candidato.numeroDeVotacao
@@ -26,9 +26,10 @@ export class CadastrarCandidatoUseCase {
           data.anoDaEleicao.toString()
         ),
       ]);
-      if(status!==StatusDaEleicao.NAO_INICIADA) throw new ApiError("Eleicao ja esta ativa",400)
+      if (status !== StatusDaEleicao.NAO_INICIADA)
+        throw new ApiError("Eleicao ja esta ativa", 400);
       if (retrievedCandidato.numeroDeVotacao !== 0)
-        throw new ApiError("Candidato ja cadastrado",400);
+        throw new ApiError("Candidato ja cadastrado", 400);
     } catch (error) {
       if (error instanceof ApiError) {
         throw error;
@@ -41,7 +42,15 @@ export class CadastrarCandidatoUseCase {
         candidato
       );
       return hash;
-    } catch (error) {
+    } catch (error: any) {
+      console.error(error)
+      //console.error(error.info.error.data=="0x2271a0fb")
+      //if (error.info.error.data == "0x2271a0fb") {
+      //  throw new ApiError(
+      //    `Candidato ${candidato.numeroDeVotacao} ja existe`,
+      //    400
+      //  );
+     // }
       throw new ApiError(
         `Erro ao cadastrar o candidato de numero ${data.candidato.numeroDeVotacao} na eleicao ${data.anoDaEleicao}`
       );

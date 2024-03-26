@@ -10,6 +10,7 @@ export function validateCadastrarCandidatoRequest(
 ) {
   try {
     CadastrarCandidatoRequestSchema.parse(req.body)
+    next()
   } catch (error) {
     return res.sendStatus(422)
 }

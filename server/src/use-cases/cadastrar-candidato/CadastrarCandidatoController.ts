@@ -13,6 +13,7 @@ export class CadastrarCandidatoController{
                 transactionHash:transactionHash
             })
         } catch (error) {
+            
             return handleErrors(error,res)
         }
     }
