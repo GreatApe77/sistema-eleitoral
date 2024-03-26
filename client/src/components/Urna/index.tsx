@@ -56,6 +56,8 @@ export default function Urna() {
     }
     function handleConfirmaClick() {
         if (dadosDeVotacao.numeroDoCandidato.length !== 2) return
+        const token = localStorage.getItem("token")
+        if(!token) return navigate("/login")
         const tenMinutesFuture = Math.floor(Date.now()/1000)+600
         setLoading(true)
         signVotacao({
@@ -64,7 +66,7 @@ export default function Urna() {
             prazo: tenMinutesFuture
         }, localWallet.localWalletPrivateKey)
         .then((signedData)=>{
-            votar(signedData)
+            votar(signedData,token)
             .then((res)=>{
                 console.log(res)
                 if(res.statusCode === 200){

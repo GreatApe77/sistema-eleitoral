@@ -5,6 +5,7 @@ import { DadosDeVotacaoContext } from '../../contexts/DadosDeVotacaoContext'
 export default function InputAnoEleicao() {
     const {setDadosDeVotacao} = useContext(DadosDeVotacaoContext)
     function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
+        
         setDadosDeVotacao((prev)=>{
             return {
                 ...prev,
