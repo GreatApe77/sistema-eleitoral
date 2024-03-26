@@ -116,7 +116,7 @@ export default function VotoCheckout() {
                     <Button
                   variant="contained"
                   onClick={handleNext}
-                  disabled={loading}
+                  disabled={loading }
                   sx={{ mt: 3, ml: 1 }}
                 >
                     Próximo
