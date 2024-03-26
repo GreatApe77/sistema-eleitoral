@@ -61,6 +61,6 @@ router.post("/admin/eleicao/eleitores",onlyAdmin,validateConfigureEleitor,(req,r
     return configureEleitorController.handle(req,res)
 })
 
-router.post("/admin/eleicao/candidatos",(req,res)=>{})
+
 
 export default router
