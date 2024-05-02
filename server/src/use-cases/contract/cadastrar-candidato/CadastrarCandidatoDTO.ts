@@ -1,4 +1,5 @@
-import { ICandidato } from "../../models/interfaces/ICandidato"
+import { ICandidato } from "../../../models/interfaces/ICandidato"
+
 
 export interface CadastrarCandidatoDTO{
     anoDaEleicao:number

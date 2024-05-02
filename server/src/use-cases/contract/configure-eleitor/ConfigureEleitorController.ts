@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ConfigureEleitorUseCase } from "./ConfigureEleitorUseCase";
-import { handleErrors } from "../../errors/handleErrors";
+import { handleErrors } from "../../../errors/handleErrors";
+
 export class ConfigureEleitorController {
     constructor(
         private readonly configureEleitorUseCase: ConfigureEleitorUseCase

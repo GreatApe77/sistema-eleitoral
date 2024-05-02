@@ -1,4 +1,5 @@
-import { handleErrors } from "../../errors/handleErrors";
+
+import { handleErrors } from "../../../errors/handleErrors";
 import { CadastrarCandidatoDTO } from "./CadastrarCandidatoDTO";
 import { CadastrarCandidatoUseCase } from "./CadastrarCandidatoUseCase";
 import { Request,Response } from "express";

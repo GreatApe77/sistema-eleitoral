@@ -1,9 +1,10 @@
-import { unknown } from "zod"
-import { ApiError } from "../../errors/ApiError"
-import { Candidato } from "../../models/Candidato"
+
+
+import { handleErrors } from "../../../errors/handleErrors"
+import { Candidato } from "../../../models/Candidato"
 import { ConfigureEleicaoUseCase } from "./ConfigureEleicaoUseCase"
 import { Request, Response } from "express"
-import { handleErrors } from "../../errors/handleErrors"
+
 export class ConfigureEleicaoController{
 
     constructor(

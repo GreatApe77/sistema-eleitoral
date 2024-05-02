@@ -1,7 +1,8 @@
-import { ApiError } from "../../errors/ApiError";
-import { Candidato } from "../../models/Candidato";
-import { ISistemaEleitoralWrapper } from "../../services/interfaces/ISistemaEleitoralWrapper";
-import { StatusDaEleicao } from "../../types/StatusDaEleicao";
+
+import { ApiError } from "../../../errors/ApiError";
+import { Candidato } from "../../../models/Candidato";
+import { ISistemaEleitoralWrapper } from "../../../services/interfaces/ISistemaEleitoralWrapper";
+import { StatusDaEleicao } from "../../../types/StatusDaEleicao";
 import { CadastrarCandidatoDTO } from "./CadastrarCandidatoDTO";
 
 export class CadastrarCandidatoUseCase {

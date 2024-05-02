@@ -1,8 +1,8 @@
-import { ApiError } from "../../errors/ApiError";
-import { Candidato } from "../../models/Candidato";
-import { IEleicaoRepository } from "../../repositories/IEleicaoRepository";
-import { ISistemaEleitoralRepository } from "../../repositories/ISistemaEleitoralRepository";
-import { ISistemaEleitoralWrapper } from "../../services/interfaces/ISistemaEleitoralWrapper";
+
+import { ApiError } from "../../../errors/ApiError";
+import { Candidato } from "../../../models/Candidato";
+import { IEleicaoRepository } from "../../../repositories/IEleicaoRepository";
+import { ISistemaEleitoralWrapper } from "../../../services/interfaces/ISistemaEleitoralWrapper";
 import { IConfigureEleicaoDTO } from "./IConfigureEleicaoDTO";
 
 export class ConfigureEleicaoUseCase {

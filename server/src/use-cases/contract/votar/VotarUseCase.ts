@@ -1,7 +1,8 @@
-import { ApiError } from "../../errors/ApiError"
-import { ISistemaEleitoralWrapper } from "../../services/interfaces/ISistemaEleitoralWrapper"
-import { StatusDaEleicao } from "../../types/StatusDaEleicao"
-import { getCurrentTimeStamp } from "../../utils/getCurrentTimeStamp"
+
+import { ApiError } from "../../../errors/ApiError"
+import { ISistemaEleitoralWrapper } from "../../../services/interfaces/ISistemaEleitoralWrapper"
+import { StatusDaEleicao } from "../../../types/StatusDaEleicao"
+import { getCurrentTimeStamp } from "../../../utils/getCurrentTimeStamp"
 import { VotarDTO } from "./VotarDTO"
 
 export class VotarUseCase{

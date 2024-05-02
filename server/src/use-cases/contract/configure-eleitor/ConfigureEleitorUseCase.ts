@@ -1,7 +1,8 @@
-import { ApiError } from "../../errors/ApiError";
-import { IEleitorRepository } from "../../repositories/IEleitorRepository";
-import { ISistemaEleitoralRepository } from "../../repositories/ISistemaEleitoralRepository";
-import { StatusDaEleicao } from "../../types/StatusDaEleicao";
+
+import { ApiError } from "../../../errors/ApiError";
+import { IEleitorRepository } from "../../../repositories/IEleitorRepository";
+import { ISistemaEleitoralRepository } from "../../../repositories/ISistemaEleitoralRepository";
+import { StatusDaEleicao } from "../../../types/StatusDaEleicao";
 import { IConfigureEleitorDTO } from "./ConfigureEleitorDTO";
 
 export class ConfigureEleitorUseCase {

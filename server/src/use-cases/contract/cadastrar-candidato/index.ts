@@ -1,4 +1,4 @@
-import { SistemaEleitoralWrapper } from "../../services/implementations/SistemaEleitoralWrapper";
+import { SistemaEleitoralWrapper } from "../../../services/implementations/SistemaEleitoralWrapper";
 import { CadastrarCandidatoController } from "./CadastrarCandidatoController";
 import { CadastrarCandidatoUseCase } from "./CadastrarCandidatoUseCase";
 

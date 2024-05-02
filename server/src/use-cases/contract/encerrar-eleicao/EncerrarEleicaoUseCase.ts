@@ -1,7 +1,7 @@
-import { ApiError } from "../../errors/ApiError"
-import { SistemaEleitoralRepository } from "../../repositories/implementations/SistemaEleitoralRepository"
-import { SistemaEleitoralWrapper } from "../../services/implementations/SistemaEleitoralWrapper"
-import { StatusDaEleicao } from "../../types/StatusDaEleicao"
+
+import { ApiError } from "../../../errors/ApiError"
+import { SistemaEleitoralWrapper } from "../../../services/implementations/SistemaEleitoralWrapper"
+import { StatusDaEleicao } from "../../../types/StatusDaEleicao"
 import { EncerrarEleicaoDTO } from "./EncerrarEleicaoDTO"
 
 export class EncerrarEleicaoUseCase {

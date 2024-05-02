@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { VotarUseCase } from "./VotarUseCase";
 import { VotarDTO } from "./VotarDTO";
-import { ApiError } from "../../errors/ApiError";
-import { handleErrors } from "../../errors/handleErrors";
+import { handleErrors } from "../../../errors/handleErrors";
+
 
 export class VotarController {
   constructor(private votarUseCase: VotarUseCase) {}

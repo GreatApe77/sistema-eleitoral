@@ -1,4 +1,5 @@
-import { handleErrors } from "../../errors/handleErrors"
+
+import { handleErrors } from "../../../errors/handleErrors"
 import { IniciarEleicaoUseCase } from "./IniciarEleicaoUseCase"
 import { Request, Response } from "express"
 export class IniciarEleicaoController {

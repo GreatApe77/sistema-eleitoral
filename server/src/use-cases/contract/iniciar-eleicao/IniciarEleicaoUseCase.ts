@@ -1,6 +1,6 @@
-import { ApiError } from "../../errors/ApiError"
-//import { ISistemaEleitoralRepository } from "../../repositories/ISistemaEleitoralRepository"
-import { ISistemaEleitoralWrapper } from "../../services/interfaces/ISistemaEleitoralWrapper"
+
+import { ApiError } from "../../../errors/ApiError"
+import { ISistemaEleitoralWrapper } from "../../../services/interfaces/ISistemaEleitoralWrapper"
 import { IniciarEleicaoDTO } from "./IniciarEleicaoDTO"
 
 

@@ -1,7 +1,8 @@
 import { Request ,Response} from "express";
 import { EncerrarEleicaoDTO } from "./EncerrarEleicaoDTO";
 import { EncerrarEleicaoUseCase } from "./EncerrarEleicaoUseCase";
-import { handleErrors } from "../../errors/handleErrors";
+import { handleErrors } from "../../../errors/handleErrors";
+
 
 export class EncerrarEleicaoController{
     constructor(private encerrarEleicaoUseCase: EncerrarEleicaoUseCase){}

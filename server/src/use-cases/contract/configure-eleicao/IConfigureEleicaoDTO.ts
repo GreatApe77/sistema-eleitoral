@@ -1,4 +1,5 @@
-import { Candidato } from "../../models/Candidato"
+import { Candidato } from "../../../models/Candidato"
+
 
 export interface IConfigureEleicaoDTO {
     anoDaEleicao:string

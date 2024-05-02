@@ -1,6 +1,7 @@
-import { EleicaoRepository } from "../../repositories/implementations/EleicaoRepository";
-import { SistemaEleitoralWrapper } from "../../services/implementations/SistemaEleitoralWrapper";
+
 //import { SistemaEleitoralRepository } from "../../repositories/implementations/SistemaEleitoralRepository";
+import { EleicaoRepository } from "../../../repositories/implementations/EleicaoRepository";
+import { SistemaEleitoralWrapper } from "../../../services/implementations/SistemaEleitoralWrapper";
 import { ConfigureEleicaoController } from "./ConfigureEleicaoController";
 import { ConfigureEleicaoUseCase } from "./ConfigureEleicaoUseCase";
 const sistemaEleitoralWrapper = new SistemaEleitoralWrapper()
