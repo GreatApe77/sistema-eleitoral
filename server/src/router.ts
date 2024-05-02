@@ -22,21 +22,11 @@ import { onlyLoggedEleitor } from "./middlewares/only-logged-eleitor/onlyLoggedE
 import { validateVotar } from "./middlewares/validate-votar/validateVotar"
 import { cadastrarCandidatoController } from "./use-cases/cadastrar-candidato"
 import { validateCadastrarCandidatoRequest } from "./middlewares/cadastrar-candidato/validateCadastrarCandidatoRequest"
+import { eleitoresRouter } from "./routes/eleitores"
 const router = express.Router()
 
 //ELEITORES
-router.post('/eleitores',validateEleitorRequest, (req,res)=>{
-    return createEleitorController.handle(req,res)
-})
-router.post("/eleitores/login",(req,res)=>{
-    return loginAsEleitorController.handle(req,res)
-})
-router.get("/eleitores/:cpfOrIdOrChavePublica",validateFindEleitorRequest,(req,res)=>{
-    return findEleitorController.handle(req,res)
-})
-router.delete("/eleitores/:cpf",onlyAdmin,validateDeleteEleitorRequest,(req,res)=>{
-    return deleteEleitorController.handle(req,res)
-})
+router.use("/eleitores",eleitoresRouter)
 
 //ELEICAO
 router.post("/admin/login",validateAdminLoginRequest,(req,res)=>{
