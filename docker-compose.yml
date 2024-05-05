@@ -10,7 +10,6 @@ services:
   deployer:
     build: ./smart-contracts
     networks:
-      - "host"
       - "sistema-eleitoral"
       
     depends_on:
