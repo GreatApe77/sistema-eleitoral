@@ -14,9 +14,19 @@ services:
       
     depends_on:
       - "blockchain"
-    command: npm run deploy:local 
+    command: npm run deploy:local
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    networks:
+      - "sistema-eleitoral"
+    volumes:
+      - mongodb-data:/data/db 
     
 networks:
   sistema-eleitoral:
-    
+
+volumes:
+  mongodb-data:
     
