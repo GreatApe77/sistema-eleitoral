@@ -1,0 +1,23 @@
+services:
+  blockchain:
+    image: trufflesuite/ganache:latest
+    ports:
+      - "8545:8545"
+    networks:
+      - "sistema-eleitoral"
+    command: --db /ganache --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat" --networkId 5777
+    
+  deployer:
+    build: ./smart-contracts
+    networks:
+      - "host"
+      - "sistema-eleitoral"
+      
+    depends_on:
+      - "blockchain"
+    command: npm run deploy:local 
+    
+networks:
+  sistema-eleitoral:
+    
+    

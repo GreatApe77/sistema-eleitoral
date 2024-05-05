@@ -1,0 +1,23 @@
+# add git-ignore syntax here of things you don't want copied into docker image
+
+.git
+*Dockerfile*
+*docker-compose*
+node_modules
+.env
+docs
+
+artifacts
+test
+.solcover.js
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json

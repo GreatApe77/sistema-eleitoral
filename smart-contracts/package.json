@@ -7,7 +7,8 @@
     "test": "npx hardhat test",
     "coverage": "npx hardhat coverage",
     "compile": "npx hardhat compile",
-    "docgen": "npx hardhat docgen"
+    "docgen": "npx hardhat docgen",
+    "deploy:local":"npx hardhat run scripts/deploySistemaEleitoral.ts --network hardhatNode"
   },
   "keywords": [],
   "author": "",

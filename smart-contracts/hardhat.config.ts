@@ -1,13 +1,10 @@
-import fs from "node:fs"
+
 import { HardhatUserConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-toolbox";
 import "solidity-docgen";
 import dotenv from "dotenv"
 dotenv.config()
 
-if(fs.existsSync("typechain-types")){
-  require("./tasks/vote")
-}
 
 
 
@@ -30,7 +27,7 @@ const config: HardhatUserConfig = {
       }
     },
     hardhatNode:{
-      url:"http://localhost:8545"
+      url:`${process.env.LOCAL_NODE || "http://blockchain:8545"}`
     }
   },
   etherscan:{
