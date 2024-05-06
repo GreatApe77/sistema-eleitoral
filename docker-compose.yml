@@ -5,6 +5,8 @@ services:
       - "8545:8545"
     networks:
       - "sistema-eleitoral"
+    volumes:
+      - ganache:/ganache
     command: --db /ganache --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat" --networkId 5777
     
   deployer:
@@ -22,11 +24,26 @@ services:
     networks:
       - "sistema-eleitoral"
     volumes:
-      - mongodb-data:/data/db 
+      - mongodb-data:/data/db
+  
+  server:
+    build: ./server
+    env_file:
+      - ./server/.env
+      
+    networks:
+      - "sistema-eleitoral"
+    depends_on:
+      - "mongodb"
+      - "deployer"
+    ports:
+      - "8080:8080"
+    command: npm run start
     
 networks:
   sistema-eleitoral:
 
 volumes:
   mongodb-data:
+  ganache:
     
