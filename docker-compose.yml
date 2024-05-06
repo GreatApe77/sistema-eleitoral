@@ -1,13 +1,15 @@
 services:
   blockchain:
-    image: trufflesuite/ganache:latest
+    image:  ghcr.io/foundry-rs/foundry:latest
     ports:
       - "8545:8545"
     networks:
       - "sistema-eleitoral"
     volumes:
-      - ganache:/ganache
-    command: --db /ganache --mnemonic "candy maple cake sugar pudding cream honey rich smooth crumble sweet treat" --networkId 5777
+      - anvil:/anvil
+    environment:
+      - ANVIL_IP_ADDR=0.0.0.0
+    entrypoint: ["anvil"]
     
   deployer:
     build: ./smart-contracts
@@ -45,5 +47,5 @@ networks:
 
 volumes:
   mongodb-data:
-  ganache:
+  anvil:
     
