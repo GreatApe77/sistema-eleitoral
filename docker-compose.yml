@@ -5,8 +5,6 @@ services:
       - "8545:8545"
     networks:
       - "sistema-eleitoral"
-    volumes:
-      - anvil:/anvil
     environment:
       - ANVIL_IP_ADDR=0.0.0.0
     entrypoint: ["anvil"]
@@ -47,5 +45,4 @@ networks:
 
 volumes:
   mongodb-data:
-  anvil:
     
