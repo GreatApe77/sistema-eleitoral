@@ -39,6 +39,21 @@ services:
     ports:
       - "8080:8080"
     command: npm run start
+  client:
+    env_file:
+      - ./client/.env
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+      args:
+        - server_url=${VITE_SERVER_URL}
+        - sistema_eleitoral_contract_address=${VITE_SISTEMA_ELEITORAL_CONTRACT_ADDRESS}
+        - eth_node_url=${VITE_ETH_NODE_URL}
+    networks:
+      - "sistema-eleitoral"
+    ports:
+      - "3000:3000"
+    command: npm run start
     
 networks:
   sistema-eleitoral:

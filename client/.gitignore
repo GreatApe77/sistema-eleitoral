@@ -25,7 +25,7 @@ dist-ssr
 
 # Environment
 .env
-
+.env.production
 
 # Typechain types
 src/typechain-types
