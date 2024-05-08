@@ -10,11 +10,11 @@ RUN npm ci
 
 COPY . .
 
-ARG server_url
+ARG server_url=http://localhost:8080
 
-ARG sistema_eleitoral_contract_address
+ARG sistema_eleitoral_contract_address=0x8464135c8f25da09e49bc8782676a84730c318bc
 
-ARG eth_node_url
+ARG eth_node_url=http://localhost:8545
 
 ENV VITE_SERVER_URL=${server_url}
 
