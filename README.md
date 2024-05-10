@@ -2,6 +2,8 @@
 
 Projeto de sistema eleitoral feito com o intuito de utilizar diversas tecnologias e integrá-las em um único projeto.
 
+Link do projeto em produção: [Sistema Eleitoral](https://sistema-eleitoral.vercel.app/)
+
 <h3>Tecnologias utilizadas</h3>
 
 - [Docker](https://www.docker.com/)
@@ -50,7 +52,6 @@ Para executar o projeto, basta rodar o comando abaixo na raiz do projeto (depois
     
 ```
     docker compose build
-
 ```
 
 Em seguida, execute o comando abaixo para subir os containers:
