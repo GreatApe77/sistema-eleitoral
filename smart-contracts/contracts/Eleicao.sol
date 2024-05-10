@@ -105,15 +105,21 @@ contract Eleicao is IEleicao {
      *
      * @dev O Eleito só pode votar se estiver aprovado para votar
      */
-    modifier somenteAprovadosParaVotar(address eleitor){
-        if(_eleitoresAprovadosParaVotar[eleitor]==false) revert Eleicao__EleitorNaoAprovado();
+    modifier somenteAprovadosParaVotar(address eleitor) {
+        if (_eleitoresAprovadosParaVotar[eleitor] == false)
+            revert Eleicao__EleitorNaoAprovado();
         _;
     }
+
     /**
      *
      * @param candidatosIniciais Lista de candidatos iniciais a serem cadastrados
      */
-    constructor(uint256 ano,address _admin, EleicaoLib.Candidato[] memory candidatosIniciais) {
+    constructor(
+        uint256 ano,
+        address _admin,
+        EleicaoLib.Candidato[] memory candidatosIniciais
+    ) {
         _cadastrarCandidatos(candidatosIniciais);
         admin = _admin;
         _anoDeEleicao = ano;
@@ -325,65 +331,78 @@ contract Eleicao is IEleicao {
     ) external view override returns (EleicaoLib.Candidato memory) {
         return _candidatoPorNumero[numeroDeVotacao];
     }
+
     /**
-     * 
+     *
      * @inheritdoc IEleicao
      */
-    function aprovarEleitores(address[] memory eleitores) external override somenteAdmnistrador somenteAntesDaEleicao {
+    function aprovarEleitores(
+        address[] memory eleitores
+    ) external override somenteAdmnistrador somenteAntesDaEleicao {
         for (uint256 i = 0; i < eleitores.length; i++) {
-            if(_eleitoresAprovadosParaVotar[eleitores[i]]==false){
+            if (_eleitoresAprovadosParaVotar[eleitores[i]] == false) {
                 _quantidadeDeEleitores++;
                 _eleitoresAprovadosParaVotar[eleitores[i]] = true;
-            
             }
-            
-
         }
-        
     }
+
     /**
-     * 
+     *
      * @inheritdoc IEleicao
      */
     function retiraAprovacaoDeEleitores(
         address[] memory eleitores
-    ) external override  somenteAdmnistrador somenteAntesDaEleicao{
+    ) external override somenteAdmnistrador somenteAntesDaEleicao {
         for (uint i = 0; i < eleitores.length; i++) {
-            if(_eleitoresAprovadosParaVotar[eleitores[i]]==true){
+            if (_eleitoresAprovadosParaVotar[eleitores[i]] == true) {
                 _quantidadeDeEleitores--;
                 _eleitoresAprovadosParaVotar[eleitores[i]] = false;
-            
             }
         }
     }
+
     /**
-     * 
-     * @inheritdoc IEleicao
-     */    
-    function getQuantidadeDeEleitores() external view returns(uint256){
-        return _quantidadeDeEleitores;
-    }
-    /**
-     * 
+     *
      * @inheritdoc IEleicao
      */
-    function getPermissaoDeVoto(address eleitor) external view returns(bool){
+    function getQuantidadeDeEleitores() external view returns (uint256) {
+        return _quantidadeDeEleitores;
+    }
+
+    /**
+     *
+     * @inheritdoc IEleicao
+     */
+    function getPermissaoDeVoto(address eleitor) external view returns (bool) {
         return _eleitoresAprovadosParaVotar[eleitor];
     }
+
     /**
      * @return true Se é compatível com a interface
      * @param interfaceId Id da interface
      */
-    function supportsInterface(bytes4 interfaceId) external pure override returns (bool) {
-        return
-            interfaceId == type(IEleicao).interfaceId;
-            
+    function supportsInterface(
+        bytes4 interfaceId
+    ) external pure override returns (bool) {
+        return interfaceId == type(IEleicao).interfaceId;
     }
+
     /**
-     * 
+     *
      * @inheritdoc IEleicao
      */
-    function getAnoDeEleicao() external view returns(uint256){
+    function getAnoDeEleicao() external view returns (uint256) {
         return _anoDeEleicao;
+    }
+    /**
+     * @inheritdoc IEleicao
+     */
+    function atualizarUrlFotoDePerfil(
+        uint16 numeroDoCandidato,
+        string calldata novaUrlImagem
+    ) external somenteAdmnistrador  override {
+        _candidatoPorNumero[numeroDoCandidato].fotoDoCandidatoUrl = novaUrlImagem;
+        emit FotoAtualizada(numeroDoCandidato,novaUrlImagem);
     }
 }

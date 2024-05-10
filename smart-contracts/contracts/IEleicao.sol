@@ -67,6 +67,12 @@ interface IEleicao is IERC165 {
     event EleicaoEncerrada();
 
     /**
+     * @notice Evento disparado quando a foto de um candidato é atualizada
+     * @param numeroDoCandidato Número de votação do candidato
+     * @param novaFotoUrl URL da nova foto
+     */
+    event FotoAtualizada(uint16 indexed numeroDoCandidato,string novaFotoUrl);
+    /**
      * @notice Retorna o status da eleição
      * @return Status da eleição (Não iniciada, Ativa, Encerrada)
      */
@@ -147,4 +153,9 @@ interface IEleicao is IERC165 {
      */
     function getAnoDeEleicao() external view returns (uint256);
 
+    /**
+     * Atualiza a foto de perfil de um dado candidato
+     * @param novaUrlImagem URL da imagem
+     */
+    function atualizarUrlFotoDePerfil(uint16 numeroDoCandidato,string calldata novaUrlImagem) external;
 }
